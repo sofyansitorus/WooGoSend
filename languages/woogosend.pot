@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: WooGoSend\n"
-"POT-Creation-Date: 2018-01-09 19:05+0700\n"
+"POT-Creation-Date: 2018-01-09 19:10+0700\n"
 "PO-Revision-Date: 2018-01-09 19:04+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -234,7 +234,19 @@ msgid ""
 "Shipping cost that will be billed to customer for distance start from 15 km."
 msgstr ""
 
-#: includes/class-woogosend.php:472 includes/class-woogosend.php:607
+#: includes/class-woogosend.php:355
+msgid "API Key is required"
+msgstr ""
+
+#: includes/class-woogosend.php:376
+msgid "Store Location Latitude is required"
+msgstr ""
+
+#: includes/class-woogosend.php:397
+msgid "Store Location Longitude is required"
+msgstr ""
+
+#: includes/class-woogosend.php:535 includes/class-woogosend.php:670
 #, php-format
 msgid "%s driver"
 msgid_plural "%s drivers"
