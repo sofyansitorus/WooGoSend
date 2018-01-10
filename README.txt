@@ -53,6 +53,7 @@ In the search field type “WooGoSend” and click Search Plugins. You can insta
 1. Settings panel: General Options
 2. Settings panel: Instant Delivery Service Options
 3. Settings panel: Same Day Delivery Service Options
+4. Shipping Calculator preview
 
 == Changelog ==
 
