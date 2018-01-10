@@ -57,6 +57,11 @@ In the search field type “WooGoSend” and click Search Plugins. You can insta
 
 == Changelog ==
 
+= 1.0.1 - 2018-01-10 =
+
+* Improvements - Add new filter hooks: woocommerce_woogosend_shipping_destination_info.
+* Improvements - Add new filter hooks: woocommerce_woogosend_shipping_origin_info.
+
 = 1.0.0 - 2018-01-09 =
 
 * Feature - Automatically split shipping for multiple items into several drivers if the package size exceeded package weight and dimensions limitation.
