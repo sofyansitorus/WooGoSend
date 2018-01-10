@@ -849,16 +849,12 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @param array $data Shipping destination data in associative array format: address, city, state, postcode, country.
 	 * @return string
 	 */
-	private function get_destination_info( $data ) {
-		if ( empty( $data ) ) {
-			return false;
-		}
-
-		$info = array();
+	private function get_destination_info( $data = array() ) {
+		$destination_info = array();
 
 		$keys = array( 'address', 'address_2', 'city', 'state', 'postcode', 'country' );
 
-		// Filter destination field keys for shipping calculator request.
+		// Remove destination field keys for shipping calculator request.
 		if ( ! empty( $_POST['calc_shipping'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'woocommerce-cart' ) ) {
 			$keys_remove = array( 'address', 'address_2' );
 			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) {
@@ -881,22 +877,36 @@ class WooGoSend extends WC_Shipping_Method {
 					if ( empty( $country_code ) ) {
 						$country_code = $data[ $key ];
 					}
-					$full_country = isset( WC()->countries->countries[ $country_code ] ) ? WC()->countries->countries[ $country_code ] : $country_code;
-					$info[]       = trim( $full_country );
+					$full_country       = isset( WC()->countries->countries[ $country_code ] ) ? WC()->countries->countries[ $country_code ] : $country_code;
+					$destination_info[] = trim( $full_country );
 					break;
 				case 'state':
 					if ( empty( $country_code ) ) {
 						$country_code = $data['country'];
 					}
-					$full_state = isset( WC()->countries->states[ $country_code ][ $data[ $key ] ] ) ? WC()->countries->states[ $country_code ][ $data[ $key ] ] : $data[ $key ];
-					$info[]     = trim( $full_state );
+					$full_state         = isset( WC()->countries->states[ $country_code ][ $data[ $key ] ] ) ? WC()->countries->states[ $country_code ][ $data[ $key ] ] : $data[ $key ];
+					$destination_info[] = trim( $full_state );
 					break;
 				default:
-					$info[] = trim( $data[ $key ] );
+					$destination_info[] = trim( $data[ $key ] );
 					break;
 			}
 		}
-		return implode( ', ', $info );
+
+		/**
+		 * Developers can modify the destination info via filter hooks.
+		 *
+		 * @since 1.0.1
+		 *
+		 * This example shows how you can modify the shipping destination info via custom function:
+		 *
+		 *      add_action( 'woocommerce_woogosend_shipping_destination_info', 'modify_shipping_destination_info', 10, 2 );
+		 *
+		 *      function modify_shipping_destination_info( $destination_info, $method ) {
+		 *          return '1600 Amphitheatre Parkway,Mountain View,CA,94043';
+		 *      }
+		 */
+		return apply_filters( 'woocommerce_' . $this->id . '_shipping_destination_info', implode( ',', $destination_info ), $this );
 	}
 
 	/**
