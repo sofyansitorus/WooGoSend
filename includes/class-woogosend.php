@@ -49,7 +49,7 @@ class WooGoSend extends WC_Shipping_Method {
 		$this->method_title = 'WooGoSend';
 
 		// Description shown in admin.
-		$this->method_description = __( 'Shipping rates calculator for GoSend courier from Go-Jek Indonesia. <a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> to get more info about GoSend terms and conditions.', 'woogosend' );
+		$this->method_description = __( 'Shipping rates calculator for GoSend courier from Go-Jek Indonesia.', 'woogosend' );
 
 		$this->enabled = $this->get_option( 'enabled' );
 
@@ -182,6 +182,7 @@ class WooGoSend extends WC_Shipping_Method {
 			'instant_title'          => array(
 				'title' => __( 'Instant Delivery Service Options', 'woogosend' ),
 				'type'  => 'title',
+				'description' => __( '<a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ),
 			),
 			'enable_instant'         => array(
 				'title'       => __( 'Enable', 'woogosend' ),
@@ -261,6 +262,7 @@ class WooGoSend extends WC_Shipping_Method {
 			'same_day_title'         => array(
 				'title' => __( 'Same Day Delivery Service Options', 'woogosend' ),
 				'type'  => 'title',
+				'description' => __( '<a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ),
 			),
 			'enable_same_day'        => array(
 				'title'       => __( 'Enable', 'woogosend' ),
