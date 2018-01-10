@@ -180,8 +180,8 @@ class WooGoSend extends WC_Shipping_Method {
 				),
 			),
 			'instant_title'          => array(
-				'title' => __( 'Instant Delivery Service Options', 'woogosend' ),
-				'type'  => 'title',
+				'title'       => __( 'Instant Delivery Service Options', 'woogosend' ),
+				'type'        => 'title',
 				'description' => __( '<a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ),
 			),
 			'enable_instant'         => array(
@@ -260,8 +260,8 @@ class WooGoSend extends WC_Shipping_Method {
 				'desc_tip'    => true,
 			),
 			'same_day_title'         => array(
-				'title' => __( 'Same Day Delivery Service Options', 'woogosend' ),
-				'type'  => 'title',
+				'title'       => __( 'Same Day Delivery Service Options', 'woogosend' ),
+				'type'        => 'title',
 				'description' => __( '<a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ),
 			),
 			'enable_same_day'        => array(
@@ -820,10 +820,26 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @return string
 	 */
 	private function get_origin_info() {
-		if ( empty( $this->origin_lat ) && empty( $this->origin_lng ) ) {
-			return false;
+		$origin_info = array();
+
+		if ( ! empty( $this->origin_lat ) && ! empty( $this->origin_lng ) ) {
+			array_push( $origin_info, $this->origin_lat, $this->origin_lng );
 		}
-		return implode( ',', array( $this->origin_lat, $this->origin_lng ) );
+
+		/**
+		 * Developers can modify the origin info via filter hooks.
+		 *
+		 * @since 1.0.1
+		 *
+		 * This example shows how you can modify the shipping origin info via custom function:
+		 *
+		 *      add_action( 'woocommerce_woogosend_shipping_origin_info', 'modify_shipping_origin_info', 10, 2 );
+		 *
+		 *      function modify_shipping_origin_info( $origin_info, $method ) {
+		 *          return '1600 Amphitheatre Parkway,Mountain View,CA,94043';
+		 *      }
+		 */
+		return apply_filters( 'woocommerce_' . $this->id . '_shipping_origin_info', implode( ',', $origin_info ), $this );
 	}
 
 	/**
