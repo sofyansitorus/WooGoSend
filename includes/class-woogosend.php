@@ -547,7 +547,7 @@ class WooGoSend extends WC_Shipping_Method {
 		}
 
 		$rate = array(
-			'id'        => $this->id . '_instant',
+			'id'        => $this->get_rate_id( 'instant:' . $drivers_count ),
 			'label'     => $label,
 			'cost'      => $shipping_cost_total,
 			'meta_data' => $api_request,
@@ -682,7 +682,7 @@ class WooGoSend extends WC_Shipping_Method {
 		}
 
 		$rate = array(
-			'id'        => $this->id . '_same_day',
+			'id'        => $this->get_rate_id( 'same_day:' . $drivers_count ),
 			'label'     => $label,
 			'cost'      => $shipping_cost_total,
 			'meta_data' => $api_request,
