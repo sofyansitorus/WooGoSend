@@ -759,6 +759,113 @@ class WooGoSend extends WC_Shipping_Method {
 	}
 
 	/**
+	 * Calculate number of the drivers needed
+	 *
+	 * @since    1.1.0
+	 * @param array $contents Items in cart.
+	 * @param int   $max_weight Max package weight limit.
+	 * @param int   $max_width Max package width limit.
+	 * @param int   $max_length Max package length limit.
+	 * @param int   $max_height Max package height limit.
+	 * @param bool  $multiple_drivers Multiple drivers option status.
+	 * @throws Exception If the item weight or dimensions exceeded the limit.
+	 * @return int
+	 */
+	private function calculate_drivers_count( $contents, $max_weight = 0, $max_width = 0, $max_length = 0, $max_height = 0, $multiple_drivers = false ) {
+		$drivers_count = 1;
+
+		$item_weight_bulk = array();
+		$item_width_bulk  = array();
+		$item_length_bulk = array();
+		$item_height_bulk = array();
+
+		foreach ( $contents as $hash => $item ) {
+			// Validate item quantity data.
+			$quantity = isset( $item['quantity'] ) ? absint( $item['quantity'] ) : 1;
+			if ( ! $quantity ) {
+				$quantity = 1;
+			}
+
+			// Validate item weight data.
+			$item_weight = wc_get_weight( $item['data']->get_weight(), 'kg' );
+			if ( ! $item_weight || ! is_numeric( $item_weight ) ) {
+				$item_weight = 0;
+			}
+			$item_weight *= $quantity;
+			if ( $max_weight && $item_weight > $max_weight ) {
+				return;
+			}
+
+			// Validate item width data.
+			$item_width = wc_get_dimension( $item['data']->get_width(), 'cm' );
+			if ( ! $item_width || ! is_numeric( $item_width ) ) {
+				$item_width = 0;
+			}
+			if ( $max_width && $item_width > $max_width ) {
+				return;
+			}
+
+			// Validate item length data.
+			$item_length = wc_get_dimension( $item['data']->get_length(), 'cm' );
+			if ( ! $item_length || ! is_numeric( $item_length ) ) {
+				$item_length = 0;
+			}
+			if ( $max_length && $item_length > $max_length ) {
+				return;
+			}
+
+			// Validate item height data.
+			$item_height = wc_get_dimension( $item['data']->get_height(), 'cm' );
+			if ( ! $item_height || ! is_numeric( $item_height ) ) {
+				$item_height = 0;
+			}
+			$item_height *= $quantity;
+			if ( $max_height && $item_height > $max_height ) {
+				return;
+			}
+
+			// Try to split the order for several shipments.
+			try {
+				$item_weight_bulk[] = $item_weight;
+				if ( $this->max_weight && array_sum( $item_weight_bulk ) > $this->max_weight ) {
+					throw new Exception( 'Exceeded maximum package weight', 1 );
+				}
+
+				$item_width_bulk[] = $item_width;
+				if ( $this->max_width && max( $item_width_bulk ) > $this->max_width ) {
+					throw new Exception( 'Exceeded maximum package width', 1 );
+				}
+
+				$item_length_bulk[] = $item_length;
+				if ( $this->max_length && max( $item_length_bulk ) > $this->max_length ) {
+					throw new Exception( 'Exceeded maximum package length', 1 );
+				}
+
+				$item_height_bulk[] = $item_height;
+				if ( $this->max_height && array_sum( $item_height_bulk ) > $this->max_height ) {
+					throw new Exception( 'Exceeded maximum package height', 1 );
+				}
+			} catch ( Exception $e ) {
+				// Return if $multiple_drivers is disabled.
+				if ( ! $multiple_drivers ) {
+					return;
+				}
+
+				$item_weight_bulk = array();
+				$item_width_bulk  = array();
+				$item_length_bulk = array();
+				$item_height_bulk = array();
+
+				$drivers_count++;
+
+				continue;
+			}
+		}
+
+		return $drivers_count;
+	}
+
+	/**
 	 * Making HTTP request to Google Maps Distance Matrix API
 	 *
 	 * @since    1.0.0
