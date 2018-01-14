@@ -119,20 +119,20 @@ class WooGoSend extends WC_Shipping_Method {
 	 */
 	public function init_form_fields() {
 		$this->instance_form_fields = array(
-			'title'                  => array(
+			'title'                     => array(
 				'title'       => __( 'Title', 'woogosend' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woogosend' ),
 				'default'     => 'GoSend',
 				'desc_tip'    => true,
 			),
-			'gmaps_api_key'          => array(
+			'gmaps_api_key'             => array(
 				'title'       => __( 'API Key', 'woogosend' ),
 				'type'        => 'text',
 				'description' => __( '<a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get a Google Maps Distance Matrix API Key.', 'woogosend' ),
 				'default'     => '',
 			),
-			'gmaps_api_mode'         => array(
+			'gmaps_api_mode'            => array(
 				'title'       => __( 'Travel Mode', 'woogosend' ),
 				'type'        => 'select',
 				'description' => __( 'Google Maps Distance Matrix API travel mode parameter.', 'woogosend' ),
@@ -144,7 +144,7 @@ class WooGoSend extends WC_Shipping_Method {
 					'bicycling' => __( 'Bicycling', 'woogosend' ),
 				),
 			),
-			'gmaps_api_avoid'        => array(
+			'gmaps_api_avoid'           => array(
 				'title'       => __( 'Restrictions', 'woogosend' ),
 				'type'        => 'multiselect',
 				'description' => __( 'Google Maps Distance Matrix API restrictions parameter.', 'woogosend' ),
@@ -157,19 +157,19 @@ class WooGoSend extends WC_Shipping_Method {
 					'indoor'   => __( 'Avoid Indoor', 'woogosend' ),
 				),
 			),
-			'origin_lat'             => array(
+			'origin_lat'                => array(
 				'title'       => __( 'Store Location Latitude', 'woogosend' ),
 				'type'        => 'decimal',
 				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 				'default'     => '',
 			),
-			'origin_lng'             => array(
+			'origin_lng'                => array(
 				'title'       => __( 'Store Location Longitude', 'woogosend' ),
 				'type'        => 'decimal',
 				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 				'default'     => '',
 			),
-			'tax_status'             => array(
+			'tax_status'                => array(
 				'title'   => __( 'Tax status', 'woogosend' ),
 				'type'    => 'select',
 				'class'   => 'wc-enhanced-select',
@@ -179,40 +179,40 @@ class WooGoSend extends WC_Shipping_Method {
 					'none'    => __( 'None', 'woogosend' ),
 				),
 			),
-			'instant_title'          => array(
+			'instant_title'             => array(
 				'title'       => __( 'Instant Delivery Service Options', 'woogosend' ),
 				'type'        => 'title',
 				'description' => __( '<a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ),
 			),
-			'enable_instant'         => array(
+			'enable_instant'            => array(
 				'title'       => __( 'Enable', 'woogosend' ),
 				'label'       => __( 'Yes', 'woogosend' ),
 				'type'        => 'checkbox',
 				'description' => __( 'Enable Instant delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
 			),
-			'title_instant'          => array(
+			'title_instant'             => array(
 				'title'       => __( 'Label', 'woogosend' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woogosend' ),
 				'default'     => 'Instant',
 				'desc_tip'    => true,
 			),
-			'min_cost_instant'       => array(
+			'min_cost_instant'          => array(
 				'title'       => __( 'Minimum Cost', 'woogosend' ),
 				'type'        => 'price',
 				'description' => __( 'Minimum shipping cost that will be billed to customer.', 'woogosend' ),
 				'desc_tip'    => true,
 				'default'     => '25000',
 			),
-			'per_km_cost_instant'    => array(
+			'per_km_cost_instant'       => array(
 				'title'       => __( 'Per Kilometer Cost', 'woogosend' ),
 				'type'        => 'price',
 				'description' => __( 'Per kilometer rates that will be billed to customer.', 'woogosend' ),
 				'desc_tip'    => true,
 				'default'     => '2500',
 			),
-			'max_weight_instant'     => array(
+			'max_weight_instant'        => array(
 				'title'             => __( 'Maximum Package Weight', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -220,7 +220,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '20',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_width_instant'      => array(
+			'max_width_instant'         => array(
 				'title'             => __( 'Maximum Package Width', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -228,7 +228,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '70',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_length_instant'     => array(
+			'max_length_instant'        => array(
 				'title'             => __( 'Maximum Package Length', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -236,7 +236,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '50',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_height_instant'     => array(
+			'max_height_instant'        => array(
 				'title'             => __( 'Maximum Package Height', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -244,7 +244,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '50',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_distance_instant'   => array(
+			'max_distance_instant'      => array(
 				'title'             => __( 'Maximum Distance', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -252,47 +252,54 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '40',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'show_distance_instant'  => array(
+			'show_distance_instant'     => array(
 				'title'       => __( 'Show distance', 'woogosend' ),
 				'label'       => __( 'Yes', 'woogosend' ),
 				'type'        => 'checkbox',
 				'description' => __( 'Show the distance info to customer during checkout.', 'woogosend' ),
 				'desc_tip'    => true,
 			),
-			'same_day_title'         => array(
+			'multiple_drivers_instant'  => array(
+				'title'       => __( 'Multiple Drivers', 'woogosend' ),
+				'label'       => __( 'Enable', 'woogosend' ),
+				'type'        => 'checkbox',
+				'description' => __( 'Split shipment into several drivers if the package bulk weight and dimensions exceeded the limit.', 'woogosend' ),
+				'desc_tip'    => true,
+			),
+			'same_day_title'            => array(
 				'title'       => __( 'Same Day Delivery Service Options', 'woogosend' ),
 				'type'        => 'title',
 				'description' => __( '<a href="https://www.go-jek.com/go-send/" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ),
 			),
-			'enable_same_day'        => array(
+			'enable_same_day'           => array(
 				'title'       => __( 'Enable', 'woogosend' ),
 				'label'       => __( 'Yes', 'woogosend' ),
 				'type'        => 'checkbox',
 				'description' => __( 'Enable Same Day delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
 			),
-			'title_same_day'         => array(
+			'title_same_day'            => array(
 				'title'       => __( 'Label', 'woogosend' ),
 				'type'        => 'text',
 				'description' => __( 'This controls the title which the user sees during checkout.', 'woogosend' ),
 				'default'     => 'Same Day',
 				'desc_tip'    => true,
 			),
-			'min_cost_same_day'      => array(
+			'min_cost_same_day'         => array(
 				'title'       => __( 'Minimum Cost', 'woogosend' ),
 				'type'        => 'price',
 				'description' => __( 'Shipping cost that will be billed to customer for distance under 15 km.', 'woogosend' ),
 				'desc_tip'    => true,
 				'default'     => '15000',
 			),
-			'max_cost_same_day'      => array(
+			'max_cost_same_day'         => array(
 				'title'       => __( 'Maximum Cost', 'woogosend' ),
 				'type'        => 'price',
 				'description' => __( 'Shipping cost that will be billed to customer for distance start from 15 km.', 'woogosend' ),
 				'desc_tip'    => true,
 				'default'     => '20000',
 			),
-			'max_weight_same_day'    => array(
+			'max_weight_same_day'       => array(
 				'title'             => __( 'Maximum Package Weight', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -300,7 +307,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '7',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_width_same_day'     => array(
+			'max_width_same_day'        => array(
 				'title'             => __( 'Maximum Package Width', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -308,7 +315,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '40',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_length_same_day'    => array(
+			'max_length_same_day'       => array(
 				'title'             => __( 'Maximum Package Length', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -316,7 +323,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '40',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_height_same_day'    => array(
+			'max_height_same_day'       => array(
 				'title'             => __( 'Maximum Package Height', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -324,7 +331,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '17',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'max_distance_same_day'  => array(
+			'max_distance_same_day'     => array(
 				'title'             => __( 'Maximum Distance', 'woogosend' ),
 				'type'              => 'number',
 				'description'       => __( 'Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
@@ -332,14 +339,14 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'           => '40',
 				'custom_attributes' => array( 'min' => '1' ),
 			),
-			'show_distance_same_day' => array(
+			'show_distance_same_day'    => array(
 				'title'       => __( 'Show distance', 'woogosend' ),
 				'label'       => __( 'Yes', 'woogosend' ),
 				'type'        => 'checkbox',
 				'description' => __( 'Show the distance info to customer during checkout.', 'woogosend' ),
 				'desc_tip'    => true,
 			),
-			'multiple_drivers'       => array(
+			'multiple_drivers_same_day' => array(
 				'title'       => __( 'Multiple Drivers', 'woogosend' ),
 				'label'       => __( 'Enable', 'woogosend' ),
 				'type'        => 'checkbox',
