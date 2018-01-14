@@ -473,92 +473,17 @@ class WooGoSend extends WC_Shipping_Method {
 		}
 
 		$shipping_cost_total = 0;
-		$drivers_count       = 1;
 
-		$item_weight_bulk = array();
-		$item_width_bulk  = array();
-		$item_length_bulk = array();
-		$item_height_bulk = array();
+		$multiple_drivers = 'yes' === $this->get_option( 'multiple_drivers_instant', 'no' );
 
-		foreach ( $package['contents'] as $hash => $item ) {
-			// Validate item quantity data.
-			$quantity = isset( $item['quantity'] ) ? absint( $item['quantity'] ) : 1;
-			if ( ! $quantity ) {
-				$quantity = 1;
-			}
+		$drivers_count = $this->calculate_drivers_count( $package['contents'], $this->max_weight_instant, $this->max_width_instant, $this->max_length_instant, $this->max_height_instant, $multiple_drivers );
 
-			// Validate item weight data.
-			$item_weight = wc_get_weight( $item['data']->get_weight(), 'kg' );
-			if ( ! $item_weight || ! is_numeric( $item_weight ) ) {
-				$item_weight = 0;
-			}
-			$item_height *= $quantity;
-			if ( $this->max_weight_instant && $item_weight > $this->max_weight_instant ) {
-				return;
-			}
-
-			// Validate item width data.
-			$item_width = wc_get_dimension( $item['data']->get_width(), 'cm' );
-			if ( ! $item_width || ! is_numeric( $item_width ) ) {
-				$item_width = 0;
-			}
-			if ( $this->max_width_instant && $item_width > $this->max_width_instant ) {
-				return;
-			}
-
-			// Validate item length data.
-			$item_length = wc_get_dimension( $item['data']->get_length(), 'cm' );
-			if ( ! $item_length || ! is_numeric( $item_length ) ) {
-				$item_length = 0;
-			}
-			if ( $this->max_length_instant && $item_length > $this->max_length_instant ) {
-				return;
-			}
-
-			// Validate item height data.
-			$item_height = wc_get_dimension( $item['data']->get_height(), 'cm' );
-			if ( ! $item_height || ! is_numeric( $item_height ) ) {
-				$item_height = 0;
-			}
-			$item_height *= $quantity;
-			if ( $this->max_height_instant && $item_height > $this->max_height_instant ) {
-				return;
-			}
-
-			// Try to split the order for several shipments.
-			try {
-				$item_weight_bulk[] = $item_weight;
-				if ( $this->max_weight_instant && array_sum( $item_weight_bulk ) > $this->max_weight_instant ) {
-					throw new Exception( 'Exceeded maximum package weight', 1 );
-				}
-
-				$item_width_bulk[] = $item_width;
-				if ( $this->max_width_instant && max( $item_width_bulk ) > $this->max_width_instant ) {
-					throw new Exception( 'Exceeded maximum package width', 1 );
-				}
-
-				$item_length_bulk[] = $item_length;
-				if ( $this->max_length_instant && max( $item_length_bulk ) > $this->max_length_instant ) {
-					throw new Exception( 'Exceeded maximum package length', 1 );
-				}
-
-				$item_height_bulk[] = $item_height;
-				if ( $this->max_height_instant && array_sum( $item_height_bulk ) > $this->max_height_instant ) {
-					throw new Exception( 'Exceeded maximum package height', 1 );
-				}
-			} catch ( Exception $e ) {
-				// Reset bulk items weight and diemsions data.
-				$item_weight_bulk = array();
-				$item_width_bulk  = array();
-				$item_length_bulk = array();
-				$item_height_bulk = array();
-
-				// Increase the package count.
-				$drivers_count++;
-
-				continue;
-			}
+		if ( ! $drivers_count ) {
+			return;
 		}
+
+		// Trasnlators: Number of drivers needed.
+		$drivers_count_text = sprintf( _n( '%s driver', '%s drivers', $drivers_count, 'woogosend' ), $drivers_count );
 
 		$shipping_cost_total = $this->per_km_cost_instant * $api_request['distance'];
 
@@ -567,9 +492,7 @@ class WooGoSend extends WC_Shipping_Method {
 		}
 
 		$shipping_cost_total *= $drivers_count;
-
-		$drivers_count_text = sprintf( _n( '%s driver', '%s drivers', $drivers_count, 'woogosend' ), $drivers_count );
-		$title_text         = sprintf( '%s - %s', $this->title, $this->title_instant );
+		$title_text           = sprintf( '%s - %s', $this->title, $this->title_instant );
 
 		switch ( $this->show_distance_instant ) {
 			case 'yes':
