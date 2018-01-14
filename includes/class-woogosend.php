@@ -834,22 +834,22 @@ class WooGoSend extends WC_Shipping_Method {
 			// Try to split the order for several shipments.
 			try {
 				$item_weight_bulk[] = $item_weight;
-				if ( $this->max_weight && array_sum( $item_weight_bulk ) > $this->max_weight ) {
+				if ( $max_weight && array_sum( $item_weight_bulk ) > $max_weight ) {
 					throw new Exception( 'Exceeded maximum package weight', 1 );
 				}
 
 				$item_width_bulk[] = $item_width;
-				if ( $this->max_width && max( $item_width_bulk ) > $this->max_width ) {
+				if ( $max_width && max( $item_width_bulk ) > $max_width ) {
 					throw new Exception( 'Exceeded maximum package width', 1 );
 				}
 
 				$item_length_bulk[] = $item_length;
-				if ( $this->max_length && max( $item_length_bulk ) > $this->max_length ) {
+				if ( $max_length && max( $item_length_bulk ) > $max_length ) {
 					throw new Exception( 'Exceeded maximum package length', 1 );
 				}
 
 				$item_height_bulk[] = $item_height;
-				if ( $this->max_height && array_sum( $item_height_bulk ) > $this->max_height ) {
+				if ( $max_height && array_sum( $item_height_bulk ) > $max_height ) {
 					throw new Exception( 'Exceeded maximum package height', 1 );
 				}
 			} catch ( Exception $e ) {
