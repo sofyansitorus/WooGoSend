@@ -339,6 +339,13 @@ class WooGoSend extends WC_Shipping_Method {
 				'description' => __( 'Show the distance info to customer during checkout.', 'woogosend' ),
 				'desc_tip'    => true,
 			),
+			'multiple_drivers'       => array(
+				'title'       => __( 'Multiple Drivers', 'woogosend' ),
+				'label'       => __( 'Enable', 'woogosend' ),
+				'type'        => 'checkbox',
+				'description' => __( 'Split shipment into several drivers if the package bulk weight and dimensions exceeded the limit.', 'woogosend' ),
+				'desc_tip'    => true,
+			),
 		);
 	}
 
