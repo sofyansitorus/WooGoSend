@@ -467,26 +467,46 @@ class WooGoSend extends WC_Shipping_Method {
 		$item_height_bulk = array();
 
 		foreach ( $package['contents'] as $hash => $item ) {
-			// Check if item weight is not exceeded maximum package weight allowed.
-			$item_weight = wc_get_weight( $item['data']->get_weight(), 'kg' ) * $item['quantity'];
+			// Validate item quantity data.
+			$quantity = isset( $item['quantity'] ) ? absint( $item['quantity'] ) : 1;
+			if ( ! $quantity ) {
+				$quantity = 1;
+			}
+
+			// Validate item weight data.
+			$item_weight = wc_get_weight( $item['data']->get_weight(), 'kg' );
+			if ( ! $item_weight || ! is_numeric( $item_weight ) ) {
+				$item_weight = 0;
+			}
+			$item_height *= $quantity;
 			if ( $this->max_weight_instant && $item_weight > $this->max_weight_instant ) {
 				return;
 			}
 
-			// Check if item width is not exceeded maximum package width allowed.
+			// Validate item width data.
 			$item_width = wc_get_dimension( $item['data']->get_width(), 'cm' );
+			if ( ! $item_width || ! is_numeric( $item_width ) ) {
+				$item_width = 0;
+			}
 			if ( $this->max_width_instant && $item_width > $this->max_width_instant ) {
 				return;
 			}
 
-			// Check if item length is not exceeded maximum package length allowed.
+			// Validate item length data.
 			$item_length = wc_get_dimension( $item['data']->get_length(), 'cm' );
+			if ( ! $item_length || ! is_numeric( $item_length ) ) {
+				$item_length = 0;
+			}
 			if ( $this->max_length_instant && $item_length > $this->max_length_instant ) {
 				return;
 			}
 
-			// Check if item height is not exceeded maximum package height allowed.
-			$item_height = wc_get_dimension( $item['data']->get_height(), 'cm' ) * $item['quantity'];
+			// Validate item height data.
+			$item_height = wc_get_dimension( $item['data']->get_height(), 'cm' );
+			if ( ! $item_height || ! is_numeric( $item_height ) ) {
+				$item_height = 0;
+			}
+			$item_height *= $quantity;
 			if ( $this->max_height_instant && $item_height > $this->max_height_instant ) {
 				return;
 			}
