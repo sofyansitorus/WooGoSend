@@ -83,6 +83,10 @@ You can either create ticket at plugin support forum or GitHub repository:
 
 == Changelog ==
 
+= 1.0.2 - 2018-01-14 =
+
+* Fix - A non-numeric value encountered warning.
+
 = 1.0.1 - 2018-01-10 =
 
 * Improvements - Add new filter hooks: woocommerce_woogosend_shipping_destination_info.
