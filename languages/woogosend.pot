@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: WooGoSend\n"
-"POT-Creation-Date: 2018-01-10 15:37+0700\n"
-"PO-Revision-Date: 2018-01-10 15:37+0700\n"
+"POT-Creation-Date: 2018-01-16 02:38+0700\n"
+"PO-Revision-Date: 2018-01-16 02:38+0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -30,7 +30,7 @@ msgid "Title"
 msgstr ""
 
 #: includes/class-woogosend.php:125 includes/class-woogosend.php:197
-#: includes/class-woogosend.php:277
+#: includes/class-woogosend.php:284
 msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
@@ -119,18 +119,19 @@ msgstr ""
 msgid "Instant Delivery Service Options"
 msgstr ""
 
-#: includes/class-woogosend.php:185 includes/class-woogosend.php:265
+#: includes/class-woogosend.php:185 includes/class-woogosend.php:272
 msgid ""
 "<a href=\"https://www.go-jek.com/go-send/\" target=\"_blank\">Click here</a> "
 "for more info about GoSend."
 msgstr ""
 
-#: includes/class-woogosend.php:188 includes/class-woogosend.php:268
+#: includes/class-woogosend.php:188 includes/class-woogosend.php:264
+#: includes/class-woogosend.php:275 includes/class-woogosend.php:351
 msgid "Enable"
 msgstr ""
 
 #: includes/class-woogosend.php:189 includes/class-woogosend.php:257
-#: includes/class-woogosend.php:269 includes/class-woogosend.php:337
+#: includes/class-woogosend.php:276 includes/class-woogosend.php:344
 msgid "Yes"
 msgstr ""
 
@@ -138,11 +139,11 @@ msgstr ""
 msgid "Enable Instant delivery service."
 msgstr ""
 
-#: includes/class-woogosend.php:195 includes/class-woogosend.php:275
+#: includes/class-woogosend.php:195 includes/class-woogosend.php:282
 msgid "Label"
 msgstr ""
 
-#: includes/class-woogosend.php:202 includes/class-woogosend.php:282
+#: includes/class-woogosend.php:202 includes/class-woogosend.php:289
 msgid "Minimum Cost"
 msgstr ""
 
@@ -158,103 +159,117 @@ msgstr ""
 msgid "Per kilometer rates that will be billed to customer."
 msgstr ""
 
-#: includes/class-woogosend.php:216 includes/class-woogosend.php:296
+#: includes/class-woogosend.php:216 includes/class-woogosend.php:303
 msgid "Maximum Package Weight"
 msgstr ""
 
-#: includes/class-woogosend.php:218 includes/class-woogosend.php:298
+#: includes/class-woogosend.php:218 includes/class-woogosend.php:305
 msgid ""
 "Maximum package weight in kilograms that will be allowed to use this "
 "courier. Leave blank to disable."
 msgstr ""
 
-#: includes/class-woogosend.php:224 includes/class-woogosend.php:304
+#: includes/class-woogosend.php:224 includes/class-woogosend.php:311
 msgid "Maximum Package Width"
 msgstr ""
 
-#: includes/class-woogosend.php:226 includes/class-woogosend.php:306
+#: includes/class-woogosend.php:226 includes/class-woogosend.php:313
 msgid ""
 "Maximum package size width in centimeters that will be allowed to use this "
 "courier. Leave blank to disable."
 msgstr ""
 
-#: includes/class-woogosend.php:232 includes/class-woogosend.php:312
+#: includes/class-woogosend.php:232 includes/class-woogosend.php:319
 msgid "Maximum Package Length"
 msgstr ""
 
-#: includes/class-woogosend.php:234 includes/class-woogosend.php:314
+#: includes/class-woogosend.php:234 includes/class-woogosend.php:321
 msgid ""
 "Maximum package size length in centimeters that will be allowed to use this "
 "courier. Leave blank to disable."
 msgstr ""
 
-#: includes/class-woogosend.php:240 includes/class-woogosend.php:320
+#: includes/class-woogosend.php:240 includes/class-woogosend.php:327
 msgid "Maximum Package Height"
 msgstr ""
 
-#: includes/class-woogosend.php:242 includes/class-woogosend.php:322
+#: includes/class-woogosend.php:242 includes/class-woogosend.php:329
 msgid ""
 "Maximum package size height in centimeters that will be allowed to use this "
 "courier. Leave blank to disable."
 msgstr ""
 
-#: includes/class-woogosend.php:248 includes/class-woogosend.php:328
+#: includes/class-woogosend.php:248 includes/class-woogosend.php:335
 msgid "Maximum Distance"
 msgstr ""
 
-#: includes/class-woogosend.php:250 includes/class-woogosend.php:330
+#: includes/class-woogosend.php:250 includes/class-woogosend.php:337
 msgid ""
 "Maximum distance in kilometers that will be allowed to use this courier. "
 "Leave blank to disable."
 msgstr ""
 
-#: includes/class-woogosend.php:256 includes/class-woogosend.php:336
+#: includes/class-woogosend.php:256 includes/class-woogosend.php:343
 msgid "Show distance"
 msgstr ""
 
-#: includes/class-woogosend.php:259 includes/class-woogosend.php:339
+#: includes/class-woogosend.php:259 includes/class-woogosend.php:346
 msgid "Show the distance info to customer during checkout."
 msgstr ""
 
-#: includes/class-woogosend.php:263
+#: includes/class-woogosend.php:263 includes/class-woogosend.php:350
+msgid "Multiple Drivers"
+msgstr ""
+
+#: includes/class-woogosend.php:266 includes/class-woogosend.php:353
+msgid ""
+"Split shipment into several drivers if the package bulk weight and "
+"dimensions exceeded the limit."
+msgstr ""
+
+#: includes/class-woogosend.php:270
 msgid "Same Day Delivery Service Options"
 msgstr ""
 
-#: includes/class-woogosend.php:271
+#: includes/class-woogosend.php:278
 msgid "Enable Same Day delivery service."
 msgstr ""
 
-#: includes/class-woogosend.php:284
+#: includes/class-woogosend.php:291
 msgid "Shipping cost that will be billed to customer for distance under 15 km."
 msgstr ""
 
-#: includes/class-woogosend.php:289
+#: includes/class-woogosend.php:296
 msgid "Maximum Cost"
 msgstr ""
 
-#: includes/class-woogosend.php:291
+#: includes/class-woogosend.php:298
 msgid ""
 "Shipping cost that will be billed to customer for distance start from 15 km."
 msgstr ""
 
-#: includes/class-woogosend.php:357
+#: includes/class-woogosend.php:371
 msgid "API Key is required"
 msgstr ""
 
-#: includes/class-woogosend.php:378
+#: includes/class-woogosend.php:392
 msgid "Store Location Latitude is required"
 msgstr ""
 
-#: includes/class-woogosend.php:399
+#: includes/class-woogosend.php:413
 msgid "Store Location Longitude is required"
 msgstr ""
 
-#: includes/class-woogosend.php:537 includes/class-woogosend.php:672
+#: includes/class-woogosend.php:486 includes/class-woogosend.php:563
 #, php-format
 msgid "%s driver"
 msgid_plural "%s drivers"
 msgstr[0] ""
 msgstr[1] ""
+
+#: woogosend.php:75
+msgid "Settings"
+msgstr ""
 
 #. Plugin Name of the plugin/theme
 msgid "WooGoSend"
