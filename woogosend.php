@@ -29,6 +29,11 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
+// Defines plugin named constants.
+define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
+
+
 /**
  * Load plugin textdomain.
  *
@@ -67,7 +72,7 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	function woogosend_plugin_action_links( $links ) {
 		$links = array_merge(
 			array(
-				'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=0&wongkir_settings=1' ), 'wongkir_settings' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
+				'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=0&woogosend_settings=1' ), 'woogosend_settings' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
 			),
 			$links
 		);
@@ -75,7 +80,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 		return $links;
 	}
 	add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'woogosend_plugin_action_links' );
-
 
 	/**
 	 * Register shipping method
