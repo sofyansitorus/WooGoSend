@@ -55,6 +55,29 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	add_action( 'woocommerce_shipping_init', 'woogosend_shipping_init' );
 
 	/**
+	 * Add plugin action links.
+	 *
+	 * Add a link to the settings page on the plugins.php page.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param  array $links List of existing plugin action links.
+	 * @return array         List of modified plugin action links.
+	 */
+	function woogosend_plugin_action_links( $links ) {
+		$links = array_merge(
+			array(
+				'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=0&wongkir_settings=1' ), 'wongkir_settings' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
+			),
+			$links
+		);
+
+		return $links;
+	}
+	add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'woogosend_plugin_action_links' );
+
+
+	/**
 	 * Register shipping method
 	 *
 	 * @since    1.0.0
