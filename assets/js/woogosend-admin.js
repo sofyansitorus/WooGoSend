@@ -4,25 +4,32 @@
 
 	$(document).ready(function () {
 
-		// Try show settings modal on settings page.
 		if (woogosend_params.show_settings) {
+
 			setTimeout(function () {
+
+                // Try show settings modal on settings page.
 				var wooGoSendAdded = false;
 				var methods = $(document).find('.wc-shipping-zone-method-type');
 				for (var i = 0; i < methods.length; i++) {
 					var method = methods[i];
-					if ($(method).text() == 'WooGoSend') {
+                    if ($(method).text() == woogosend_params.method_title) {
 						$(method).closest('tr').find('.row-actions .wc-shipping-zone-method-settings').trigger('click');
 						wooGoSendAdded = true;
 						return;
 					}
-				}
+                }
+
+                // Show Add shipping method modal if the shipping is not added.
 				if (!wooGoSendAdded) {
 					$(".wc-shipping-zone-add-method").trigger('click');
 					$("select[name='add_method_id']").val('woogosend');
-				}
-			}, 300);
-		}
+                }
+                
+            }, 300);
+            
+        }
+        
 	});
 
 })(jQuery);
