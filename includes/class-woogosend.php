@@ -46,7 +46,7 @@ class WooGoSend extends WC_Shipping_Method {
 		$this->id = 'woogosend';
 
 		// Title shown in admin.
-		$this->method_title = 'WooGoSend';
+		$this->method_title = WOOGOSEND_METHOD_TITLE;
 
 		// Description shown in admin.
 		$this->method_description = __( 'Per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier.', 'woogosend' );

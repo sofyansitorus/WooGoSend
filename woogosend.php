@@ -43,6 +43,7 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOGOSEND_VERSION', '1.1.1' );
+define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
 
 /**
  * Load plugin textdomain.
@@ -91,7 +92,7 @@ function woogosend_plugin_action_links( $links ) {
 
 	$links = array_merge(
 		array(
-			'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id . '&woogosend_settings=1' ), 'woogosend_settings', 'woogosend_nonce' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
+			'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id ), 'woogosend_settings', 'woogosend_nonce' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
 		),
 		$links
 	);
@@ -122,7 +123,8 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend-admin',
 			'woogosend_params',
 			array(
-				'show_settings' => ( isset( $_GET['woogosend_settings'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
+				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
+				'method_title' => WOOGOSEND_METHOD_TITLE,
 			)
 		);
 	}
