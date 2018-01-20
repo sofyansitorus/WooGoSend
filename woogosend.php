@@ -43,6 +43,7 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOGOSEND_VERSION', '1.1.1' );
+define( 'WOOGOSEND_METHOD_ID', 'woogosend' );
 define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
 
 /**
@@ -124,7 +125,8 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend_params',
 			array(
 				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
-				'method_title' => WOOGOSEND_METHOD_TITLE,
+				'method_id'     => WOOGOSEND_METHOD_ID,
+				'method_title'  => WOOGOSEND_METHOD_TITLE,
 			)
 		);
 	}

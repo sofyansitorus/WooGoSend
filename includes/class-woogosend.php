@@ -43,7 +43,7 @@ class WooGoSend extends WC_Shipping_Method {
 	 */
 	public function __construct( $instance_id = 0 ) {
 		// ID for your shipping method. Should be unique.
-		$this->id = 'woogosend';
+		$this->id = WOOGOSEND_METHOD_ID;
 
 		// Title shown in admin.
 		$this->method_title = WOOGOSEND_METHOD_TITLE;
