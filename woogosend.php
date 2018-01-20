@@ -32,26 +32,26 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// Defines plugin named constants.
-define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
-define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
-
-
-/**
- * Load plugin textdomain.
- *
- * @since 1.0.0
- */
-function woogosend_load_textdomain() {
-	load_plugin_textdomain( 'woogosend', false, basename( dirname( __FILE__ ) ) . '/languages' );
-}
-add_action( 'plugins_loaded', 'woogosend_load_textdomain' );
-
-
 /**
  * Check if WooCommerce is active
  */
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
+
+	// Defines plugin named constants.
+	define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
+	define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
+	define( 'WOOGOSEND_VERSION', '1.1.1' );
+
+	/**
+	 * Load plugin textdomain.
+	 *
+	 * @since 1.0.0
+	 */
+	function woogosend_load_textdomain() {
+		load_plugin_textdomain( 'woogosend', false, basename( dirname( __FILE__ ) ) . '/languages' );
+	}
+	add_action( 'plugins_loaded', 'woogosend_load_textdomain' );
+
 	/**
 	 * Load the main class
 	 *
@@ -73,9 +73,23 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 * @return array         List of modified plugin action links.
 	 */
 	function woogosend_plugin_action_links( $links ) {
+		$zone_id = 0;
+		$zones   = WC_Shipping_Zones::get_zones();
+		foreach ( $zones as $zone ) {
+			if ( empty( $zone['shipping_methods'] ) || empty( $zone['zone_id'] ) ) {
+				continue;
+			}
+			foreach ( $zone['shipping_methods'] as $zone_shipping_method ) {
+				if ( $zone_shipping_method instanceof WooGoSend ) {
+					$zone_id = $zone['zone_id'];
+					break;
+				}
+			}
+		}
+
 		$links = array_merge(
 			array(
-				'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=0&woogosend_settings=1' ), 'woogosend_settings' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
+				'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id . '&woogosend_settings=1' ), 'woogosend_settings', 'woogosend_nonce' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
 			),
 			$links
 		);
@@ -92,12 +106,21 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	 */
 	function woogosend_enqueue_scripts( $hook = null ) {
 		if ( 'woocommerce_page_wc-settings' === $hook ) {
-			wp_enqueue_script( 'woogosend', WOOGOSEND_URL . 'assets/js/woogosend.min.js', array( 'jquery' ), '', true );
+			// Enqueue admin scripts.
+			$woogosend_admin_js = ( defined( 'WOOGOSEND_DEV' ) && WOOGOSEND_DEV ) ? add_query_arg( array( 't' => time() ), WOOGOSEND_URL . 'assets/js/woogosend-admin.js' ) : WOOGOSEND_URL . 'assets/js/woogosend-admin.min.js';
+			wp_enqueue_script(
+				'woogosend-admin', // Give the script a unique ID.
+				$woogosend_admin_js, // Define the path to the JS file.
+				array( 'jquery' ), // Define dependencies.
+				WOOGOSEND_VERSION, // Define a version (optional).
+				true // Specify whether to put in footer (leave this true).
+			);
+
 			wp_localize_script(
-				'woogosend',
+				'woogosend-admin',
 				'woogosend_params',
 				array(
-					'show_settings' => ( isset( $_GET['woogosend_settings'] ) && wp_verify_nonce( $_GET['_wpnonce'], 'woogosend_settings' ) && is_admin() ),
+					'show_settings' => ( isset( $_GET['woogosend_settings'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
 				)
 			);
 		}
