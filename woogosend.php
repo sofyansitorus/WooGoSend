@@ -119,6 +119,16 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			WOOGOSEND_VERSION, // Define a version (optional).
 			true // Specify whether to put in footer (leave this true).
 		);
+
+		wp_localize_script(
+			'woogosend-admin',
+			'woogosend_params',
+			array(
+				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
+				'method_id'     => WOOGOSEND_METHOD_ID,
+				'method_title'  => WOOGOSEND_METHOD_TITLE,
+			)
+		);
 	}
 }
 add_action( 'admin_enqueue_scripts', 'woogosend_enqueue_scripts', 999 );
