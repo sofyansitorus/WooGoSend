@@ -23,7 +23,7 @@
                 // Show Add shipping method modal if the shipping is not added.
 				if (!isMethodAdded) {
 					$(".wc-shipping-zone-add-method").trigger('click');
-                    $("select[name='add_method_id']").val(woogosend_params.method_id);
+                    $("select[name='add_method_id']").val(woogosend_params.method_id).trigger('change');
                 }
                 
             }, 300);
