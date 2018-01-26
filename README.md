@@ -6,7 +6,7 @@ WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia 
 **Contributors:** [sofyansitorus](https://profiles.wordpress.org/sofyansitorus)<br>
 **Tags:** [woocommerce shipping](https://wordpress.org/plugins/tags/woocommerce shipping), [go-jek](https://wordpress.org/plugins/tags/go-jek), [ojek shipping](https://wordpress.org/plugins/tags/ojek shipping), [gosend](https://wordpress.org/plugins/tags/gosend), [gojek shipping](https://wordpress.org/plugins/tags/gojek shipping)<br>
 **Requires at least:** 4.8<br>
-**Tested up to:** 4.9.1<br>
+**Tested up to:** 4.9.2<br>
 **Stable tag:** 1.1.1<br>
 **License:** [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.txt)<br>
 **Requires PHP:** 5.6<br>
@@ -79,6 +79,21 @@ You can either create ticket at plugin support forum or GitHub repository:
 
 ## Screenshots ##
 
+### Settings panel: General Options
+
+![Settings panel: General Options](assets/screenshot-1.jpg)
+
+### Settings panel: Instant Delivery Service Options
+
+![Settings panel: Instant Delivery Service Options](assets/screenshot-2.jpg)
+
+### Settings panel: Same Day Delivery Service Options
+
+![Settings panel: Same Day Delivery Service Options](assets/screenshot-3.jpg)
+
+### Shipping Calculator preview
+
+![Shipping Calculator preview](assets/screenshot-4.jpg)
 
 ## Changelog ##
 
