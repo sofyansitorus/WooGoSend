@@ -110,12 +110,23 @@ add_action( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'woogosend_plu
  */
 function woogosend_enqueue_scripts( $hook = null ) {
 	if ( 'woocommerce_page_wc-settings' === $hook ) {
+
+		// Enqueue admin scripts.
+		$woogosend_admin_css = ( defined( 'WOOGOSEND_DEV' ) && WOOGOSEND_DEV ) ? add_query_arg( array( 't' => time() ), WOOGOSEND_URL . 'assets/css/woogosend-admin.css' ) : WOOGOSEND_URL . 'assets/css/woogosend-admin.min.css';
+		wp_enqueue_style(
+			'woogosend-admin', // Give the script a unique ID.
+			$woogosend_admin_css, // Define the path to the JS file.
+			array(), // Define dependencies.
+			WOOGOSEND_VERSION, // Define a version (optional).
+			false // Specify whether to put in footer (leave this false).
+		);
+
 		// Enqueue admin scripts.
 		$woogosend_admin_js = ( defined( 'WOOGOSEND_DEV' ) && WOOGOSEND_DEV ) ? add_query_arg( array( 't' => time() ), WOOGOSEND_URL . 'assets/js/woogosend-admin.js' ) : WOOGOSEND_URL . 'assets/js/woogosend-admin.min.js';
 		wp_enqueue_script(
 			'woogosend-admin', // Give the script a unique ID.
 			$woogosend_admin_js, // Define the path to the JS file.
-			array( 'jquery' ), // Define dependencies.
+			array( 'jquery', 'wp-util' ), // Define dependencies.
 			WOOGOSEND_VERSION, // Define a version (optional).
 			true // Specify whether to put in footer (leave this true).
 		);
@@ -127,6 +138,10 @@ function woogosend_enqueue_scripts( $hook = null ) {
 				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
 				'method_id'     => WOOGOSEND_METHOD_ID,
 				'method_title'  => WOOGOSEND_METHOD_TITLE,
+				'txt'           => array(
+					'drag_marker' => __( 'Drag this marker or search your address at the input above.', 'woogosend' ),
+				),
+				'marker'        => WOOGOSEND_URL . 'assets/img/marker.png',
 			)
 		);
 	}
