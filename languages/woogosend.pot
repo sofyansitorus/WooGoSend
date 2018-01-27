@@ -1,28 +1,19 @@
-#, fuzzy
+# Copyright (C) 2018 WooGoSend
+# This file is distributed under the same license as the WooGoSend package.
 msgid ""
 msgstr ""
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: WooGoSend\n"
-"POT-Creation-Date: 2018-01-16 02:38+0700\n"
-"PO-Revision-Date: 2018-01-16 02:38+0700\n"
-"Last-Translator: \n"
-"Language-Team: \n"
+"Project-Id-Version: WooGoSend 1.1.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woogosend\n"
+"POT-Creation-Date: 2018-01-27 13:31:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.5\n"
-"X-Poedit-Basepath: ..\n"
-"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
-"X-Poedit-WPHeader: woogosend.php\n"
-"X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
-"X-Poedit-SearchPath-0: .\n"
-"X-Poedit-SearchPathExcluded-0: *.js\n"
+"PO-Revision-Date: 2018-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
 
 #: includes/class-woogosend.php:52
-msgid "Shipping rates calculator for GoSend courier from Go-Jek Indonesia."
+msgid "Per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier."
 msgstr ""
 
 #: includes/class-woogosend.php:123
@@ -39,68 +30,55 @@ msgid "API Key"
 msgstr ""
 
 #: includes/class-woogosend.php:132
-msgid ""
-"<a href=\"https://developers.google.com/maps/documentation/distance-matrix/"
-"get-api-key\" target=\"_blank\">Click here</a> to get a Google Maps Distance "
-"Matrix API Key."
+msgid "<a href=\"https://developers.google.com/maps/documentation/distance-matrix/get-api-key\" target=\"_blank\">Click here</a> to get a Google Maps Distance Matrix API Key."
 msgstr ""
 
 #: includes/class-woogosend.php:136
+msgid "Store Location"
+msgstr ""
+
+#: includes/class-woogosend.php:140
 msgid "Travel Mode"
 msgstr ""
 
-#: includes/class-woogosend.php:138
+#: includes/class-woogosend.php:142
 msgid "Google Maps Distance Matrix API travel mode parameter."
 msgstr ""
 
-#: includes/class-woogosend.php:142
+#: includes/class-woogosend.php:146
 msgid "Driving"
 msgstr ""
 
-#: includes/class-woogosend.php:143
+#: includes/class-woogosend.php:147
 msgid "Walking"
 msgstr ""
 
-#: includes/class-woogosend.php:144
+#: includes/class-woogosend.php:148
 msgid "Bicycling"
 msgstr ""
 
-#: includes/class-woogosend.php:148
+#: includes/class-woogosend.php:152
 msgid "Restrictions"
 msgstr ""
 
-#: includes/class-woogosend.php:150
+#: includes/class-woogosend.php:154
 msgid "Google Maps Distance Matrix API restrictions parameter."
 msgstr ""
 
-#: includes/class-woogosend.php:154
+#: includes/class-woogosend.php:158
 msgid "Avoid Tolls"
 msgstr ""
 
-#: includes/class-woogosend.php:155
+#: includes/class-woogosend.php:159
 msgid "Avoid Highways"
 msgstr ""
 
-#: includes/class-woogosend.php:156
+#: includes/class-woogosend.php:160
 msgid "Avoid Ferries"
 msgstr ""
 
-#: includes/class-woogosend.php:157
-msgid "Avoid Indoor"
-msgstr ""
-
 #: includes/class-woogosend.php:161
-msgid "Store Location Latitude"
-msgstr ""
-
-#: includes/class-woogosend.php:163 includes/class-woogosend.php:169
-msgid ""
-"<a href=\"http://www.latlong.net/\" target=\"_blank\">Click here</a> to get "
-"your store location coordinates info."
-msgstr ""
-
-#: includes/class-woogosend.php:167
-msgid "Store Location Longitude"
+msgid "Avoid Indoor"
 msgstr ""
 
 #: includes/class-woogosend.php:173
@@ -120,9 +98,7 @@ msgid "Instant Delivery Service Options"
 msgstr ""
 
 #: includes/class-woogosend.php:185 includes/class-woogosend.php:272
-msgid ""
-"<a href=\"https://www.go-jek.com/go-send/\" target=\"_blank\">Click here</a> "
-"for more info about GoSend."
+msgid "<a href=\"https://www.go-jek.com/go-send/\" target=\"_blank\">Click here</a> for more info about GoSend."
 msgstr ""
 
 #: includes/class-woogosend.php:188 includes/class-woogosend.php:264
@@ -164,9 +140,7 @@ msgid "Maximum Package Weight"
 msgstr ""
 
 #: includes/class-woogosend.php:218 includes/class-woogosend.php:305
-msgid ""
-"Maximum package weight in kilograms that will be allowed to use this "
-"courier. Leave blank to disable."
+msgid "Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable."
 msgstr ""
 
 #: includes/class-woogosend.php:224 includes/class-woogosend.php:311
@@ -174,9 +148,7 @@ msgid "Maximum Package Width"
 msgstr ""
 
 #: includes/class-woogosend.php:226 includes/class-woogosend.php:313
-msgid ""
-"Maximum package size width in centimeters that will be allowed to use this "
-"courier. Leave blank to disable."
+msgid "Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable."
 msgstr ""
 
 #: includes/class-woogosend.php:232 includes/class-woogosend.php:319
@@ -184,9 +156,7 @@ msgid "Maximum Package Length"
 msgstr ""
 
 #: includes/class-woogosend.php:234 includes/class-woogosend.php:321
-msgid ""
-"Maximum package size length in centimeters that will be allowed to use this "
-"courier. Leave blank to disable."
+msgid "Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable."
 msgstr ""
 
 #: includes/class-woogosend.php:240 includes/class-woogosend.php:327
@@ -194,9 +164,7 @@ msgid "Maximum Package Height"
 msgstr ""
 
 #: includes/class-woogosend.php:242 includes/class-woogosend.php:329
-msgid ""
-"Maximum package size height in centimeters that will be allowed to use this "
-"courier. Leave blank to disable."
+msgid "Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable."
 msgstr ""
 
 #: includes/class-woogosend.php:248 includes/class-woogosend.php:335
@@ -204,9 +172,7 @@ msgid "Maximum Distance"
 msgstr ""
 
 #: includes/class-woogosend.php:250 includes/class-woogosend.php:337
-msgid ""
-"Maximum distance in kilometers that will be allowed to use this courier. "
-"Leave blank to disable."
+msgid "Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable."
 msgstr ""
 
 #: includes/class-woogosend.php:256 includes/class-woogosend.php:343
@@ -222,9 +188,7 @@ msgid "Multiple Drivers"
 msgstr ""
 
 #: includes/class-woogosend.php:266 includes/class-woogosend.php:353
-msgid ""
-"Split shipment into several drivers if the package bulk weight and "
-"dimensions exceeded the limit."
+msgid "Split shipment into several drivers if the package bulk weight and dimensions exceeded the limit."
 msgstr ""
 
 #: includes/class-woogosend.php:270
@@ -244,33 +208,38 @@ msgid "Maximum Cost"
 msgstr ""
 
 #: includes/class-woogosend.php:298
-msgid ""
-"Shipping cost that will be billed to customer for distance start from 15 km."
+msgid "Shipping cost that will be billed to customer for distance start from 15 km."
 msgstr ""
 
-#: includes/class-woogosend.php:371
+#: includes/class-woogosend.php:393
+msgid "Search your store location"
+msgstr ""
+
+#: includes/class-woogosend.php:433
 msgid "API Key is required"
 msgstr ""
 
-#: includes/class-woogosend.php:392
+#: includes/class-woogosend.php:454
 msgid "Store Location Latitude is required"
 msgstr ""
 
-#: includes/class-woogosend.php:413
+#: includes/class-woogosend.php:475
 msgid "Store Location Longitude is required"
 msgstr ""
 
-#: includes/class-woogosend.php:486 includes/class-woogosend.php:563
-#, php-format
+#: includes/class-woogosend.php:548 includes/class-woogosend.php:625
 msgid "%s driver"
 msgid_plural "%s drivers"
 msgstr[0] ""
 msgstr[1] ""
 
-#: woogosend.php:75
+#: woogosend.php:96
 msgid "Settings"
 msgstr ""
 
+#: woogosend.php:142
+msgid "Drag this marker or search your address at the input above."
+msgstr ""
 #. Plugin Name of the plugin/theme
 msgid "WooGoSend"
 msgstr ""
@@ -280,9 +249,7 @@ msgid "https://github.com/sofyansitorus/WooGoSend"
 msgstr ""
 
 #. Description of the plugin/theme
-msgid ""
-"WooCommerce per kilometer shipping rates calculator for GoSend courier from "
-"Go-Jek Indonesia."
+msgid "WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier."
 msgstr ""
 
 #. Author of the plugin/theme
