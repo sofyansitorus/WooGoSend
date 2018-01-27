@@ -132,6 +132,10 @@ class WooGoSend extends WC_Shipping_Method {
 				'description' => __( '<a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get a Google Maps Distance Matrix API Key.', 'woogosend' ),
 				'default'     => '',
 			),
+			'gmaps_address_picker'      => array(
+				'title' => __( 'Store Location', 'woogosend' ),
+				'type'  => 'address_picker',
+			),
 			'gmaps_api_mode'            => array(
 				'title'       => __( 'Travel Mode', 'woogosend' ),
 				'type'        => 'select',
@@ -158,16 +162,12 @@ class WooGoSend extends WC_Shipping_Method {
 				),
 			),
 			'origin_lat'                => array(
-				'title'       => __( 'Store Location Latitude', 'woogosend' ),
-				'type'        => 'decimal',
-				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
-				'default'     => '',
+				'type'    => 'hidden',
+				'default' => '',
 			),
 			'origin_lng'                => array(
-				'title'       => __( 'Store Location Longitude', 'woogosend' ),
-				'type'        => 'decimal',
-				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
-				'default'     => '',
+				'type'    => 'hidden',
+				'default' => '',
 			),
 			'tax_status'                => array(
 				'title'   => __( 'Tax status', 'woogosend' ),
@@ -354,6 +354,68 @@ class WooGoSend extends WC_Shipping_Method {
 				'desc_tip'    => true,
 			),
 		);
+	}
+
+	/**
+	 * Generate origin settings field.
+	 *
+	 * @since 1.0.0
+	 * @param string $key Settings field key.
+	 * @param array  $data Settings field data.
+	 */
+	public function generate_address_picker_html( $key, $data ) {
+		$field_key = $this->get_field_key( $key );
+
+		$defaults = array(
+			'title'             => '',
+			'disabled'          => false,
+			'class'             => '',
+			'css'               => '',
+			'placeholder'       => '',
+			'type'              => 'text',
+			'desc_tip'          => false,
+			'description'       => '',
+			'custom_attributes' => array(),
+			'options'           => array(),
+		);
+
+		$data = wp_parse_args( $data, $defaults );
+
+		ob_start(); ?>
+		<tr valign="top">
+			<th scope="row" class="titledesc">
+				<?php echo esc_html( $this->get_tooltip_html( $data ) ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+			</th>
+			<td class="forminp">
+				<div id="woogosend-map-wrapper" class="woogosend-map-wrapper"></div>
+				<script type="text/html" id="tmpl-woogosend-map-search">
+					<input id="{{data.map_search_id}}" class="woogosend-map-search controls" type="text" placeholder="<?php echo esc_attr( __( 'Search your store location', 'woogosend' ) ); ?>" autocomplete="off" />
+				</script>
+				<script type="text/html" id="tmpl-woogosend-map-canvas">
+					<div id="{{data.map_canvas_id}}" class="woogosend-map-canvas"></div>
+				</script>
+			</td>
+		</tr>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Generate hidden settings field.
+	 *
+	 * @since 1.0.0
+	 * @param string $key Settings field key.
+	 * @param array  $data Settings field data.
+	 */
+	public function generate_hidden_html( $key, $data ) {
+		$field_key = $this->get_field_key( $key );
+
+		ob_start();
+		?>
+		<input type="hidden" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>">
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
