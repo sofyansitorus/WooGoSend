@@ -7,7 +7,7 @@ WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia 
 **Tags:** [woocommerce shipping](https://wordpress.org/plugins/tags/woocommerce shipping), [go-jek](https://wordpress.org/plugins/tags/go-jek), [ojek shipping](https://wordpress.org/plugins/tags/ojek shipping), [gosend](https://wordpress.org/plugins/tags/gosend), [gojek shipping](https://wordpress.org/plugins/tags/gojek shipping)<br>
 **Requires at least:** 4.8<br>
 **Tested up to:** 4.9.2<br>
-**Stable tag:** 1.1.1<br>
+**Stable tag:** 1.2.0<br>
 **License:** [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.txt)<br>
 **Requires PHP:** 5.6<br>
 
