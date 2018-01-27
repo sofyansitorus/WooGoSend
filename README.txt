@@ -24,7 +24,7 @@ Please note that this plugin is not using official Gojek Indonesia API. This plu
 * Set maximum cost that will be billed to customer.
 * Set maximum shipping distances that allowed to use the courier.
 * Set maximum package weight and dimensions that allowed to use the courier.
-* Set shipping origin info by coordinates.
+* Set shipping origin info by coordinates using "Map Address Picker".
 * Set travel mode: Driving, Walking, Bicycling.
 * Set route restrictions: Avoid Tolls, Avoid Highways, Avoid Ferries, Avoid Indoor.
 * Set visibility distance info to customer.
@@ -83,6 +83,10 @@ You can either create ticket at plugin support forum or GitHub repository:
 
 == Changelog ==
 
+= 1.2.0 =
+
+* Improvemnets - Add "Map Location Picker" for store location setting.
+
 = 1.1.1 =
 
 * Improvemnets - Add "Settings" link on the plugins.php page.
@@ -116,5 +120,5 @@ You can either create ticket at plugin support forum or GitHub repository:
 
 == Upgrade Notice ==
 
-= 1.1.1 =
+= 1.2.0 =
 This version add some improvements. Upgrade immediately.
