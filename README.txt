@@ -4,7 +4,7 @@ Tags: woocommerce shipping,go-jek,ojek shipping,gosend,gojek shipping
 Requires at least: 4.8
 Tested up to: 4.9.2
 Requires PHP: 5.6
-Stable tag: 1.2.1
+Stable tag: trunk
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -14,6 +14,8 @@ WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia 
 WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier.
 
 Please note that this plugin is not using official Gojek Indonesia API. This plugin just estimate the distance matrix using using Google Maps Distance Matrix API and then calculating the cost using the rates defined in the settings.
+
+This plugin require Google Maps Distance Matrix API Services enabled in your Google Console. [Click here](https://developers.google.com/maps/documentation/distance-matrix/get-api-key) to get API Key and to enable the services.
 
 = Features =
 
@@ -58,22 +60,20 @@ You can setup the plugin setting from the Shipping Zones settings. Please check 
 [Video](https://www.youtube.com/watch?v=eThWmrnBP38) by [InMotion Hosting](https://www.inmotionhosting.com)
 
 = Where can I get support? =
-You can either create ticket at plugin support forum or GitHub repository:
+You can either support ticket at plugin support forum :
 
-* [Plugin Support Forum](https://wordpress.org/support/plugin/woogosend)
-* [Plugin GitHub Repository](https://github.com/sofyansitorus/WooGoSend)
+* [Plugin Support Forum](https://wordpress.org/support/plugin/wcsdm)
 
 = Where can I report bugs? =
-You can either create ticket at plugin support forum or GitHub repository:
+You can report bugs at the plugin GitHub repository:
 
-* [Plugin Support Forum](https://wordpress.org/support/plugin/woogosend)
-* [Plugin GitHub Repository](https://github.com/sofyansitorus/WooGoSend)
+* [Plugin Support Forum](https://wordpress.org/support/plugin/wcsdm)
+* [Plugin GitHub Repository](https://github.com/sofyansitorus/WooCommerce-Shipping-Distance-Matrix)
 
-= Where can I request a feature? =
-You can either create ticket at plugin support forum or GitHub repository:
+= Can I contribute to develop this plugin? =
+I always welcome and encourage contributions to this plugin. Please visit the plugin GitHub repository:
 
-* [Plugin Support Forum](https://wordpress.org/support/plugin/woogosend)
-* [Plugin GitHub Repository](https://github.com/sofyansitorus/WooGoSend)
+* [Plugin GitHub Repository](https://github.com/sofyansitorus/WooCommerce-Shipping-Distance-Matrix)
 
 == Screenshots ==
 1. Settings panel: General Options
@@ -82,6 +82,10 @@ You can either create ticket at plugin support forum or GitHub repository:
 4. Shipping Calculator preview
 
 == Changelog ==
+
+= 1.2.2 =
+
+* Fix - Maps picker.
 
 = 1.2.1 =
 
@@ -124,5 +128,5 @@ You can either create ticket at plugin support forum or GitHub repository:
 
 == Upgrade Notice ==
 
-= 1.2.1 =
-This version add some improvements. Upgrade immediately.
+= 1.2.2 =
+This version include bug fix Maps Picker. Upgrade immediately.
