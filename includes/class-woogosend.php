@@ -129,7 +129,7 @@ class WooGoSend extends WC_Shipping_Method {
 			'gmaps_api_key'             => array(
 				'title'       => __( 'API Key', 'woogosend' ),
 				'type'        => 'text',
-				'description' => __( '<a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get a Google Maps Distance Matrix API Key.', 'woogosend' ),
+				'description' => __( 'This plugin require Google Maps Distance Matrix API Services enabled in your Google Console. <a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get API Key and to enable the services.', 'woogosend' ),
 				'default'     => '',
 			),
 			'gmaps_address_picker'      => array(
