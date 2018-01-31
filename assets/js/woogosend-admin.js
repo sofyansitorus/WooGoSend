@@ -49,7 +49,7 @@
 				}
 			});
 		},
-		_initGoogleMaps: function(apiKey) {
+		_initGoogleMaps: function() {
 			var self = this;
 			try {
 				if (
