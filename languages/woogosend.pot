@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the WooGoSend package.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooGoSend 1.1.1\n"
+"Project-Id-Version: WooGoSend 1.2.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woogosend\n"
-"POT-Creation-Date: 2018-01-27 13:31:03+00:00\n"
+"POT-Creation-Date: 2018-02-01 02:58:09+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -26,58 +26,66 @@ msgid "This controls the title which the user sees during checkout."
 msgstr ""
 
 #: includes/class-woogosend.php:130
-msgid "API Key"
+msgid "Google Maps Distance Matrix API"
 msgstr ""
 
 #: includes/class-woogosend.php:132
-msgid "<a href=\"https://developers.google.com/maps/documentation/distance-matrix/get-api-key\" target=\"_blank\">Click here</a> to get a Google Maps Distance Matrix API Key."
+msgid "This plugin require Google Maps Distance Matrix API Services enabled in your Google Console. <a href=\"https://developers.google.com/maps/documentation/distance-matrix/get-api-key\" target=\"_blank\">Click here</a> to get API Key and to enable the services."
 msgstr ""
 
 #: includes/class-woogosend.php:136
-msgid "Store Location"
+msgid "Store Location Latitude"
 msgstr ""
 
-#: includes/class-woogosend.php:140
-msgid "Travel Mode"
+#: includes/class-woogosend.php:138 includes/class-woogosend.php:144
+msgid "<a href=\"http://www.latlong.net/\" target=\"_blank\">Click here</a> to get your store location coordinates info."
 msgstr ""
 
 #: includes/class-woogosend.php:142
-msgid "Google Maps Distance Matrix API travel mode parameter."
-msgstr ""
-
-#: includes/class-woogosend.php:146
-msgid "Driving"
-msgstr ""
-
-#: includes/class-woogosend.php:147
-msgid "Walking"
+msgid "Store Location Longitude"
 msgstr ""
 
 #: includes/class-woogosend.php:148
-msgid "Bicycling"
+msgid "Travel Mode"
 msgstr ""
 
-#: includes/class-woogosend.php:152
-msgid "Restrictions"
+#: includes/class-woogosend.php:150
+msgid "Google Maps Distance Matrix API travel mode parameter."
 msgstr ""
 
 #: includes/class-woogosend.php:154
-msgid "Google Maps Distance Matrix API restrictions parameter."
+msgid "Driving"
 msgstr ""
 
-#: includes/class-woogosend.php:158
-msgid "Avoid Tolls"
+#: includes/class-woogosend.php:155
+msgid "Walking"
 msgstr ""
 
-#: includes/class-woogosend.php:159
-msgid "Avoid Highways"
+#: includes/class-woogosend.php:156
+msgid "Bicycling"
 msgstr ""
 
 #: includes/class-woogosend.php:160
+msgid "Restrictions"
+msgstr ""
+
+#: includes/class-woogosend.php:162
+msgid "Google Maps Distance Matrix API restrictions parameter."
+msgstr ""
+
+#: includes/class-woogosend.php:166
+msgid "Avoid Tolls"
+msgstr ""
+
+#: includes/class-woogosend.php:167
+msgid "Avoid Highways"
+msgstr ""
+
+#: includes/class-woogosend.php:168
 msgid "Avoid Ferries"
 msgstr ""
 
-#: includes/class-woogosend.php:161
+#: includes/class-woogosend.php:169
 msgid "Avoid Indoor"
 msgstr ""
 
@@ -211,23 +219,21 @@ msgstr ""
 msgid "Shipping cost that will be billed to customer for distance start from 15 km."
 msgstr ""
 
-#: includes/class-woogosend.php:393
-msgid "Search your store location"
-msgstr ""
-
-#: includes/class-woogosend.php:433
+#: includes/class-woogosend.php:371
 msgid "API Key is required"
 msgstr ""
 
-#: includes/class-woogosend.php:454
+#: includes/class-woogosend.php:392
 msgid "Store Location Latitude is required"
 msgstr ""
 
-#: includes/class-woogosend.php:475
+#: includes/class-woogosend.php:413
 msgid "Store Location Longitude is required"
 msgstr ""
 
-#: includes/class-woogosend.php:548 includes/class-woogosend.php:625
+#. translators: Number of drivers needed.
+
+#: includes/class-woogosend.php:486 includes/class-woogosend.php:563
 msgid "%s driver"
 msgid_plural "%s drivers"
 msgstr[0] ""
