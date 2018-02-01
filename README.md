@@ -26,7 +26,7 @@ This plugin require Google Maps Distance Matrix API Services enabled in your Goo
 * Set maximum cost that will be billed to customer.
 * Set maximum shipping distances that allowed to use the courier.
 * Set maximum package weight and dimensions that allowed to use the courier.
-* Set shipping origin info by coordinates using "Map Address Picker".
+* Set shipping origin info by store location coordinates.
 * Set travel mode: Driving, Walking, Bicycling.
 * Set route restrictions: Avoid Tolls, Avoid Highways, Avoid Ferries, Avoid Indoor.
 * Set visibility distance info to customer.
@@ -97,6 +97,9 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 ## Changelog ##
 
+### 1.2.3 ###
+* Fix - Remove Maps Place Picker.
+
 ### 1.2.2 ###
 * Fix - Maps picker.
 
@@ -135,7 +138,7 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 ## Upgrade Notice ##
 
-### 1.2.2 ###
+### 1.2.3 ###
 This version include bug fix Maps Picker. Upgrade immediately.
 
 
