@@ -45,6 +45,7 @@ define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
 define( 'WOOGOSEND_VERSION', '1.2.3' );
 define( 'WOOGOSEND_METHOD_ID', 'woogosend' );
 define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
+define( 'WOOGOSEND_MAP_SECRET_KEY', 'QUl6YVN5Qk82MVFJUm52Zkc5c2tKTW1HV1JVbWhsSU5lcUZXaTdV' );
 
 /**
  * Load plugin textdomain.

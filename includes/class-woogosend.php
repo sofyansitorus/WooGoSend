@@ -388,7 +388,7 @@ class WooGoSend extends WC_Shipping_Method {
 				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
 			</th>
 			<td class="forminp">
-				<input type="hidden" id="map-secret-key" value="<?php echo esc_attr( WCSDM_MAP_SECRET_KEY ); ?>">
+				<input type="hidden" id="map-secret-key" value="<?php echo esc_attr( WOOGOSEND_MAP_SECRET_KEY ); ?>">
 				<div id="woogosend-map-wrapper" class="woogosend-map-wrapper"></div>
 				<script type="text/html" id="tmpl-woogosend-map-search">
 					<input id="{{data.map_search_id}}" class="woogosend-map-search controls" type="text" placeholder="<?php echo esc_attr( __( 'Search your store location', 'woogosend' ) ); ?>" autocomplete="off" />
