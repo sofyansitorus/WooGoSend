@@ -136,7 +136,7 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend-admin',
 			'woogosend_params',
 			array(
-				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
+				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( sanitize_term_field( wp_unslash( $_GET['woogosend_nonce'] ) ), 'woogosend_settings' ) && is_admin() ),
 				'method_id'     => WOOGOSEND_METHOD_ID,
 				'method_title'  => WOOGOSEND_METHOD_TITLE,
 				'txt'           => array(

@@ -925,7 +925,7 @@ class WooGoSend extends WC_Shipping_Method {
 		$keys = array( 'address', 'address_2', 'city', 'state', 'postcode', 'country' );
 
 		// Remove destination field keys for shipping calculator request.
-		if ( ! empty( $_POST['calc_shipping'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'woocommerce-cart' ) ) {
+		if ( isset( $_POST['calc_shipping'], $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-cart' ) ) {
 			$keys_remove = array( 'address', 'address_2' );
 			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) {
 				array_push( $keys_remove, 'city' );
