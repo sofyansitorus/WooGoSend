@@ -1017,6 +1017,7 @@ class WooGoSend extends WC_Shipping_Method {
 	/**
 	 * Convert Meters to Distance Unit
 	 *
+	 * @since    1.2.4
 	 * @param int $meters Number of meters to convert.
 	 * @return int
 	 */
@@ -1027,6 +1028,7 @@ class WooGoSend extends WC_Shipping_Method {
 	/**
 	 * Convert Meters to Miles
 	 *
+	 * @since    1.2.4
 	 * @param int $meters Number of meters to convert.
 	 * @return int
 	 */
@@ -1037,6 +1039,7 @@ class WooGoSend extends WC_Shipping_Method {
 	/**
 	 * Convert Meters to Kilometres
 	 *
+	 * @since    1.2.4
 	 * @param int $meters Number of meters to convert.
 	 * @return int
 	 */
