@@ -154,6 +154,7 @@ function woogosend_enqueue_scripts( $hook = null ) {
 					'drag_marker' => __( 'Drag this marker or search your address at the input above.', 'woogosend' ),
 				),
 				'marker'        => WOOGOSEND_URL . 'assets/img/marker.png',
+				'language'      => get_locale(),
 			)
 		);
 	}

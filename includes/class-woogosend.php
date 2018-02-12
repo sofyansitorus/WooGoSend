@@ -809,6 +809,7 @@ class WooGoSend extends WC_Shipping_Method {
 			'mode'         => rawurlencode( $this->gmaps_api_mode ),
 			'avoid'        => rawurlencode( $this->gmaps_api_avoid ),
 			'units'        => rawurlencode( 'metric' ),
+			'language'     => rawurlencode( get_locale() ),
 			'origins'      => rawurlencode( $origin ),
 			'destinations' => rawurlencode( $destination ),
 		);

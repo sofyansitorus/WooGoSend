@@ -66,7 +66,8 @@
 				$.getScript(
 					"https://maps.googleapis.com/maps/api/js?key=" +
 						self._decode($("#map-secret-key").val()) +
-						"&libraries=geometry,places",
+						"&libraries=geometry,places&&language=" +
+						woogosend_params.language,
 					function() {
 						self._buildGoogleMaps();
 					}
