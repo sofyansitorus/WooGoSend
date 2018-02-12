@@ -6,7 +6,7 @@ WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia 
 **Contributors:** [sofyansitorus](https://profiles.wordpress.org/sofyansitorus)<br>
 **Tags:** [woocommerce shipping](https://wordpress.org/plugins/tags/woocommerce shipping), [go-jek](https://wordpress.org/plugins/tags/go-jek), [ojek shipping](https://wordpress.org/plugins/tags/ojek shipping), [gosend](https://wordpress.org/plugins/tags/gosend), [gojek shipping](https://wordpress.org/plugins/tags/gojek shipping)<br>
 **Requires at least:** 4.8<br>
-**Tested up to:** 4.9.2<br>
+**Tested up to:** 4.9.4<br>
 **Stable tag:** trunk (master)<br>
 **License:** [GPL-2.0+](http://www.gnu.org/licenses/gpl-2.0.txt)<br>
 **Requires PHP:** 5.6<br>
@@ -97,6 +97,10 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 ## Changelog ##
 
+### 1.2.4 ###
+* Improvements - Add Maps Place Picker.
+* Fix - Fix issue when using comma as decimal dlimeter.
+
 ### 1.2.3 ###
 * Fix - Remove Maps Place Picker.
 
@@ -138,7 +142,7 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 ## Upgrade Notice ##
 
-### 1.2.3 ###
-This version include bug fix Maps Picker. Upgrade immediately.
+### 1.2.4 ###
+This version include bug fixes and improvements. Upgrade immediately.
 
 
