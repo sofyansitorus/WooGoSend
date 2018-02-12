@@ -79,8 +79,7 @@ add_action( 'woocommerce_shipping_init', 'woogosend_shipping_init' );
  */
 function woogosend_plugin_action_links( $links ) {
 	$zone_id = 0;
-	$zones   = WC_Shipping_Zones::get_zones();
-	foreach ( $zones as $zone ) {
+	foreach ( WC_Shipping_Zones::get_zones() as $zone ) {
 		if ( empty( $zone['shipping_methods'] ) || empty( $zone['zone_id'] ) ) {
 			continue;
 		}
@@ -90,11 +89,23 @@ function woogosend_plugin_action_links( $links ) {
 				break;
 			}
 		}
+		if ( $zone_id ) {
+			break;
+		}
 	}
 
 	$links = array_merge(
 		array(
-			'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id ), 'woogosend_settings', 'woogosend_nonce' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
+			'<a href="' . esc_url(
+				add_query_arg(
+					array(
+						'page'               => 'wc-settings',
+						'tab'                => 'shipping',
+						'zone_id'            => $zone_id,
+						'woogosend_settings' => true,
+					), admin_url( 'admin.php' )
+				)
+			) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
 		),
 		$links
 	);
@@ -136,7 +147,7 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend-admin',
 			'woogosend_params',
 			array(
-				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( sanitize_term_field( wp_unslash( $_GET['woogosend_nonce'] ) ), 'woogosend_settings' ) && is_admin() ),
+				'show_settings' => ( isset( $_GET['woogosend_settings'] ) && is_admin() ) ? 1 : 0,
 				'method_id'     => WOOGOSEND_METHOD_ID,
 				'method_title'  => WOOGOSEND_METHOD_TITLE,
 				'txt'           => array(
