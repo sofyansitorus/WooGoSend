@@ -147,7 +147,7 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend-admin',
 			'woogosend_params',
 			array(
-				'show_settings' => ( isset( $_GET['woogosend_settings'] ) && is_admin() ) ? 1 : 0,
+				'show_settings' => ( isset( $_GET['woogosend_settings'] ) && is_admin() ) ? true : false,
 				'method_id'     => WOOGOSEND_METHOD_ID,
 				'method_title'  => WOOGOSEND_METHOD_TITLE,
 				'txt'           => array(
