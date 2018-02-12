@@ -2,7 +2,7 @@
 Contributors: sofyansitorus
 Tags: woocommerce shipping,go-jek,ojek shipping,gosend,gojek shipping
 Requires at least: 4.8
-Tested up to: 4.9.2
+Tested up to: 4.9.4
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPL-2.0+
@@ -83,6 +83,11 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Changelog ==
 
+= 1.2.4 =
+
+* Improvements - Add Maps Place Picker.
+* Fix - Fix issue when using comma as decimal dlimeter.
+
 = 1.2.3 =
 
 * Fix - Remove Maps Place Picker.
@@ -132,5 +137,5 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Upgrade Notice ==
 
-= 1.2.3 =
-This version include bug fix Maps Picker. Upgrade immediately.
+= 1.2.4 =
+This version include bug fixes and improvements. Upgrade immediately.

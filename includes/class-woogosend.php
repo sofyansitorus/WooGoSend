@@ -80,6 +80,7 @@ class WooGoSend extends WC_Shipping_Method {
 		$this->gmaps_api_key          = $this->get_option( 'gmaps_api_key' );
 		$this->origin_lat             = $this->get_option( 'origin_lat' );
 		$this->origin_lng             = $this->get_option( 'origin_lng' );
+		$this->gmaps_api_units        = $this->get_option( 'gmaps_api_units', 'metric' );
 		$this->gmaps_api_mode         = $this->get_option( 'gmaps_api_mode', 'driving' );
 		$this->gmaps_api_avoid        = $this->get_option( 'gmaps_api_avoid' );
 		$this->tax_status             = $this->get_option( 'tax_status' );
@@ -129,20 +130,20 @@ class WooGoSend extends WC_Shipping_Method {
 			'gmaps_api_key'             => array(
 				'title'       => __( 'Google Maps Distance Matrix API', 'woogosend' ),
 				'type'        => 'text',
-				'description' => __( 'This plugin require Google Maps Distance Matrix API Services enabled in your Google Console. <a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get API Key and to enable the services.', 'woogosend' ),
+				'description' => __( 'This plugin require Google Maps Distance Matrix API Services enabled in your Google API Console. <a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get API Key and to enable the services.', 'woogosend' ),
 				'default'     => '',
+			),
+			'gmaps_address_picker'      => array(
+				'title' => __( 'Store Location', 'woogosend' ),
+				'type'  => 'address_picker',
 			),
 			'origin_lat'                => array(
-				'title'       => __( 'Store Location Latitude', 'woogosend' ),
-				'type'        => 'decimal',
-				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
-				'default'     => '',
+				'type'    => 'hidden',
+				'default' => '',
 			),
 			'origin_lng'                => array(
-				'title'       => __( 'Store Location Longitude', 'woogosend' ),
-				'type'        => 'decimal',
-				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
-				'default'     => '',
+				'type'    => 'hidden',
+				'default' => '',
 			),
 			'gmaps_api_mode'            => array(
 				'title'       => __( 'Travel Mode', 'woogosend' ),
@@ -158,11 +159,12 @@ class WooGoSend extends WC_Shipping_Method {
 			),
 			'gmaps_api_avoid'           => array(
 				'title'       => __( 'Restrictions', 'woogosend' ),
-				'type'        => 'multiselect',
+				'type'        => 'select',
 				'description' => __( 'Google Maps Distance Matrix API restrictions parameter.', 'woogosend' ),
 				'desc_tip'    => true,
 				'default'     => 'driving',
 				'options'     => array(
+					''         => __( 'None', 'woogosend' ),
 					'tolls'    => __( 'Avoid Tolls', 'woogosend' ),
 					'highways' => __( 'Avoid Highways', 'woogosend' ),
 					'ferries'  => __( 'Avoid Ferries', 'woogosend' ),
@@ -354,6 +356,69 @@ class WooGoSend extends WC_Shipping_Method {
 				'desc_tip'    => true,
 			),
 		);
+	}
+
+	/**
+	 * Generate origin settings field.
+	 *
+	 * @since 1.2.4
+	 * @param string $key Settings field key.
+	 * @param array  $data Settings field data.
+	 */
+	public function generate_address_picker_html( $key, $data ) {
+		$field_key = $this->get_field_key( $key );
+
+		$defaults = array(
+			'title'             => '',
+			'disabled'          => false,
+			'class'             => '',
+			'css'               => '',
+			'placeholder'       => '',
+			'type'              => 'text',
+			'desc_tip'          => false,
+			'description'       => '',
+			'custom_attributes' => array(),
+			'options'           => array(),
+		);
+
+		$data = wp_parse_args( $data, $defaults );
+
+		ob_start(); ?>
+		<tr valign="top">
+			<th scope="row" class="titledesc">
+				<?php echo esc_html( $this->get_tooltip_html( $data ) ); ?>
+				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?></label>
+			</th>
+			<td class="forminp">
+				<input type="hidden" id="map-secret-key" value="<?php echo esc_attr( WOOGOSEND_MAP_SECRET_KEY ); ?>">
+				<div id="woogosend-map-wrapper" class="woogosend-map-wrapper"></div>
+				<script type="text/html" id="tmpl-woogosend-map-search">
+					<input id="{{data.map_search_id}}" class="woogosend-map-search controls" type="text" placeholder="<?php echo esc_attr( __( 'Search your store location', 'woogosend' ) ); ?>" autocomplete="off" />
+				</script>
+				<script type="text/html" id="tmpl-woogosend-map-canvas">
+					<div id="{{data.map_canvas_id}}" class="woogosend-map-canvas"></div>
+				</script>
+			</td>
+		</tr>
+		<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Generate hidden settings field.
+	 *
+	 * @since 1.2.4
+	 * @param string $key Settings field key.
+	 * @param array  $data Settings field data.
+	 */
+	public function generate_hidden_html( $key, $data ) {
+		$field_key = $this->get_field_key( $key );
+
+		ob_start();
+		?>
+		<input type="hidden" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>">
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
@@ -726,7 +791,6 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @return array
 	 */
 	private function api_request( $destination ) {
-
 		if ( empty( $this->gmaps_api_key ) ) {
 			return false;
 		}
@@ -736,83 +800,117 @@ class WooGoSend extends WC_Shipping_Method {
 			return false;
 		}
 
-		$origins = $this->get_origin_info();
-		if ( empty( $origins ) ) {
+		$origin = $this->get_origin_info();
+		if ( empty( $origin ) ) {
 			return false;
 		}
 
-		$cache_keys = array(
-			$this->gmaps_api_key,
-			$destination,
-			$origins,
-			$this->gmaps_api_mode,
+		$request_url_args = array(
+			'key'          => rawurlencode( $this->gmaps_api_key ),
+			'mode'         => rawurlencode( $this->gmaps_api_mode ),
+			'avoid'        => rawurlencode( $this->gmaps_api_avoid ),
+			'units'        => rawurlencode( $this->gmaps_api_units ),
+			'language'     => rawurlencode( get_locale() ),
+			'origins'      => rawurlencode( $origin ),
+			'destinations' => rawurlencode( $destination ),
 		);
 
-		$route_avoid = $this->gmaps_api_avoid;
-		if ( is_array( $route_avoid ) ) {
-			$route_avoid = implode( ',', $route_avoid );
-		}
-		if ( $route_avoid ) {
-			array_push( $cache_keys, $route_avoid );
-		}
-
-		$cache_key = implode( '_', $cache_keys );
+		$transient_key = $this->id . '_api_request_' . md5( wp_json_encode( $request_url_args ) );
 
 		// Check if the data already chached and return it.
-		$cached_data = wp_cache_get( $cache_key, $this->id );
+		$cached_data = get_transient( $transient_key );
+
 		if ( false !== $cached_data ) {
-			$this->show_debug( 'Google Maps Distance Matrix API cache key: ' . $cache_key );
-			$this->show_debug( 'Cached Google Maps Distance Matrix API response: ' . wp_json_encode( $cached_data ) );
+			$this->show_debug( __( 'Cached key', 'woogosend' ) . ': ' . $transient_key );
+			$this->show_debug( __( 'Cached data', 'woogosend' ) . ': ' . wp_json_encode( $cached_data ) );
 			return $cached_data;
 		}
 
-		$request_url = add_query_arg(
-			array(
-				'key'          => rawurlencode( $this->gmaps_api_key ),
-				'units'        => rawurlencode( 'metric' ),
-				'mode'         => rawurlencode( $this->gmaps_api_mode ),
-				'avoid'        => rawurlencode( $route_avoid ),
-				'destinations' => rawurlencode( $destination ),
-				'origins'      => rawurlencode( $origins ),
-			), $this->google_api_url
+		$request_url = add_query_arg( $request_url_args, $this->google_api_url );
+
+		$this->show_debug( __( 'API Request URL', 'woogosend' ) . ': ' . str_replace( rawurlencode( $this->gmaps_api_key ), '**********', $request_url ), 'notice' );
+
+		$raw_response = wp_remote_get( esc_url_raw( $request_url ) );
+
+		// Check if HTTP request is error.
+		if ( is_wp_error( $raw_response ) ) {
+			$this->show_debug( $raw_response->get_error_message(), 'notice' );
+			return false;
+		}
+
+		$response_body = wp_remote_retrieve_body( $raw_response );
+
+		// Check if API response is empty.
+		if ( empty( $response_body ) ) {
+			$this->show_debug( __( 'API response is empty', 'woogosend' ), 'notice' );
+		}
+
+		$response_data = json_decode( $response_body, true );
+
+		// Check if JSON data is valid.
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			if ( function_exists( 'json_last_error_msg' ) ) {
+				$this->show_debug( __( 'Error while decoding API response', 'woogosend' ) . ': ' . json_last_error_msg(), 'notice' );
+			}
+			return false;
+		}
+
+		// Check API response is OK.
+		$status = isset( $response_data['status'] ) ? $response_data['status'] : '';
+		if ( 'OK' !== $status ) {
+			$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $status;
+			if ( isset( $response_data['error_message'] ) ) {
+				$error_message .= ' - ' . $response_data['error_message'];
+			}
+			$this->show_debug( $error_message, 'notice' );
+			return false;
+		}
+
+		$distance      = 0;
+		$distance_text = '';
+		$error_message = '';
+
+		$element_lvl_errors = array(
+			'NOT_FOUND'                 => __( 'Origin and/or destination of this pairing could not be geocoded', 'woogosend' ),
+			'ZERO_RESULTS'              => __( 'No route could be found between the origin and destination', 'woogosend' ),
+			'MAX_ROUTE_LENGTH_EXCEEDED' => __( 'Requested route is too long and cannot be processed', 'woogosend' ),
 		);
-		$this->show_debug( 'Google Maps Distance Matrix API request URL: ' . $request_url );
 
-		$response = wp_remote_retrieve_body( wp_remote_get( esc_url_raw( $request_url ) ) );
-		$this->show_debug( 'Google Maps Distance Matrix API response: ' . $response );
-
-		$response = json_decode( $response, true );
-
-		if ( json_last_error() !== JSON_ERROR_NONE || empty( $response['rows'] ) ) {
-			return false;
-		}
-
-		if ( empty( $response['destination_addresses'] ) || empty( $response['origin_addresses'] ) ) {
-			return false;
-		}
-
-		$distance = 0;
-
-		foreach ( $response['rows'] as $rows ) {
-			foreach ( $rows['elements'] as $element ) {
-				if ( 'OK' === $element['status'] ) {
-					$element_distance = ceil( str_replace( ' km', '', $element['distance']['text'] ) );
-					if ( $element_distance > $distance ) {
-						$distance      = $element_distance;
-						$distance_text = $distance . ' km';
-					}
+		// Get the shipping distance.
+		foreach ( $response_data['rows'] as $row ) {
+			foreach ( $row['elements'] as $element ) {
+				$element_status = $element['status'];
+				switch ( $element_status ) {
+					case 'OK':
+						if ( isset( $element['distance']['value'] ) && ! empty( $element['distance']['value'] ) ) {
+							$distance      = $this->convert_m( $element['distance']['value'] );
+							$distance_text = $element['distance']['text'];
+						}
+						break;
+					default:
+						$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $element_status;
+						if ( isset( $element_lvl_errors[ $element_status ] ) ) {
+							$error_message .= ' - ' . $element_lvl_errors[ $element_status ];
+						}
+						break;
 				}
 			}
+		}
+
+		if ( ! $distance && $error_message ) {
+			$this->show_debug( $error_message, 'notice' );
+			return;
 		}
 
 		if ( $distance ) {
 			$data = array(
 				'distance'      => $distance,
 				'distance_text' => $distance_text,
-				'response'      => $response,
+				'response'      => $response_data,
 			);
 
-			wp_cache_set( $cache_key, $data, $this->id ); // Store the data to WP Object Cache for later use.
+			delete_transient( $transient_key ); // To make sure the data re-created, delete ot first.
+			set_transient( $transient_key, $data, HOUR_IN_SECONDS ); // Store the data to transient with expiration in 1 hour for later use.
 
 			return $data;
 		}
@@ -862,7 +960,7 @@ class WooGoSend extends WC_Shipping_Method {
 		$keys = array( 'address', 'address_2', 'city', 'state', 'postcode', 'country' );
 
 		// Remove destination field keys for shipping calculator request.
-		if ( ! empty( $_POST['calc_shipping'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'woocommerce-cart' ) ) {
+		if ( isset( $_POST['calc_shipping'], $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-cart' ) ) {
 			$keys_remove = array( 'address', 'address_2' );
 			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) {
 				array_push( $keys_remove, 'city' );
@@ -914,6 +1012,39 @@ class WooGoSend extends WC_Shipping_Method {
 		 *      }
 		 */
 		return apply_filters( 'woocommerce_' . $this->id . '_shipping_destination_info', implode( ',', $destination_info ), $this );
+	}
+
+	/**
+	 * Convert Meters to Distance Unit
+	 *
+	 * @since    1.2.4
+	 * @param int $meters Number of meters to convert.
+	 * @return int
+	 */
+	private function convert_m( $meters ) {
+		return ( 'metric' === $this->gmaps_api_units ) ? $this->convert_m_to_km( $meters ) : $this->convert_m_to_mi( $meters );
+	}
+
+	/**
+	 * Convert Meters to Miles
+	 *
+	 * @since    1.2.4
+	 * @param int $meters Number of meters to convert.
+	 * @return int
+	 */
+	private function convert_m_to_mi( $meters ) {
+		return $meters * 0.000621371;
+	}
+
+	/**
+	 * Convert Meters to Kilometres
+	 *
+	 * @since    1.2.4
+	 * @param int $meters Number of meters to convert.
+	 * @return int
+	 */
+	private function convert_m_to_km( $meters ) {
+		return $meters * 0.001;
 	}
 
 	/**

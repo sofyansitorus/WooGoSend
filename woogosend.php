@@ -15,7 +15,7 @@
  * Plugin Name:       WooGoSend
  * Plugin URI:        https://github.com/sofyansitorus/WooGoSend
  * Description:       WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier.
- * Version:           1.2.3
+ * Version:           1.2.4
  * Author:            Sofyan Sitorus
  * Author URI:        https://github.com/sofyansitorus
  * License:           GPL-2.0+
@@ -42,9 +42,10 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 // Defines plugin named constants.
 define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
-define( 'WOOGOSEND_VERSION', '1.2.3' );
+define( 'WOOGOSEND_VERSION', '1.2.4' );
 define( 'WOOGOSEND_METHOD_ID', 'woogosend' );
 define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
+define( 'WOOGOSEND_MAP_SECRET_KEY', 'QUl6YVN5Qk82MVFJUm52Zkc5c2tKTW1HV1JVbWhsSU5lcUZXaTdV' );
 
 /**
  * Load plugin textdomain.
@@ -78,8 +79,7 @@ add_action( 'woocommerce_shipping_init', 'woogosend_shipping_init' );
  */
 function woogosend_plugin_action_links( $links ) {
 	$zone_id = 0;
-	$zones   = WC_Shipping_Zones::get_zones();
-	foreach ( $zones as $zone ) {
+	foreach ( WC_Shipping_Zones::get_zones() as $zone ) {
 		if ( empty( $zone['shipping_methods'] ) || empty( $zone['zone_id'] ) ) {
 			continue;
 		}
@@ -89,11 +89,23 @@ function woogosend_plugin_action_links( $links ) {
 				break;
 			}
 		}
+		if ( $zone_id ) {
+			break;
+		}
 	}
 
 	$links = array_merge(
 		array(
-			'<a href="' . esc_url( wp_nonce_url( admin_url( 'admin.php?page=wc-settings&tab=shipping&zone_id=' . $zone_id ), 'woogosend_settings', 'woogosend_nonce' ) ) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
+			'<a href="' . esc_url(
+				add_query_arg(
+					array(
+						'page'               => 'wc-settings',
+						'tab'                => 'shipping',
+						'zone_id'            => $zone_id,
+						'woogosend_settings' => true,
+					), admin_url( 'admin.php' )
+				)
+			) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
 		),
 		$links
 	);
@@ -135,13 +147,14 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend-admin',
 			'woogosend_params',
 			array(
-				'show_settings' => ( isset( $_GET['woogosend_nonce'] ) && wp_verify_nonce( $_GET['woogosend_nonce'], 'woogosend_settings' ) && is_admin() ),
+				'show_settings' => ( isset( $_GET['woogosend_settings'] ) && is_admin() ) ? true : false,
 				'method_id'     => WOOGOSEND_METHOD_ID,
 				'method_title'  => WOOGOSEND_METHOD_TITLE,
 				'txt'           => array(
 					'drag_marker' => __( 'Drag this marker or search your address at the input above.', 'woogosend' ),
 				),
 				'marker'        => WOOGOSEND_URL . 'assets/img/marker.png',
+				'language'      => get_locale(),
 			)
 		);
 	}
