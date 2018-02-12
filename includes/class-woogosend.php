@@ -158,11 +158,12 @@ class WooGoSend extends WC_Shipping_Method {
 			),
 			'gmaps_api_avoid'           => array(
 				'title'       => __( 'Restrictions', 'woogosend' ),
-				'type'        => 'multiselect',
+				'type'        => 'select',
 				'description' => __( 'Google Maps Distance Matrix API restrictions parameter.', 'woogosend' ),
 				'desc_tip'    => true,
 				'default'     => 'driving',
 				'options'     => array(
+					''    => __( 'None', 'woogosend' ),
 					'tolls'    => __( 'Avoid Tolls', 'woogosend' ),
 					'highways' => __( 'Avoid Highways', 'woogosend' ),
 					'ferries'  => __( 'Avoid Ferries', 'woogosend' ),
@@ -789,7 +790,6 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @return array
 	 */
 	private function api_request( $destination ) {
-
 		if ( empty( $this->gmaps_api_key ) ) {
 			return false;
 		}
@@ -799,83 +799,120 @@ class WooGoSend extends WC_Shipping_Method {
 			return false;
 		}
 
-		$origins = $this->get_origin_info();
-		if ( empty( $origins ) ) {
+		$origin = $this->get_origin_info();
+		if ( empty( $origin ) ) {
 			return false;
 		}
 
-		$cache_keys = array(
-			$this->gmaps_api_key,
-			$destination,
-			$origins,
-			$this->gmaps_api_mode,
+		$request_url_args = array(
+			'key'          => rawurlencode( $this->gmaps_api_key ),
+			'mode'         => rawurlencode( $this->gmaps_api_mode ),
+			'avoid'        => rawurlencode( $this->gmaps_api_avoid ),
+			'units'        => rawurlencode( 'metric' ),
+			'origins'      => rawurlencode( $origin ),
+			'destinations' => rawurlencode( $destination ),
 		);
 
-		$route_avoid = $this->gmaps_api_avoid;
-		if ( is_array( $route_avoid ) ) {
-			$route_avoid = implode( ',', $route_avoid );
-		}
-		if ( $route_avoid ) {
-			array_push( $cache_keys, $route_avoid );
-		}
-
-		$cache_key = implode( '_', $cache_keys );
+		$transient_key = $this->id . '_api_request_' . md5( wp_json_encode( $request_url_args ) );
 
 		// Check if the data already chached and return it.
-		$cached_data = wp_cache_get( $cache_key, $this->id );
+		$cached_data = get_transient( $transient_key );
+
 		if ( false !== $cached_data ) {
-			$this->show_debug( 'Google Maps Distance Matrix API cache key: ' . $cache_key );
-			$this->show_debug( 'Cached Google Maps Distance Matrix API response: ' . wp_json_encode( $cached_data ) );
+			$this->show_debug( __( 'Cached key', 'woogosend' ) . ': ' . $transient_key );
+			$this->show_debug( __( 'Cached data', 'woogosend' ) . ': ' . wp_json_encode( $cached_data ) );
 			return $cached_data;
 		}
 
-		$request_url = add_query_arg(
-			array(
-				'key'          => rawurlencode( $this->gmaps_api_key ),
-				'units'        => rawurlencode( 'metric' ),
-				'mode'         => rawurlencode( $this->gmaps_api_mode ),
-				'avoid'        => rawurlencode( $route_avoid ),
-				'destinations' => rawurlencode( $destination ),
-				'origins'      => rawurlencode( $origins ),
-			), $this->google_api_url
+		$request_url = add_query_arg( $request_url_args, $this->google_api_url );
+
+		$this->show_debug( __( 'API Request URL', 'woogosend' ) . ': ' . str_replace( rawurlencode( $this->gmaps_api_key ), '**********', $request_url ), 'notice' );
+
+		$raw_response = wp_remote_get( esc_url_raw( $request_url ) );
+
+		// Check if HTTP request is error.
+		if ( is_wp_error( $raw_response ) ) {
+			$this->show_debug( $raw_response->get_error_message(), 'notice' );
+			return false;
+		}
+
+		$response_body = wp_remote_retrieve_body( $raw_response );
+
+		// Check if API response is empty.
+		if ( empty( $response_body ) ) {
+			$this->show_debug( __( 'API response is empty', 'woogosend' ), 'notice' );
+		}
+
+		$response_data = json_decode( $response_body, true );
+
+		// Check if JSON data is valid.
+		if ( json_last_error() !== JSON_ERROR_NONE ) {
+			if ( function_exists( 'json_last_error_msg' ) ) {
+				$this->show_debug( __( 'Error while decoding API response', 'woogosend' ) . ': ' . json_last_error_msg(), 'notice' );
+			}
+			return false;
+		}
+
+		// Check API response is OK.
+		$status = isset( $response_data['status'] ) ? $response_data['status'] : '';
+		if ( 'OK' !== $status ) {
+			$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $status;
+			if ( isset( $response_data['error_message'] ) ) {
+				$error_message .= ' - ' . $response_data['error_message'];
+			}
+			$this->show_debug( $error_message, 'notice' );
+			return false;
+		}
+
+		$distance      = 0;
+		$distance_text = '';
+		$error_message = '';
+
+		$element_lvl_errors = array(
+			'NOT_FOUND'                 => __( 'Origin and/or destination of this pairing could not be geocoded', 'woogosend' ),
+			'ZERO_RESULTS'              => __( 'No route could be found between the origin and destination', 'woogosend' ),
+			'MAX_ROUTE_LENGTH_EXCEEDED' => __( 'Requested route is too long and cannot be processed', 'woogosend' ),
 		);
-		$this->show_debug( 'Google Maps Distance Matrix API request URL: ' . $request_url );
 
-		$response = wp_remote_retrieve_body( wp_remote_get( esc_url_raw( $request_url ) ) );
-		$this->show_debug( 'Google Maps Distance Matrix API response: ' . $response );
-
-		$response = json_decode( $response, true );
-
-		if ( json_last_error() !== JSON_ERROR_NONE || empty( $response['rows'] ) ) {
-			return false;
-		}
-
-		if ( empty( $response['destination_addresses'] ) || empty( $response['origin_addresses'] ) ) {
-			return false;
-		}
-
-		$distance = 0;
-
-		foreach ( $response['rows'] as $rows ) {
-			foreach ( $rows['elements'] as $element ) {
-				if ( 'OK' === $element['status'] ) {
-					$element_distance = ceil( str_replace( ' km', '', $element['distance']['text'] ) );
-					if ( $element_distance > $distance ) {
-						$distance      = $element_distance;
-						$distance_text = $distance . ' km';
-					}
+		// Get the shipping distance.
+		foreach ( $response_data['rows'] as $row ) {
+			foreach ( $row['elements'] as $element ) {
+				$element_status = $element['status'];
+				switch ( $element_status ) {
+					case 'OK':
+						$pieces = explode( ' ', $element['distance']['text'] );
+						if ( 2 === count( $pieces ) ) {
+							$element_distance = wc_format_decimal( $pieces[0] );
+							if ( $element_distance > $distance ) { // Try to get the longest route distance.
+								$distance      = $element_distance;
+								$distance_text = $element['distance']['text'];
+							}
+						}
+						break;
+					default:
+						$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $element_status;
+						if ( isset( $element_lvl_errors[ $element_status ] ) ) {
+							$error_message .= ' - ' . $element_lvl_errors[ $element_status ];
+						}
+						break;
 				}
 			}
+		}
+
+		if ( ! $distance && $error_message ) {
+			$this->show_debug( $error_message, 'notice' );
+			return;
 		}
 
 		if ( $distance ) {
 			$data = array(
 				'distance'      => $distance,
 				'distance_text' => $distance_text,
-				'response'      => $response,
+				'response'      => $response_data,
 			);
 
-			wp_cache_set( $cache_key, $data, $this->id ); // Store the data to WP Object Cache for later use.
+			delete_transient( $transient_key ); // To make sure the data re-created, delete ot first.
+			set_transient( $transient_key, $data, HOUR_IN_SECONDS ); // Store the data to transient with expiration in 1 hour for later use.
 
 			return $data;
 		}
