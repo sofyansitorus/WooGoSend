@@ -47,7 +47,22 @@
 						.find(".wc-shipping-zone-method-type")
 						.text() === woogosend_params.method_title
 				) {
+					$(".woogosend-toggle-service").trigger("change");
 					self._initGoogleMaps();
+				}
+			});
+
+			$(document).on("change", ".woogosend-toggle-service", function() {
+				if ($(this).is(":checked")) {
+					$(this)
+						.closest("table")
+						.find("tr:not(:first-child)")
+						.fadeIn();
+				} else {
+					$(this)
+						.closest("table")
+						.find("tr:not(:first-child)")
+						.fadeOut();
 				}
 			});
 		},

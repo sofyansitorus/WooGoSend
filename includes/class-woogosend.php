@@ -204,6 +204,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'type'        => 'checkbox',
 				'description' => __( 'Enable Instant delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
+				'class'       => 'woogosend-toggle-service',
 			),
 			'title_instant'             => array(
 				'title'       => __( 'Label', 'woogosend' ),
@@ -291,6 +292,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'type'        => 'checkbox',
 				'description' => __( 'Enable Same Day delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
+				'class'       => 'woogosend-toggle-service',
 			),
 			'title_same_day'            => array(
 				'title'       => __( 'Label', 'woogosend' ),
