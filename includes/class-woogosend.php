@@ -872,7 +872,7 @@ class WooGoSend extends WC_Shipping_Method {
 	/**
 	 * Process API Response.
 	 *
-	 * @since 1.3.4
+	 * @since 1.2.5
 	 * @param array $raw_response HTTP API response.
 	 * @return array|bool Formatted response data, false on failure.
 	 */
