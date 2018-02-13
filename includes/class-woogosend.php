@@ -76,35 +76,35 @@ class WooGoSend extends WC_Shipping_Method {
 		$this->init_settings(); // This is part of the settings API. Loads settings you previously init.
 
 		// Define user set variables.
-		$this->title                  = $this->get_option( 'title', 'GoSend' );
-		$this->gmaps_api_key          = $this->get_option( 'gmaps_api_key' );
-		$this->origin_lat             = $this->get_option( 'origin_lat' );
-		$this->origin_lng             = $this->get_option( 'origin_lng' );
-		$this->gmaps_api_units        = $this->get_option( 'gmaps_api_units', 'metric' );
-		$this->gmaps_api_mode         = $this->get_option( 'gmaps_api_mode', 'driving' );
-		$this->gmaps_api_avoid        = $this->get_option( 'gmaps_api_avoid' );
-		$this->tax_status             = $this->get_option( 'tax_status' );
-		$this->enable_fallback_request  = $this->get_option( 'enable_fallback_request', 'no' );
-		$this->enable_instant         = $this->get_option( 'enable_instant' );
-		$this->title_instant          = $this->get_option( 'title_instant', 'Instant' );
-		$this->min_cost_instant       = $this->get_option( 'min_cost_instant' );
-		$this->per_km_cost_instant    = $this->get_option( 'per_km_cost_instant' );
-		$this->max_weight_instant     = $this->get_option( 'max_weight_instant' );
-		$this->max_width_instant      = $this->get_option( 'max_width_instant' );
-		$this->max_length_instant     = $this->get_option( 'max_length_instant' );
-		$this->max_height_instant     = $this->get_option( 'max_height_instant' );
-		$this->max_distance_instant   = $this->get_option( 'max_distance_instant' );
-		$this->show_distance_instant  = $this->get_option( 'show_distance_instant' );
-		$this->enable_same_day        = $this->get_option( 'enable_same_day' );
-		$this->title_same_day         = $this->get_option( 'title_same_day', 'Same Day' );
-		$this->min_cost_same_day      = $this->get_option( 'min_cost_same_day' );
-		$this->max_cost_same_day      = $this->get_option( 'max_cost_same_day' );
-		$this->max_weight_same_day    = $this->get_option( 'max_weight_same_day' );
-		$this->max_width_same_day     = $this->get_option( 'max_width_same_day' );
-		$this->max_length_same_day    = $this->get_option( 'max_length_same_day' );
-		$this->max_height_same_day    = $this->get_option( 'max_height_same_day' );
-		$this->max_distance_same_day  = $this->get_option( 'max_distance_same_day' );
-		$this->show_distance_same_day = $this->get_option( 'show_distance_same_day' );
+		$this->title                   = $this->get_option( 'title', 'GoSend' );
+		$this->gmaps_api_key           = $this->get_option( 'gmaps_api_key' );
+		$this->origin_lat              = $this->get_option( 'origin_lat' );
+		$this->origin_lng              = $this->get_option( 'origin_lng' );
+		$this->gmaps_api_units         = $this->get_option( 'gmaps_api_units', 'metric' );
+		$this->gmaps_api_mode          = $this->get_option( 'gmaps_api_mode', 'driving' );
+		$this->gmaps_api_avoid         = $this->get_option( 'gmaps_api_avoid' );
+		$this->tax_status              = $this->get_option( 'tax_status' );
+		$this->enable_fallback_request = $this->get_option( 'enable_fallback_request', 'no' );
+		$this->enable_instant          = $this->get_option( 'enable_instant' );
+		$this->title_instant           = $this->get_option( 'title_instant', 'Instant' );
+		$this->min_cost_instant        = $this->get_option( 'min_cost_instant' );
+		$this->per_km_cost_instant     = $this->get_option( 'per_km_cost_instant' );
+		$this->max_weight_instant      = $this->get_option( 'max_weight_instant' );
+		$this->max_width_instant       = $this->get_option( 'max_width_instant' );
+		$this->max_length_instant      = $this->get_option( 'max_length_instant' );
+		$this->max_height_instant      = $this->get_option( 'max_height_instant' );
+		$this->max_distance_instant    = $this->get_option( 'max_distance_instant' );
+		$this->show_distance_instant   = $this->get_option( 'show_distance_instant' );
+		$this->enable_same_day         = $this->get_option( 'enable_same_day' );
+		$this->title_same_day          = $this->get_option( 'title_same_day', 'Same Day' );
+		$this->min_cost_same_day       = $this->get_option( 'min_cost_same_day' );
+		$this->max_cost_same_day       = $this->get_option( 'max_cost_same_day' );
+		$this->max_weight_same_day     = $this->get_option( 'max_weight_same_day' );
+		$this->max_width_same_day      = $this->get_option( 'max_width_same_day' );
+		$this->max_length_same_day     = $this->get_option( 'max_length_same_day' );
+		$this->max_height_same_day     = $this->get_option( 'max_height_same_day' );
+		$this->max_distance_same_day   = $this->get_option( 'max_distance_same_day' );
+		$this->show_distance_same_day  = $this->get_option( 'show_distance_same_day' );
 
 		// Save settings in admin if you have any defined.
 		add_action( 'woocommerce_update_options_shipping_' . $this->id, array( $this, 'process_admin_options' ) );
@@ -138,13 +138,13 @@ class WooGoSend extends WC_Shipping_Method {
 				'title' => __( 'Store Location', 'woogosend' ),
 				'type'  => 'address_picker',
 			),
-			'origin_lat'               => array(
+			'origin_lat'                => array(
 				'title'       => __( 'Store Location Latitude', 'woogosend' ),
 				'type'        => 'text',
 				'default'     => '',
 				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 			),
-			'origin_lng'               => array(
+			'origin_lng'                => array(
 				'title'       => __( 'Store Location Logitude', 'woogosend' ),
 				'type'        => 'text',
 				'default'     => '',
@@ -186,7 +186,7 @@ class WooGoSend extends WC_Shipping_Method {
 					'none'    => __( 'None', 'woogosend' ),
 				),
 			),
-			'enable_fallback_request'  => array(
+			'enable_fallback_request'   => array(
 				'title'       => __( 'Enable Fallback Request', 'woogosend' ),
 				'label'       => __( 'Yes', 'woogosend' ),
 				'type'        => 'checkbox',
