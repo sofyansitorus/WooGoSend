@@ -228,7 +228,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'     => '2500',
 			),
 			'max_weight_instant'        => array(
-				'title'             => __( 'Maximum Package Weight', 'woogosend' ),
+				'title'             => __( 'Maximum Package Weight', 'woogosend' ) . ' (kg)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -236,7 +236,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_width_instant'         => array(
-				'title'             => __( 'Maximum Package Width', 'woogosend' ),
+				'title'             => __( 'Maximum Package Width', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -244,7 +244,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_length_instant'        => array(
-				'title'             => __( 'Maximum Package Length', 'woogosend' ),
+				'title'             => __( 'Maximum Package Length', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -252,7 +252,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_height_instant'        => array(
-				'title'             => __( 'Maximum Package Height', 'woogosend' ),
+				'title'             => __( 'Maximum Package Height', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -260,7 +260,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_distance_instant'      => array(
-				'title'             => __( 'Maximum Distance', 'woogosend' ),
+				'title'             => __( 'Maximum Distance', 'woogosend' ) . ' (km)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -316,7 +316,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'     => '20000',
 			),
 			'max_weight_same_day'       => array(
-				'title'             => __( 'Maximum Package Weight', 'woogosend' ),
+				'title'             => __( 'Maximum Package Weight', 'woogosend' ) . ' (kg)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -324,7 +324,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_width_same_day'        => array(
-				'title'             => __( 'Maximum Package Width', 'woogosend' ),
+				'title'             => __( 'Maximum Package Width', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -332,7 +332,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_length_same_day'       => array(
-				'title'             => __( 'Maximum Package Length', 'woogosend' ),
+				'title'             => __( 'Maximum Package Length', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -340,7 +340,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_height_same_day'       => array(
-				'title'             => __( 'Maximum Package Height', 'woogosend' ),
+				'title'             => __( 'Maximum Package Height', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -348,7 +348,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_distance_same_day'     => array(
-				'title'             => __( 'Maximum Distance', 'woogosend' ),
+				'title'             => __( 'Maximum Distance', 'woogosend' ) . ' (km)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
