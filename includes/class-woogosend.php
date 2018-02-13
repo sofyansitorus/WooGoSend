@@ -137,13 +137,17 @@ class WooGoSend extends WC_Shipping_Method {
 				'title' => __( 'Store Location', 'woogosend' ),
 				'type'  => 'address_picker',
 			),
-			'origin_lat'                => array(
-				'type'    => 'hidden',
-				'default' => '',
+			'origin_lat'               => array(
+				'title'       => __( 'Store Location Latitude', 'woogosend' ),
+				'type'        => 'text',
+				'default'     => '',
+				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 			),
-			'origin_lng'                => array(
-				'type'    => 'hidden',
-				'default' => '',
+			'origin_lng'               => array(
+				'title'       => __( 'Store Location Logitude', 'woogosend' ),
+				'type'        => 'text',
+				'default'     => '',
+				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 			),
 			'gmaps_api_mode'            => array(
 				'title'       => __( 'Travel Mode', 'woogosend' ),
