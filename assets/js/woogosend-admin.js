@@ -82,22 +82,19 @@
 		},
 		_buildGoogleMaps: function() {
 			var self = this;
+			var defaultLat = -6.175392;
+			var defaultLng = 106.827153;
 			var curLat = $("#" + self._inputLatId).val();
 			var curLng = $("#" + self._inputLngId).val();
-			curLat = curLat.length ? parseFloat(curLat) : -6.175392;
-			curLng = curLng.length ? parseFloat(curLng) : 106.827153;
-			var curLatLng = {
-				lat: curLat,
-				lng: curLng
-			};
+			curLat = curLat.length ? parseFloat(curLat) : defaultLat;
+			curLng = curLng.length ? parseFloat(curLng) : defaultLng;
+			var curLatLng = { lat: curLat, lng: curLng };
 			var tmplMapCanvas = wp.template(self._mapCanvasId);
 			var tmplMapSearch = wp.template(self._mapSearchId);
 			if (!$("#" + self._mapCanvasId).length) {
-				$("#" + self._mapWrapperId).append(
-					tmplMapCanvas({
+				$("#" + self._mapWrapperId).append(tmplMapCanvas({
 						map_canvas_id: self._mapCanvasId
-					})
-				);
+					}));
 			}
 			var markers = [];
 			var map = new google.maps.Map(
@@ -114,24 +111,30 @@
 				draggable: true,
 				icon: woogosend_params.marker
 			});
-			var infowindow = new google.maps.InfoWindow({
-				maxWidth: 350,
-				content: woogosend_params.txt.drag_marker
-			});
-			infowindow.open(map, marker);
+
+			var infowindow = new google.maps.InfoWindow({ maxWidth: 350 });
+
+			if (curLat == defaultLat && curLng == defaultLng) {
+				infowindow.setContent(woogosend_params.txt.drag_marker);
+				infowindow.open(map, marker);
+			} else {
+				self._setLatLng(marker.position, marker, map, infowindow);
+			}
+
 			google.maps.event.addListener(marker, "dragstart", function(event) {
 				infowindow.close();
 			});
+
 			google.maps.event.addListener(marker, "dragend", function(event) {
 				self._setLatLng(event.latLng, marker, map, infowindow);
 			});
+
 			markers.push(marker);
+
 			if (!$("#" + self._mapSearchId).length) {
-				$("#" + self._mapWrapperId).append(
-					tmplMapSearch({
+				$("#" + self._mapWrapperId).append(tmplMapSearch({
 						map_search_id: self._mapSearchId
-					})
-				);
+					}));
 			}
 			// Create the search box and link it to the UI element.
 			var inputAddress = document.getElementById(self._mapSearchId);
@@ -166,10 +169,14 @@
 						icon: woogosend_params.marker
 					});
 					self._setLatLng(place.geometry.location, marker, map, infowindow);
-					google.maps.event.addListener(marker, "dragstart", function(event) {
+					google.maps.event.addListener(marker, "dragstart", function(
+						event
+					) {
 						infowindow.close();
 					});
-					google.maps.event.addListener(marker, "dragend", function(event) {
+					google.maps.event.addListener(marker, "dragend", function(
+						event
+					) {
 						self._setLatLng(event.latLng, marker, map, infowindow);
 					});
 					// Create a marker for each place.
