@@ -53,6 +53,12 @@
 		},
 		_initGoogleMaps: function(e) {
 			var self = this;
+			$("#" + self._inputLatId)
+				.closest("tr")
+				.hide();
+			$("#" + self._inputLngId)
+				.closest("tr")
+				.hide();
 			try {
 				if (
 					typeof google === "undefined" ||
@@ -178,6 +184,21 @@
 				map.setZoom(self._zoomLevel);
 				map.fitBounds(bounds);
 			});
+
+			setInterval(function() {
+				if ($(".gm-err-content").length) {
+					$("#" + self._mapCanvasId)
+						.closest("tr")
+						.hide();
+					$("#" + self._inputLatId)
+						.closest("tr")
+						.show();
+					$("#" + self._inputLngId)
+						.closest("tr")
+						.show();
+					google = undefined;
+				}
+			}, 1000);
 		},
 		_setLatLng: function(location, marker, map, infowindow) {
 			var self = this;
