@@ -92,9 +92,11 @@
 			var tmplMapCanvas = wp.template(self._mapCanvasId);
 			var tmplMapSearch = wp.template(self._mapSearchId);
 			if (!$("#" + self._mapCanvasId).length) {
-				$("#" + self._mapWrapperId).append(tmplMapCanvas({
+				$("#" + self._mapWrapperId).append(
+					tmplMapCanvas({
 						map_canvas_id: self._mapCanvasId
-					}));
+					})
+				);
 			}
 			var markers = [];
 			var map = new google.maps.Map(
@@ -132,9 +134,11 @@
 			markers.push(marker);
 
 			if (!$("#" + self._mapSearchId).length) {
-				$("#" + self._mapWrapperId).append(tmplMapSearch({
+				$("#" + self._mapWrapperId).append(
+					tmplMapSearch({
 						map_search_id: self._mapSearchId
-					}));
+					})
+				);
 			}
 			// Create the search box and link it to the UI element.
 			var inputAddress = document.getElementById(self._mapSearchId);
@@ -169,14 +173,10 @@
 						icon: woogosend_params.marker
 					});
 					self._setLatLng(place.geometry.location, marker, map, infowindow);
-					google.maps.event.addListener(marker, "dragstart", function(
-						event
-					) {
+					google.maps.event.addListener(marker, "dragstart", function(event) {
 						infowindow.close();
 					});
-					google.maps.event.addListener(marker, "dragend", function(
-						event
-					) {
+					google.maps.event.addListener(marker, "dragend", function(event) {
 						self._setLatLng(event.latLng, marker, map, infowindow);
 					});
 					// Create a marker for each place.
