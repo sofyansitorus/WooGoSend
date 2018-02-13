@@ -83,6 +83,11 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Changelog ==
 
+= 1.2.5 =
+
+* Improvements -Add new option: Enable Fallback Request.
+* Fix - Added fallback to input store location manually on google map error.
+
 = 1.2.4 =
 
 * Improvements - Add Maps Place Picker.
@@ -137,5 +142,5 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Upgrade Notice ==
 
-= 1.2.4 =
+= 1.2.5 =
 This version include bug fixes and improvements. Upgrade immediately.

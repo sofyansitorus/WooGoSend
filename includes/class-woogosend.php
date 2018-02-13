@@ -84,6 +84,7 @@ class WooGoSend extends WC_Shipping_Method {
 		$this->gmaps_api_mode         = $this->get_option( 'gmaps_api_mode', 'driving' );
 		$this->gmaps_api_avoid        = $this->get_option( 'gmaps_api_avoid' );
 		$this->tax_status             = $this->get_option( 'tax_status' );
+		$this->enable_fallback_request  = $this->get_option( 'enable_fallback_request', 'no' );
 		$this->enable_instant         = $this->get_option( 'enable_instant' );
 		$this->title_instant          = $this->get_option( 'title_instant', 'Instant' );
 		$this->min_cost_instant       = $this->get_option( 'min_cost_instant' );
@@ -137,13 +138,17 @@ class WooGoSend extends WC_Shipping_Method {
 				'title' => __( 'Store Location', 'woogosend' ),
 				'type'  => 'address_picker',
 			),
-			'origin_lat'                => array(
-				'type'    => 'hidden',
-				'default' => '',
+			'origin_lat'               => array(
+				'title'       => __( 'Store Location Latitude', 'woogosend' ),
+				'type'        => 'text',
+				'default'     => '',
+				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 			),
-			'origin_lng'                => array(
-				'type'    => 'hidden',
-				'default' => '',
+			'origin_lng'               => array(
+				'title'       => __( 'Store Location Logitude', 'woogosend' ),
+				'type'        => 'text',
+				'default'     => '',
+				'description' => __( '<a href="http://www.latlong.net/" target="_blank">Click here</a> to get your store location coordinates info.', 'woogosend' ),
 			),
 			'gmaps_api_mode'            => array(
 				'title'       => __( 'Travel Mode', 'woogosend' ),
@@ -181,6 +186,13 @@ class WooGoSend extends WC_Shipping_Method {
 					'none'    => __( 'None', 'woogosend' ),
 				),
 			),
+			'enable_fallback_request'  => array(
+				'title'       => __( 'Enable Fallback Request', 'woogosend' ),
+				'label'       => __( 'Yes', 'woogosend' ),
+				'type'        => 'checkbox',
+				'description' => __( 'If there is no results for API request using full address, the system will attempt to make another API request to the Google API server without "Address Line 1" parameter. The fallback request will only using "Address Line 2", "City", "State/Province", "Postal Code" and "Country" parameters.', 'woogosend' ),
+				'desc_tip'    => true,
+			),
 			'instant_title'             => array(
 				'title'       => __( 'Instant Delivery Service Options', 'woogosend' ),
 				'type'        => 'title',
@@ -192,6 +204,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'type'        => 'checkbox',
 				'description' => __( 'Enable Instant delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
+				'class'       => 'woogosend-toggle-service',
 			),
 			'title_instant'             => array(
 				'title'       => __( 'Label', 'woogosend' ),
@@ -215,7 +228,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'     => '2500',
 			),
 			'max_weight_instant'        => array(
-				'title'             => __( 'Maximum Package Weight', 'woogosend' ),
+				'title'             => __( 'Maximum Package Weight', 'woogosend' ) . ' (kg)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -223,7 +236,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_width_instant'         => array(
-				'title'             => __( 'Maximum Package Width', 'woogosend' ),
+				'title'             => __( 'Maximum Package Width', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -231,7 +244,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_length_instant'        => array(
-				'title'             => __( 'Maximum Package Length', 'woogosend' ),
+				'title'             => __( 'Maximum Package Length', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -239,7 +252,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_height_instant'        => array(
-				'title'             => __( 'Maximum Package Height', 'woogosend' ),
+				'title'             => __( 'Maximum Package Height', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -247,7 +260,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_distance_instant'      => array(
-				'title'             => __( 'Maximum Distance', 'woogosend' ),
+				'title'             => __( 'Maximum Distance', 'woogosend' ) . ' (km)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -279,6 +292,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'type'        => 'checkbox',
 				'description' => __( 'Enable Same Day delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
+				'class'       => 'woogosend-toggle-service',
 			),
 			'title_same_day'            => array(
 				'title'       => __( 'Label', 'woogosend' ),
@@ -302,7 +316,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'default'     => '20000',
 			),
 			'max_weight_same_day'       => array(
-				'title'             => __( 'Maximum Package Weight', 'woogosend' ),
+				'title'             => __( 'Maximum Package Weight', 'woogosend' ) . ' (kg)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package weight in kilograms that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -310,7 +324,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_width_same_day'        => array(
-				'title'             => __( 'Maximum Package Width', 'woogosend' ),
+				'title'             => __( 'Maximum Package Width', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size width in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -318,7 +332,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_length_same_day'       => array(
-				'title'             => __( 'Maximum Package Length', 'woogosend' ),
+				'title'             => __( 'Maximum Package Length', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size length in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -326,7 +340,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_height_same_day'       => array(
-				'title'             => __( 'Maximum Package Height', 'woogosend' ),
+				'title'             => __( 'Maximum Package Height', 'woogosend' ) . ' (cm)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum package size height in centimeters that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -334,7 +348,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'custom_attributes' => array( 'min' => '1' ),
 			),
 			'max_distance_same_day'     => array(
-				'title'             => __( 'Maximum Distance', 'woogosend' ),
+				'title'             => __( 'Maximum Distance', 'woogosend' ) . ' (km)',
 				'type'              => 'number',
 				'description'       => __( 'Maximum distance in kilometers that will be allowed to use this courier. Leave blank to disable.', 'woogosend' ),
 				'desc_tip'          => true,
@@ -512,7 +526,7 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @throws Exception If the item weight and dimensions exceeded the limit.
 	 */
 	public function calculate_shipping( $package = array() ) {
-		$api_request = $this->api_request( $package['destination'] );
+		$api_request = $this->api_request( $package );
 		if ( ! $api_request ) {
 			return;
 		}
@@ -787,32 +801,32 @@ class WooGoSend extends WC_Shipping_Method {
 	 * Making HTTP request to Google Maps Distance Matrix API
 	 *
 	 * @since    1.0.0
-	 * @param array $destination Destination info in assciative array: address, address_2, city, state, postcode, country.
+	 * @param array $package The cart content data.
 	 * @return array
 	 */
-	private function api_request( $destination ) {
+	private function api_request( $package ) {
 		if ( empty( $this->gmaps_api_key ) ) {
 			return false;
 		}
 
-		$destination = $this->get_destination_info( $destination );
-		if ( empty( $destination ) ) {
+		$destination_info = $this->get_destination_info( $package['destination'] );
+		if ( empty( $destination_info ) ) {
 			return false;
 		}
 
-		$origin = $this->get_origin_info();
-		if ( empty( $origin ) ) {
+		$origin_info = $this->get_origin_info( $package );
+		if ( empty( $origin_info ) ) {
 			return false;
 		}
 
 		$request_url_args = array(
 			'key'          => rawurlencode( $this->gmaps_api_key ),
 			'mode'         => rawurlencode( $this->gmaps_api_mode ),
-			'avoid'        => rawurlencode( $this->gmaps_api_avoid ),
+			'avoid'        => is_string( $this->gmaps_api_avoid ) ? rawurlencode( $this->gmaps_api_avoid ) : '',
 			'units'        => rawurlencode( $this->gmaps_api_units ),
 			'language'     => rawurlencode( get_locale() ),
-			'origins'      => rawurlencode( $origin ),
-			'destinations' => rawurlencode( $destination ),
+			'origins'      => rawurlencode( implode( ',', $origin_info ) ),
+			'destinations' => rawurlencode( implode( ',', $destination_info ) ),
 		);
 
 		$transient_key = $this->id . '_api_request_' . md5( wp_json_encode( $request_url_args ) );
@@ -830,7 +844,43 @@ class WooGoSend extends WC_Shipping_Method {
 
 		$this->show_debug( __( 'API Request URL', 'woogosend' ) . ': ' . str_replace( rawurlencode( $this->gmaps_api_key ), '**********', $request_url ), 'notice' );
 
-		$raw_response = wp_remote_get( esc_url_raw( $request_url ) );
+		$data = $this->process_api_response( wp_remote_get( esc_url_raw( $request_url ) ) );
+
+		// Try to make fallback request if no results found.
+		if ( ! $data && 'yes' === $this->enable_fallback_request && ! empty( $destination_info['address_2'] ) ) {
+			unset( $destination_info['address'] );
+			$request_url_args['destinations'] = rawurlencode( implode( ',', $destination_info ) );
+
+			$request_url = add_query_arg( $request_url_args, $this->google_api_url );
+
+			$this->show_debug( __( 'API Fallback Request URL', 'woogosend' ) . ': ' . str_replace( rawurlencode( $this->gmaps_api_key ), '**********', $request_url ), 'notice' );
+
+			$data = $this->process_api_response( wp_remote_get( esc_url_raw( $request_url ) ) );
+		}
+
+		if ( $data ) {
+
+			delete_transient( $transient_key ); // To make sure the transient data re-created, delete it first.
+			set_transient( $transient_key, $data, HOUR_IN_SECONDS ); // Store the data to transient with expiration in 1 hour for later use.
+
+			return $data;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Process API Response.
+	 *
+	 * @since 1.2.5
+	 * @param array $raw_response HTTP API response.
+	 * @return array|bool Formatted response data, false on failure.
+	 */
+	private function process_api_response( $raw_response ) {
+
+		$distance      = 0;
+		$distance_text = '';
+		$error_message = '';
 
 		// Check if HTTP request is error.
 		if ( is_wp_error( $raw_response ) ) {
@@ -843,6 +893,7 @@ class WooGoSend extends WC_Shipping_Method {
 		// Check if API response is empty.
 		if ( empty( $response_body ) ) {
 			$this->show_debug( __( 'API response is empty', 'woogosend' ), 'notice' );
+			return false;
 		}
 
 		$response_data = json_decode( $response_body, true );
@@ -866,10 +917,6 @@ class WooGoSend extends WC_Shipping_Method {
 			return false;
 		}
 
-		$distance      = 0;
-		$distance_text = '';
-		$error_message = '';
-
 		$element_lvl_errors = array(
 			'NOT_FOUND'                 => __( 'Origin and/or destination of this pairing could not be geocoded', 'woogosend' ),
 			'ZERO_RESULTS'              => __( 'No route could be found between the origin and destination', 'woogosend' ),
@@ -878,9 +925,20 @@ class WooGoSend extends WC_Shipping_Method {
 
 		// Get the shipping distance.
 		foreach ( $response_data['rows'] as $row ) {
+
+			// Berak the loop is distance is defined.
+			if ( $distance ) {
+				break;
+			}
+
 			foreach ( $row['elements'] as $element ) {
-				$element_status = $element['status'];
-				switch ( $element_status ) {
+
+				// Berak the loop is distance is defined.
+				if ( $distance ) {
+					break;
+				}
+
+				switch ( $element['status'] ) {
 					case 'OK':
 						if ( isset( $element['distance']['value'] ) && ! empty( $element['distance']['value'] ) ) {
 							$distance      = $this->convert_m( $element['distance']['value'] );
@@ -888,47 +946,42 @@ class WooGoSend extends WC_Shipping_Method {
 						}
 						break;
 					default:
-						$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $element_status;
-						if ( isset( $element_lvl_errors[ $element_status ] ) ) {
-							$error_message .= ' - ' . $element_lvl_errors[ $element_status ];
+						$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $element['status'];
+						if ( isset( $element_lvl_errors[ $element['status'] ] ) ) {
+							$error_message .= ' - ' . $element_lvl_errors[ $element['status'] ];
 						}
 						break;
 				}
 			}
 		}
 
-		if ( ! $distance && $error_message ) {
-			$this->show_debug( $error_message, 'notice' );
-			return;
+		if ( ! $distance ) {
+			if ( $error_message ) {
+				$this->show_debug( $error_message, 'notice' );
+			}
+			return false;
 		}
 
-		if ( $distance ) {
-			$data = array(
-				'distance'      => $distance,
-				'distance_text' => $distance_text,
-				'response'      => $response_data,
-			);
-
-			delete_transient( $transient_key ); // To make sure the data re-created, delete ot first.
-			set_transient( $transient_key, $data, HOUR_IN_SECONDS ); // Store the data to transient with expiration in 1 hour for later use.
-
-			return $data;
-		}
-
-		return false;
+		return array(
+			'distance'      => $distance,
+			'distance_text' => $distance_text,
+			'response'      => $response_data,
+		);
 	}
 
 	/**
 	 * Get shipping origin info
 	 *
 	 * @since    1.0.0
-	 * @return string
+	 * @param array $package The cart content data.
+	 * @return array
 	 */
-	private function get_origin_info() {
+	private function get_origin_info( $package ) {
 		$origin_info = array();
 
 		if ( ! empty( $this->origin_lat ) && ! empty( $this->origin_lng ) ) {
-			array_push( $origin_info, $this->origin_lat, $this->origin_lng );
+			$origin_info['lat'] = $this->origin_lat;
+			$origin_info['lng'] = $this->origin_lng;
 		}
 
 		/**
@@ -940,11 +993,11 @@ class WooGoSend extends WC_Shipping_Method {
 		 *
 		 *      add_action( 'woocommerce_woogosend_shipping_origin_info', 'modify_shipping_origin_info', 10, 2 );
 		 *
-		 *      function modify_shipping_origin_info( $origin_info, $method ) {
+		 *      function modify_shipping_origin_info( $origin_info, $package ) {
 		 *          return '1600 Amphitheatre Parkway,Mountain View,CA,94043';
 		 *      }
 		 */
-		return apply_filters( 'woocommerce_' . $this->id . '_shipping_origin_info', implode( ',', $origin_info ), $this );
+		return apply_filters( 'woocommerce_' . $this->id . '_shipping_origin_info', $origin_info, $package );
 	}
 
 	/**
@@ -954,7 +1007,7 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @param array $data Shipping destination data in associative array format: address, city, state, postcode, country.
 	 * @return string
 	 */
-	private function get_destination_info( $data = array() ) {
+	private function get_destination_info( $data ) {
 		$destination_info = array();
 
 		$keys = array( 'address', 'address_2', 'city', 'state', 'postcode', 'country' );
@@ -982,18 +1035,18 @@ class WooGoSend extends WC_Shipping_Method {
 					if ( empty( $country_code ) ) {
 						$country_code = $data[ $key ];
 					}
-					$full_country       = isset( WC()->countries->countries[ $country_code ] ) ? WC()->countries->countries[ $country_code ] : $country_code;
-					$destination_info[] = trim( $full_country );
+					$full_country             = isset( WC()->countries->countries[ $country_code ] ) ? WC()->countries->countries[ $country_code ] : $country_code;
+					$destination_info[ $key ] = trim( $full_country );
 					break;
 				case 'state':
 					if ( empty( $country_code ) ) {
 						$country_code = $data['country'];
 					}
-					$full_state         = isset( WC()->countries->states[ $country_code ][ $data[ $key ] ] ) ? WC()->countries->states[ $country_code ][ $data[ $key ] ] : $data[ $key ];
-					$destination_info[] = trim( $full_state );
+					$full_state               = isset( WC()->countries->states[ $country_code ][ $data[ $key ] ] ) ? WC()->countries->states[ $country_code ][ $data[ $key ] ] : $data[ $key ];
+					$destination_info[ $key ] = trim( $full_state );
 					break;
 				default:
-					$destination_info[] = trim( $data[ $key ] );
+					$destination_info[ $key ] = trim( $data[ $key ] );
 					break;
 			}
 		}
@@ -1007,11 +1060,11 @@ class WooGoSend extends WC_Shipping_Method {
 		 *
 		 *      add_action( 'woocommerce_woogosend_shipping_destination_info', 'modify_shipping_destination_info', 10, 2 );
 		 *
-		 *      function modify_shipping_destination_info( $destination_info, $method ) {
+		 *      function modify_shipping_destination_info( $destination_info, $destination_info_arr ) {
 		 *          return '1600 Amphitheatre Parkway,Mountain View,CA,94043';
 		 *      }
 		 */
-		return apply_filters( 'woocommerce_' . $this->id . '_shipping_destination_info', implode( ',', $destination_info ), $this );
+		return apply_filters( 'woocommerce_' . $this->id . '_shipping_destination_info', $destination_info, $this );
 	}
 
 	/**
