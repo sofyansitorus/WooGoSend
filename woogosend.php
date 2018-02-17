@@ -15,7 +15,7 @@
  * Plugin Name:       WooGoSend
  * Plugin URI:        https://github.com/sofyansitorus/WooGoSend
  * Description:       WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier.
- * Version:           1.2.5
+ * Version:           1.2.6
  * Author:            Sofyan Sitorus
  * Author URI:        https://github.com/sofyansitorus
  * License:           GPL-2.0+
@@ -24,7 +24,7 @@
  * Domain Path:       /languages
  *
  * WC requires at least: 3.0.0
- * WC tested up to: 3.3.0
+ * WC tested up to: 3.4.0
  */
 
 // If this file is called directly, abort.
@@ -42,7 +42,7 @@ if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins',
 // Defines plugin named constants.
 define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WOOGOSEND_URL', plugin_dir_url( __FILE__ ) );
-define( 'WOOGOSEND_VERSION', '1.2.5' );
+define( 'WOOGOSEND_VERSION', '1.2.6' );
 define( 'WOOGOSEND_METHOD_ID', 'woogosend' );
 define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
 define( 'WOOGOSEND_MAP_SECRET_KEY', 'QUl6YVN5Qk82MVFJUm52Zkc5c2tKTW1HV1JVbWhsSU5lcUZXaTdV' );
