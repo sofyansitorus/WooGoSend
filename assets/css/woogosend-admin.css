@@ -1,5 +1,7 @@
 .woogosend-map-wrapper {
-  position: relative; }
+  position: relative;
+  width: 100%;
+  padding-right: 10px; }
   .woogosend-map-wrapper .controls {
     margin-top: 10px;
     border: 1px solid transparent;
@@ -11,7 +13,7 @@
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); }
   .woogosend-map-wrapper .woogosend-map-canvas {
     position: relative;
-    height: 300px; }
+    height: 360px; }
   .woogosend-map-wrapper .woogosend-map-search {
     position: relative;
     background-color: #fff;
@@ -25,6 +27,32 @@
     margin-top: 10px !important; }
     .woogosend-map-wrapper .woogosend-map-search:focus {
       border-color: #4d90fe; }
+
+#woogosend-lat-lng-wrap {
+  width: 100%;
+  padding-right: 10px; }
+  #woogosend-lat-lng-wrap div {
+    width: 50%; }
+    #woogosend-lat-lng-wrap div:first-child {
+      float: left;
+      padding-right: 10px; }
+    #woogosend-lat-lng-wrap div:last-child {
+      margin-left: 50%;
+      padding-left: 10px; }
+    #woogosend-lat-lng-wrap div label {
+      display: block; }
+    #woogosend-lat-lng-wrap div input {
+      display: block;
+      width: 100%; }
+  @media only screen and (max-width: 1070px) {
+    #woogosend-lat-lng-wrap div {
+      width: 100%; }
+      #woogosend-lat-lng-wrap div:first-child {
+        float: none;
+        padding-right: 0; }
+      #woogosend-lat-lng-wrap div:last-child {
+        margin-left: 0;
+        padding-left: 0; } }
 
 .pac-container {
   z-index: 999999 !important; }

@@ -1,5 +1,7 @@
 .woogosend-map-wrapper {
     position: relative;
+    width: 100%;
+    padding-right: 10px;
     .controls {
         margin-top: 10px;
         border: 1px solid transparent;
@@ -12,7 +14,7 @@
     }
     .woogosend-map-canvas {
         position: relative;
-        height: 300px;
+        height: 360px;
     }
     .woogosend-map-search {
         position: relative;
@@ -27,6 +29,42 @@
         margin-top: 10px !important;
         &:focus {
             border-color: #4d90fe;
+        }
+    }
+}
+
+#woogosend-lat-lng-wrap {
+    width: 100%;
+    padding-right: 10px;
+    div{
+        width: 50%;
+        &:first-child{
+            float: left;
+            padding-right: 10px;
+        }
+        &:last-child{
+            margin-left: 50%;
+            padding-left: 10px;
+        }
+        label{
+            display: block;
+        }
+        input{
+            display: block;
+            width: 100%;
+        }
+    }
+    @media only screen and (max-width: 1070px) {
+        div{
+            width: 100%;
+            &:first-child{
+                float: none;
+                padding-right: 0;
+            }
+            &:last-child{
+                margin-left: 0;
+                padding-left: 0;
+            }
         }
     }
 }
