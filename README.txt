@@ -1,6 +1,6 @@
 === WooGoSend ===
 Contributors: sofyansitorus
-Tags: woocommerce shipping,go-jek,ojek shipping,gosend,gojek shipping
+Tags: woocommerce,woocommerce-shipping,gojek,gojek-shipping,gosend,gosend-shipping
 Requires at least: 4.8
 Tested up to: 4.9.4
 Requires PHP: 5.6
@@ -23,13 +23,13 @@ This plugin require Google Maps Distance Matrix API Services enabled in your Goo
 * Available 2 shipping services: Instant Delivery, Same Day Delivery.
 * Set shipping cost per kilometer.
 * Set minimum cost that will be billed to customer.
-* Set maximum cost that will be billed to customer.
 * Set maximum shipping distances that allowed to use the courier.
 * Set maximum package weight and dimensions that allowed to use the courier.
 * Set shipping origin info by store location coordinates.
 * Set travel mode: Driving, Walking, Bicycling.
 * Set route restrictions: Avoid Tolls, Avoid Highways, Avoid Ferries, Avoid Indoor.
 * Set visibility distance info to customer.
+* Set fallback request if there is no results for API request using full address.
 
 == Installation ==
 = Minimum Requirements =
@@ -83,9 +83,13 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Changelog ==
 
+= 1.2.6 =
+
+* Improvements - Enhance Maps Picker.
+
 = 1.2.5 =
 
-* Improvements -Add new option: Enable Fallback Request.
+* Improvements - Add new option: Enable Fallback Request.
 * Fix - Added fallback to input store location manually on google map error.
 
 = 1.2.4 =
@@ -142,5 +146,5 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Upgrade Notice ==
 
-= 1.2.5 =
-This version include bug fixes and improvements. Upgrade immediately.
+= 1.2.6 =
+This version include improvements. Upgrade immediately.
