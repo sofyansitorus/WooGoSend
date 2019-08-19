@@ -1092,14 +1092,17 @@ class WooGoSend extends WC_Shipping_Method {
 	 * Show debug info
 	 *
 	 * @since    1.0.0
-	 * @param string $message The text to display in the notice.
+	 * @param string $message     The text to display in the notice.
+	 * @param string $notice_type The name of the notice type - either error, success or notice.
 	 * @return void
 	 */
-	private function show_debug( $message ) {
+	private function show_debug( $message, $notice_type = 'notice' ) {
 		$debug_mode = 'yes' === get_option( 'woocommerce_shipping_debug_mode', 'no' );
 
-		if ( $debug_mode && ! defined( 'WOOCOMMERCE_CHECKOUT' ) && ! defined( 'WC_DOING_AJAX' ) && ! wc_has_notice( $message ) ) {
-			wc_add_notice( $message );
+		if ( ! $debug_mode || ! current_user_can( 'manage_options' ) || wc_has_notice( $message ) || ( defined( 'WC_DOING_AJAX' ) && WC_DOING_AJAX ) ) {
+			return;
 		}
+
+		wc_add_notice( $message, $notice_type );
 	}
 }
