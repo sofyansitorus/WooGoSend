@@ -72,7 +72,7 @@ class WooGoSend extends WC_Shipping_Method {
 	 */
 	public function init() {
 		// Load the settings API.
-		$this->init_form_fields(); // This is part of the settings API. Override the method to add your own settings
+		$this->init_form_fields(); // This is part of the settings API. Override the method to add your own settings.
 		$this->init_settings(); // This is part of the settings API. Loads settings you previously init.
 
 		// Define user set variables.
@@ -111,7 +111,6 @@ class WooGoSend extends WC_Shipping_Method {
 
 		// Check if this shipping method is availbale for current order.
 		add_filter( 'woocommerce_shipping_' . $this->id . '_is_available', array( $this, 'check_is_available' ), 10, 2 );
-
 	}
 
 	/**
@@ -134,17 +133,17 @@ class WooGoSend extends WC_Shipping_Method {
 				'description' => __( 'This plugin require Google Maps Distance Matrix API Services enabled in your Google API Console. <a href="https://developers.google.com/maps/documentation/distance-matrix/get-api-key" target="_blank">Click here</a> to get API Key and to enable the services.', 'woogosend' ),
 				'default'     => '',
 			),
-			'origin'      => array(
+			'origin'                    => array(
 				'title' => __( 'Store Location', 'woogosend' ),
 				'type'  => 'address_picker',
 			),
 			'origin_lat'                => array(
-				'title'       => __( 'Store Location Latitude', 'woogosend' ),
-				'type'        => 'coordinates',
+				'title' => __( 'Store Location Latitude', 'woogosend' ),
+				'type'  => 'coordinates',
 			),
 			'origin_lng'                => array(
-				'title'       => __( 'Store Location Logitude', 'woogosend' ),
-				'type'        => 'coordinates',
+				'title' => __( 'Store Location Logitude', 'woogosend' ),
+				'type'  => 'coordinates',
 			),
 			'gmaps_api_mode'            => array(
 				'title'       => __( 'Travel Mode', 'woogosend' ),
@@ -423,10 +422,8 @@ class WooGoSend extends WC_Shipping_Method {
 	 * Generate coordinates settings field.
 	 *
 	 * @since 1.2.4
-	 * @param string $key Settings field key.
-	 * @param array  $data Settings field data.
 	 */
-	public function generate_coordinates_html( $key, $data ) {}
+	public function generate_coordinates_html() {}
 
 	/**
 	 * Validate gmaps_api_key settings field.
@@ -590,7 +587,7 @@ class WooGoSend extends WC_Shipping_Method {
 		 *
 		 * This example shows how you can add an extra rate via custom function:
 		 *
-		 *      add_action( 'woocommerce_woogosend_instant_shipping_add_rate', 'add_another_custom_flat_rate', 10, 2 );
+		 *      add_filter( 'woocommerce_woogosend_instant_shipping_add_rate', 'add_another_custom_flat_rate', 10, 2 );
 		 *
 		 *      function add_another_custom_flat_rate( $method, $rate ) {
 		 *          $new_rate          = $rate;
@@ -602,7 +599,7 @@ class WooGoSend extends WC_Shipping_Method {
 		 *          $method->add_rate( $new_rate );
 		 *      }.
 		 */
-		do_action( 'woocommerce_' . $this->id . '_instant_shipping_add_rate', $this, $rate );
+		do_action( 'woocommerce_' . $this->id . '_instant_shipping_add_rate', $this, $rate ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 
 	/**
@@ -668,7 +665,7 @@ class WooGoSend extends WC_Shipping_Method {
 		 *
 		 * This example shows how you can add an extra rate via custom function:
 		 *
-		 *      add_action( 'woocommerce_woogosend_same_day_shipping_add_rate', 'add_another_custom_flat_rate', 10, 2 );
+		 *      add_filter( 'woocommerce_woogosend_same_day_shipping_add_rate', 'add_another_custom_flat_rate', 10, 2 );
 		 *
 		 *      function add_another_custom_flat_rate( $method, $rate ) {
 		 *          $new_rate          = $rate;
@@ -680,7 +677,7 @@ class WooGoSend extends WC_Shipping_Method {
 		 *          $method->add_rate( $new_rate );
 		 *      }.
 		 */
-		do_action( 'woocommerce_' . $this->id . '_same_day_shipping_add_rate', $this, $rate );
+		do_action( 'woocommerce_' . $this->id . '_same_day_shipping_add_rate', $this, $rate ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 
 	/**
@@ -852,7 +849,6 @@ class WooGoSend extends WC_Shipping_Method {
 		}
 
 		if ( $data ) {
-
 			delete_transient( $transient_key ); // To make sure the transient data re-created, delete it first.
 			set_transient( $transient_key, $data, HOUR_IN_SECONDS ); // Store the data to transient with expiration in 1 hour for later use.
 
@@ -870,7 +866,6 @@ class WooGoSend extends WC_Shipping_Method {
 	 * @return array|bool Formatted response data, false on failure.
 	 */
 	private function process_api_response( $raw_response ) {
-
 		$distance      = 0;
 		$distance_text = '';
 		$error_message = '';
@@ -984,13 +979,13 @@ class WooGoSend extends WC_Shipping_Method {
 		 *
 		 * This example shows how you can modify the shipping origin info via custom function:
 		 *
-		 *      add_action( 'woocommerce_woogosend_shipping_origin_info', 'modify_shipping_origin_info', 10, 2 );
+		 *      add_filter( 'woocommerce_woogosend_shipping_origin_info', 'modify_shipping_origin_info', 10, 2 );
 		 *
 		 *      function modify_shipping_origin_info( $origin_info, $package ) {
 		 *          return '1600 Amphitheatre Parkway,Mountain View,CA,94043';
 		 *      }
 		 */
-		return apply_filters( 'woocommerce_' . $this->id . '_shipping_origin_info', $origin_info, $package );
+		return apply_filters( 'woocommerce_' . $this->id . '_shipping_origin_info', $origin_info, $package ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 
 	/**
@@ -998,7 +993,7 @@ class WooGoSend extends WC_Shipping_Method {
 	 *
 	 * @since    1.0.0
 	 * @param array $data Shipping destination data in associative array format: address, city, state, postcode, country.
-	 * @return string
+	 * @return array
 	 */
 	private function get_destination_info( $data ) {
 		$destination_info = array();
@@ -1008,10 +1003,10 @@ class WooGoSend extends WC_Shipping_Method {
 		// Remove destination field keys for shipping calculator request.
 		if ( isset( $_POST['calc_shipping'], $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'woocommerce-cart' ) ) {
 			$keys_remove = array( 'address', 'address_2' );
-			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) {
+			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_city', false ) ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				array_push( $keys_remove, 'city' );
 			}
-			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_postcode', false ) ) {
+			if ( ! apply_filters( 'woocommerce_shipping_calculator_enable_postcode', false ) ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				array_push( $keys_remove, 'postcode' );
 			}
 			$keys = array_diff( $keys, $keys_remove );
@@ -1051,13 +1046,13 @@ class WooGoSend extends WC_Shipping_Method {
 		 *
 		 * This example shows how you can modify the shipping destination info via custom function:
 		 *
-		 *      add_action( 'woocommerce_woogosend_shipping_destination_info', 'modify_shipping_destination_info', 10, 2 );
+		 *      add_filter( 'woocommerce_woogosend_shipping_destination_info', 'modify_shipping_destination_info', 10, 2 );
 		 *
 		 *      function modify_shipping_destination_info( $destination_info, $destination_info_arr ) {
 		 *          return '1600 Amphitheatre Parkway,Mountain View,CA,94043';
 		 *      }
 		 */
-		return apply_filters( 'woocommerce_' . $this->id . '_shipping_destination_info', $destination_info, $this );
+		return apply_filters( 'woocommerce_' . $this->id . '_shipping_destination_info', $destination_info, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 	}
 
 	/**

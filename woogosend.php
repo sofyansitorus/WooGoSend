@@ -35,9 +35,11 @@ if ( ! defined( 'WPINC' ) ) {
 /**
  * Check if WooCommerce is active
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 if ( ! in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true ) ) {
 	return;
-}// End if().
+}
+// phpcs:enable
 
 // Defines plugin named constants.
 define( 'WOOGOSEND_PATH', plugin_dir_path( __FILE__ ) );
@@ -103,7 +105,8 @@ function woogosend_plugin_action_links( $links ) {
 						'tab'                => 'shipping',
 						'zone_id'            => $zone_id,
 						'woogosend_settings' => true,
-					), admin_url( 'admin.php' )
+					),
+					admin_url( 'admin.php' )
 				)
 			) . '">' . __( 'Settings', 'woogosend' ) . '</a>',
 		),
@@ -147,7 +150,9 @@ function woogosend_enqueue_scripts( $hook = null ) {
 			'woogosend-admin',
 			'woogosend_params',
 			array(
-				'show_settings' => ( isset( $_GET['woogosend_settings'] ) && is_admin() ) ? true : false,
+				// phpcs:disable WordPress.Security.NonceVerification.Recommended
+				'show_settings' => isset( $_GET['woogosend_settings'] ) && is_admin(),
+				// phpcs:enable
 				'method_id'     => WOOGOSEND_METHOD_ID,
 				'method_title'  => WOOGOSEND_METHOD_TITLE,
 				'txt'           => array(

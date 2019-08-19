@@ -1,2 +1,8 @@
 <?php
-// Silence is golden.
+/**
+ * Silence is golden.
+ *
+ * @package WooGoSend
+ */
+
+// phpcs:disable
