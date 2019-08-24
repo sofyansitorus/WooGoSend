@@ -2,7 +2,7 @@
 /**
  * Class SampleTest
  *
- * @package Woogosend
+ * @package WooGoSend
  */
 
 /**
