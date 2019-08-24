@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 return array(
-	'version' => '1.3',
+	'version' => '1.3.0',
 	'options' => array(
 		'gmaps_api_key'   => 'api_key',
 		'gmaps_api_mode'  => 'travel_mode',

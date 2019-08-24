@@ -81,6 +81,13 @@ class WooGoSend_Services {
 				'desc_tip'    => true,
 				'class'       => 'woogosend-toggle-service',
 			),
+			'multiple_drivers'    => array(
+				'title'       => __( 'Multiple Drivers', 'woogosend' ),
+				'label'       => __( 'Enable', 'woogosend' ),
+				'type'        => 'checkbox',
+				'description' => __( 'Split shipping into several drivers if the total package weight and dimensions exceeded the limit. Will be handy for bulk quantity orders.', 'woogosend' ),
+				'desc_tip'    => true,
+			),
 			'title'               => array(
 				'title'       => __( 'Label', 'woogosend' ),
 				'type'        => 'text',
@@ -186,13 +193,6 @@ class WooGoSend_Services {
 					'min'  => '1',
 					'step' => '1',
 				),
-			),
-			'multiple_drivers'    => array(
-				'title'       => __( 'Multiple Drivers', 'woogosend' ),
-				'label'       => __( 'Enable', 'woogosend' ),
-				'type'        => 'checkbox',
-				'description' => __( 'Split shipping into several drivers if the total package weight and dimensions exceeded the limit. Will be handy for bulk quantity orders.', 'woogosend' ),
-				'desc_tip'    => true,
 			),
 		);
 

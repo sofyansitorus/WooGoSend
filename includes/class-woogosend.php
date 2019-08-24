@@ -180,14 +180,16 @@ class WooGoSend extends WC_Shipping_Method {
 
 		$data_version = get_option( 'woogosend_data_version' );
 
-		if ( $data_version && version_compare( $data_version, WOOGOSEND_VERSION, '>=' ) ) {
+		if ( $data_version && version_compare( WOOGOSEND_VERSION, $data_version, '<=' ) ) {
 			return;
 		}
+
+		$current_options = get_option( $this->get_instance_option_key() );
 
 		foreach ( glob( WOOGOSEND_PATH . 'includes/migration/*.php' ) as $migration_file ) {
 			$migration_data = include $migration_file;
 
-			if ( ! isset( $migration_data['version'] ) || version_compare( $migration_data['version'], WOOGOSEND_VERSION, '<=' ) ) {
+			if ( ! isset( $migration_data['version'] ) || version_compare( WOOGOSEND_VERSION, $migration_data['version'], '<' ) ) {
 				continue;
 			}
 
@@ -198,11 +200,11 @@ class WooGoSend extends WC_Shipping_Method {
 			}
 
 			foreach ( $migration_options as $old_key => $new_key ) {
-				$old_option = $this->get_option( $old_key );
-				$new_option = $this->get_option( $new_key );
+				$old_option = isset( $current_options[ $old_key ] ) ? $current_options[ $old_key ] : false;
+				$new_option = isset( $current_options[ $new_key ] ) ? $current_options[ $new_key ] : false;
 
-				if ( ! is_null( $old_option ) && is_null( $new_option ) ) {
-					$this->instance_settings[ $new_key ] = $old_option;
+				if ( $old_option && $old_option !== $new_option ) {
+					$this->instance_settings[ $new_key ] = $current_options[ $old_key ];
 				}
 			}
 
@@ -211,6 +213,9 @@ class WooGoSend extends WC_Shipping_Method {
 
 			// Update the latest version migrated option.
 			update_option( 'woogosend_data_version', $migration_data['version'], 'yes' );
+
+			// translators: %s is data migration version.
+			$this->show_debug( sprintf( __( 'Data migrated to version %s', 'woogosend' ), $migration_data['version'] ) );
 		}
 	}
 
@@ -388,6 +393,7 @@ class WooGoSend extends WC_Shipping_Method {
 				'orig_type'   => 'checkbox',
 				'description' => __( 'Show the distance info to customer during checkout.', 'woogosend' ),
 				'desc_tip'    => true,
+				'default'     => 'yes',
 			),
 			'field_group_location_picker'     => array(
 				'type'      => 'woogosend',
