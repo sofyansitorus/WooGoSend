@@ -1195,9 +1195,11 @@ class WooGoSend extends WC_Shipping_Method {
 
 					$label_extra = array();
 
-					if ( isset( $shipping_cost['drivers_count'] ) && $shipping_cost['drivers_count'] > 1 ) {
+					$drivers_count = isset( $shipping_cost['drivers_count'] ) ? $shipping_cost['drivers_count'] : 1;
+
+					if ( $drivers_count > 1 ) {
 						// translators: %s is the number of the drivers.
-						$label_extra[] = sprintf( _n( '%s driver', '%s drivers', $shipping_cost['drivers_count'], 'woogosend' ), $shipping_cost['drivers_count'] );
+						$label_extra[] = sprintf( _n( '%s driver', '%s drivers', $drivers_count, 'woogosend' ), $drivers_count );
 					}
 
 					if ( 'yes' === $this->show_distance ) {
@@ -1215,7 +1217,8 @@ class WooGoSend extends WC_Shipping_Method {
 						'label'     => $label,
 						'cost'      => $total,
 						'meta_data' => array(
-							'api_response' => $api_response,
+							'api_response'  => $api_response,
+							'drivers_count' => $drivers_count,
 						),
 					);
 
