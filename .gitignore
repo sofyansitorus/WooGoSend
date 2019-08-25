@@ -1,4 +1,9 @@
+.DS_Store
 node_modules
+vendor
+assets/css
+assets/js
+languages/woogosend.pot
+dist
+composer.lock
 package-lock.json
-/.wpt.yml
-/build
