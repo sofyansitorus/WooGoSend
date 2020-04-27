@@ -10,7 +10,6 @@
     ],
     "minimum-stability": "stable",
     "require-dev": {
-        "woocommerce/woocommerce": "dev-master",
         "phpcompatibility/php-compatibility": "*",
         "phpcompatibility/phpcompatibility-wp": "*",
         "wp-coding-standards/wpcs": "^2.1",
@@ -18,24 +17,6 @@
         "sirbrillig/phpcs-variable-analysis": "^2.7",
         "phpunit/phpunit": "^5",
         "wp-cli/wp-cli": "^2.3"
-    },
-    "autoload-dev": {
-        "classmap": [
-            "vendor/woocommerce/woocommerce/tests/framework"
-        ]
-    },
-    "extra": {
-        "installer-paths": {
-            "vendor/woocommerce/woocommerce": [
-                "woocommerce/woocommerce"
-            ],
-            "vendor/woocommerce/woocommerce-blocks": [
-                "woocommerce/woocommerce-blocks"
-            ],
-            "vendor/woocommerce/woocommerce-rest-api": [
-                "woocommerce/woocommerce-rest-api"
-            ]
-        }
     },
     "scripts": {
         "phpcs": "vendor/bin/phpcs",

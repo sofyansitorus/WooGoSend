@@ -538,7 +538,7 @@ class WooGoSend extends WC_Shipping_Method {
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
 					<input type="hidden" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" />
-					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" id="<?php echo esc_attr( $field_key ); ?>--dummy" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" readonly="readonly" /> 
+					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" id="<?php echo esc_attr( $field_key ); ?>--dummy" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" readonly="readonly" />
 					<a href="#" class="button button-secondary button-small woogosend-edit-api-key woogosend-link" id="<?php echo esc_attr( $key ); ?>"><span class="dashicons dashicons-edit"></span><span class="dashicons dashicons-yes"></span><span class="spinner woogosend-spinner"></span></a>
 					<div>
 					<a href="#" class="woogosend-show-instructions woogosend-link"><?php esc_html_e( 'How to Get API Key?', 'woogosend' ); ?></a>
@@ -587,7 +587,7 @@ class WooGoSend extends WC_Shipping_Method {
 			<td class="forminp">
 				<fieldset>
 					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" readonly="readonly" /> 
+					<input class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" type="text" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" readonly="readonly" />
 					<a href="#" class="button button-secondary button-small woogosend-link woogosend-edit-location"><span class="dashicons dashicons-location"></span></a>
 					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</fieldset>
@@ -1001,7 +1001,7 @@ class WooGoSend extends WC_Shipping_Method {
 			$data['type'] = 'text';
 		}
 
-		$data_classes = isset( $data['class'] ) ? explode( ' ', $data['class'] ) : [];
+		$data_classes = isset( $data['class'] ) ? explode( ' ', $data['class'] ) : array();
 
 		array_push( $data_classes, 'woogosend-field', 'woogosend-field-key--' . $key, 'woogosend-field-type--' . $data['type'] );
 

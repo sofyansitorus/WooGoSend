@@ -5,5 +5,4 @@ assets/css
 assets/js
 languages/woogosend.pot
 dist
-composer.lock
 package-lock.json
