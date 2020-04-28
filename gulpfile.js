@@ -36,7 +36,6 @@ const assets = [
       'helpers.js',
       'console-listener.js',
       'map-picker.js',
-      'table-rates.js',
       'backend.js',
     ],
     targetDir: 'assets/js/',

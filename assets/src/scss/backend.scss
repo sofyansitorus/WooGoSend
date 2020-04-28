@@ -10,6 +10,14 @@
   }
 }
 
+.pac-container {
+  z-index: 9999999;
+}
+
+.gm-style .gm-style-iw-c {
+  border-radius: 0;
+}
+
 .woogosend {
   &-hidden {
     display: none;
@@ -55,17 +63,19 @@
 
   &-edit-api-key.editing {
     .dashicons:before {
-      content: "\f147";
+      content: "\f113";
     }
   }
 
   &-edit-api-key.loading {
     .dashicons {
       animation: rotation 1s infinite linear;
+    }
+  }
 
-      &:before {
-        content: "\f113";
-      }
+  &-edit-api-key.valid:not(.editing):not(.loading):not(.empty) {
+    .dashicons:before {
+      content: "\f147";
     }
   }
 
@@ -132,121 +142,22 @@
         }
       }
     }
-  }
 
-  &-table {
-    &--table_rates--dummy {
-      max-width: 100%;
-
-      tr {
-        .woogosend-col {
-          background-color: $white;
-          box-sizing: border-box;
-
-          &--select-item {
-            text-align: center;
-            width: 50px;
-
-            input {
-              margin: 0;
-              padding: 0;
-            }
-          }
-
-          &--link_advanced {
-            text-align: center;
-            width: 96px;
-          }
-
-          &--link_sort {
-            text-align: center;
-            width: 60px;
-          }
-
-          &+.woogosend-col {
-            border-left: 1px solid $seashell;
-          }
-        }
-      }
-
-      thead {
-        tr {
-          .woogosend-col {
-            font-weight: 600;
-          }
-        }
-      }
-
-      tbody {
-        tr {
-          .woogosend-col {
-            padding-bottom: 9px !important;
-            padding-top: 9px !important;
-          }
-
-          &.selected {
-            .woogosend-link {
-              opacity: 0.4;
-              pointer-events: none;
-            }
-          }
-
-          &.highlighted {
-            .woogosend-col {
-              animation: highlighted 0.5s infinite;
-            }
-          }
-
-          &:nth-child(odd) {
-            .woogosend-col {
-              background-color: rgba($anakiwa, 0.1);
-            }
-          }
-
-          &:nth-child(even) {
-            .woogosend-col {
-              background-color: $white;
-            }
-          }
-
-          &:last-child {
-
-            td,
-            th {
-              border-bottom: 0px solid rgba($alabaster, 0) !important;
-            }
-          }
-
-          &:hover {
-            .woogosend-col {
-              background-color: rgba($anakiwa, 0.2);
-            }
-          }
-
-          .woogosend-field--context--dummy:not(a) {
-            min-width: 100px !important;
-          }
-        }
-      }
-    }
-
-    &--advanced_rate {
-      .woogosend-no-padding {
-        .woogosend-field-type--title {
-          margin-bottom: 0;
-          margin-top: 0;
-          padding-bottom: 5px;
-          padding-top: 5px;
-          background: $seashell;
-          background: linear-gradient(to bottom, $seashell 0%, lighten($seashell, 3%) 47%, lighten($seashell, 3%) 53%, $seashell 100%);
-          border: 1px solid $seashell;
-          font-size: 1.1em;
-        }
-
-        .form-table {
-          margin-bottom: 0 !important;
-        }
-      }
+    &-unit {
+      background-color: $iron !important;
+      display: inline-block !important;
+      width: 40px !important;
+      min-width: 40px !important;
+      margin-left: -5px;
+      border-radius: 0 !important;
+      border-top-right-radius: 4px !important;
+      border-bottom-right-radius: 4px !important;
+      box-shadow: 0 0 0 transparent;
+      border: 1px solid #7e8993 !important;
+      color: #32373c !important;
+      padding: 0 8px;
+      line-height: 2;
+      min-height: 30px;
     }
   }
 
@@ -264,6 +175,7 @@
     margin: 10px;
     position: absolute;
     top: 10px;
+    box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3);
 
     .woogosend-map-search-element {
       float: left;
@@ -276,16 +188,26 @@
       height: 40px !important;
       max-width: calc(100% - 60px) !important;
       transition: all 2s ease;
-      width: 540px !important;
+      border-radius: 0;
+      border: none;
+      border-left: 1px solid $lochmara;
+
+      &:focus {
+        border: none !important;
+        outline: none !important;
+      }
     }
 
     #woogosend-map-search-panel-toggle {
-      background: none rgb(255, 255, 255);
-      box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+      background: $lochmara;
+      border: none;
+      outline: none;
       cursor: pointer;
       display: block;
       height: 40px !important;
       width: 40px !important;
+      color: $alabaster;
+      border-radius: 0;
 
       .dashicons {
         &:before {
@@ -295,16 +217,15 @@
     }
 
     &.expanded {
+      border: 1px solid $lochmara;
+
       #woogosend-map-search-input {
         display: block;
       }
 
       #woogosend-map-search-panel-toggle {
-        .dashicons {
-          &:before {
-            content: "\f171";
-          }
-        }
+        background: $alabaster;
+        color: $lochmara;
       }
     }
 
@@ -334,10 +255,6 @@
       padding: 2px !important;
     }
   }
-}
-
-.pac-container {
-  z-index: 9999999;
 }
 
 @keyframes highlighted {

@@ -6,7 +6,6 @@ var woogosendFrontendForm = {
   },
   loadForm: function () {
     var forms = woogosendFrontendForm.getForms();
-    var defaultFields = woogosendFrontendForm.getDefaultFields();
 
     _.each(forms, function (form) {
       var $wrapper = $(form.wrapper);

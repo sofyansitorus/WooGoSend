@@ -73,6 +73,8 @@ function woogosend_i18n( $key = '', $default = '' ) {
 			'duplicate_rate_row'    => __( 'Shipping rules combination duplicate with rate row #%1$d: %2$s', 'woogosend' ),
 			'finish_editing_api'    => __( 'Please finish the API Key Editing first!', 'woogosend' ),
 			'table_rates_invalid'   => __( 'Table rates data is incomplete or invalid!', 'woogosend' ),
+			'api_key_empty'         => __( 'Distance Calculator API Key cannot be empty!', 'woogosend' ),
+			'api_key_picker_empty'  => __( 'Location Picker API Key cannot be empty!', 'woogosend' ),
 		),
 		'Save Changes' => __( 'Save Changes', 'woogosend' ),
 		'Add New Rate' => __( 'Add New Rate', 'woogosend' ),
@@ -241,7 +243,11 @@ if ( ! function_exists( 'woogosend_autoload' ) ) :
 			return;
 		}
 
-		require_once WOOGOSEND_PATH . 'includes/classes/class-' . str_replace( '_', '-', $class ) . '.php';
+		if ( strpos( $class, 'woogosend_services_' ) === 0 ) {
+			require_once WOOGOSEND_PATH . 'includes/services/class-' . str_replace( '_', '-', $class ) . '.php';
+		} else {
+			require_once WOOGOSEND_PATH . 'includes/classes/class-' . str_replace( '_', '-', $class ) . '.php';
+		}
 	}
 endif;
 

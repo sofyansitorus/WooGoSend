@@ -131,9 +131,9 @@ class WooGoSend {
 				'<a href="' . esc_url(
 					add_query_arg(
 						array(
-							'page'           => 'wc-settings',
-							'tab'            => 'shipping',
-							'zone_id'        => $zone_id,
+							'page'               => 'wc-settings',
+							'tab'                => 'shipping',
+							'zone_id'            => $zone_id,
 							'woogosend_settings' => true,
 						),
 						admin_url( 'admin.php' )

@@ -58,6 +58,14 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	private $instance_rate_fields = array();
 
 	/**
+	 * Rate fields data
+	 *
+	 * @since    2.0
+	 * @var array
+	 */
+	private $services = array();
+
+	/**
 	 * Default data
 	 *
 	 * @since    2.0
@@ -117,13 +125,14 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	 */
 	public function init() {
 		// Register hooks.
+		$this->register_services();
+
+		// Register hooks.
 		$this->init_hooks();
 
 		// Load the settings API.
 		$this->init_form_fields(); // This is part of the settings API. Override the method to add your own settings.
 		$this->init_settings(); // This is part of the settings API. Loads settings you previously init.
-
-		$this->init_rate_fields(); // Init rate fields.
 
 		// Define user set variables.
 		foreach ( $this->instance_form_fields as $key => $field ) {
@@ -132,6 +141,20 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			$this->options[ $key ] = $this->get_option( $key, $default );
 
 			$this->{$key} = $this->options[ $key ];
+		}
+	}
+
+	private function register_services() {
+		foreach ( glob( WOOGOSEND_PATH . 'includes/services/class-woogosend-services-*.php' ) as $file ) {
+			$class_name = str_replace( array( 'class-', 'woogosend' ), array( '', 'WooGoSend' ), basename( $file, '.php' ) );
+			$class_name = array_map( 'ucfirst', explode( '-', $class_name ) );
+			$class_name = implode( '_', $class_name );
+
+			if ( isset( $this->services[ $class_name ] ) ) {
+				continue;
+			}
+
+			$this->services[ $class_name ] = new $class_name();
 		}
 	}
 
@@ -351,195 +374,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'description' => __( 'Show the distance info to customer during checkout.', 'woogosend' ),
 				'desc_tip'    => true,
 			),
-			'field_group_total_cost'      => array(
-				'type'        => 'woogosend',
-				'orig_type'   => 'title',
-				'class'       => 'woogosend-field-group',
-				'title'       => __( 'Global Rates Settings', 'woogosend' ),
-				'description' => __( 'Default settings that will be inherited by certain settings in table rates when it is empty.', 'woogosend' ),
-			),
-			'title'                       => array(
-				'title'       => __( 'Label', 'woogosend' ),
-				'type'        => 'woogosend',
-				'orig_type'   => 'text',
-				'description' => __( 'This controls the label which the user sees during checkout.', 'woogosend' ),
-				'default'     => $this->method_title,
-				'desc_tip'    => true,
-				'is_required' => true,
-				'table_rate'  => array(
-					'insert_after' => 'section_general',
-					'attrs'        => array(
-						'default'     => '',
-						'desc_tip'    => true,
-						'is_advanced' => true,
-						'is_dummy'    => true,
-						'is_hidden'   => true,
-						'is_required' => false,
-					),
-				),
-			),
-			'min_cost'                    => array(
-				'type'              => 'woogosend',
-				'orig_type'         => 'text',
-				'title'             => __( 'Minimum Cost', 'woogosend' ),
-				'default'           => '0',
-				'description'       => __( 'Minimum cost that will be applied.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_required'       => true,
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-				'table_rate'        => array(
-					'insert_after' => 'section_total_cost',
-					'attrs'        => array(
-						'default'     => '',
-						'is_required' => false,
-						'is_advanced' => true,
-						'is_dummy'    => true,
-						'is_hidden'   => true,
-						'validate'    => 'number',
-					),
-				),
-			),
-			'surcharge_type'              => array(
-				'type'        => 'woogosend',
-				'orig_type'   => 'select',
-				'title'       => __( 'Surcharge Type', 'woogosend' ),
-				'default'     => 'fixed',
-				'description' => __( 'Surcharge type that will be added to the total shipping cost.', 'woogosend' ),
-				'desc_tip'    => true,
-				'is_required' => true,
-				'options'     => array(
-					'none'       => __( 'None', 'woogosend' ),
-					'fixed'      => __( 'Fixed', 'woogosend' ),
-					'percentage' => __( 'Percentage', 'woogosend' ),
-				),
-				'table_rate'  => array(
-					'insert_after' => 'min_cost',
-					'attrs'        => array(
-						'is_advanced' => true,
-						'is_hidden'   => true,
-					),
-				),
-			),
-			'surcharge'                   => array(
-				'type'              => 'woogosend',
-				'orig_type'         => 'text',
-				'title'             => __( 'Surcharge Amount', 'woogosend' ),
-				'default'           => '0',
-				'description'       => __( 'Surcharge amount that will be added to the total shipping cost.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_required'       => true,
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-				'table_rate'        => array(
-					'insert_after' => 'surcharge_type',
-					'attrs'        => array(
-						'default'     => '',
-						'is_required' => false,
-						'is_advanced' => true,
-						'is_dummy'    => true,
-						'is_hidden'   => true,
-						'validate'    => 'number',
-						'title'       => __( 'Surcharge', 'woogosend' ),
-					),
-				),
-			),
-			'discount_type'               => array(
-				'type'        => 'woogosend',
-				'orig_type'   => 'select',
-				'title'       => __( 'Discount Type', 'woogosend' ),
-				'default'     => 'fixed',
-				'description' => __( 'Discount type that will be deducted to the total shipping cost.', 'woogosend' ),
-				'desc_tip'    => true,
-				'is_required' => true,
-				'options'     => array(
-					'none'       => __( 'None', 'woogosend' ),
-					'fixed'      => __( 'Fixed', 'woogosend' ),
-					'percentage' => __( 'Percentage', 'woogosend' ),
-				),
-				'table_rate'  => array(
-					'insert_after' => 'surcharge',
-					'attrs'        => array(
-						'is_advanced' => true,
-						'is_hidden'   => true,
-					),
-				),
-			),
-			'discount'                    => array(
-				'type'              => 'woogosend',
-				'orig_type'         => 'text',
-				'title'             => __( 'Discount Amount', 'woogosend' ),
-				'default'           => '0',
-				'description'       => __( 'Discount amount that will be deducted to the total shipping cost.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_required'       => true,
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-				'table_rate'        => array(
-					'insert_after' => 'discount_type',
-					'attrs'        => array(
-						'default'     => '',
-						'is_required' => false,
-						'is_advanced' => true,
-						'is_dummy'    => true,
-						'is_hidden'   => true,
-						'validate'    => 'number',
-						'title'       => __( 'Discount', 'woogosend' ),
-					),
-				),
-			),
-			'total_cost_type'             => array(
-				'type'        => 'woogosend',
-				'orig_type'   => 'select',
-				'title'       => __( 'Total Cost Type', 'woogosend' ),
-				'default'     => 'flat__highest',
-				'description' => __( 'Determine how is the total shipping cost will be calculated.', 'woogosend' ),
-				'desc_tip'    => true,
-				'is_required' => true,
-				'options'     => array(
-					'flat__highest'                   => __( 'Max - Set highest item cost as total (Flat)', 'woogosend' ),
-					'flat__average'                   => __( 'Average - Set average item cost as total (Flat)', 'woogosend' ),
-					'flat__lowest'                    => __( 'Min - Set lowest item cost as total (Flat)', 'woogosend' ),
-					'progressive__per_shipping_class' => __( 'Per Class - Accumulate total by grouping the product shipping class (Progressive)', 'woogosend' ),
-					'progressive__per_product'        => __( 'Per Product - Accumulate total by grouping the product ID (Progressive)', 'woogosend' ),
-					'progressive__per_item'           => __( 'Per Piece - Accumulate total by multiplying the quantity (Progressive)', 'woogosend' ),
-				),
-				'table_rate'  => array(
-					'insert_after' => 'discount',
-					'attrs'        => array(
-						'is_advanced' => true,
-						'is_dummy'    => false,
-						'is_hidden'   => true,
-					),
-				),
-			),
-			'field_group_table_rates'     => array(
-				'type'        => 'woogosend',
-				'orig_type'   => 'title',
-				'class'       => 'woogosend-field-group',
-				'title'       => __( 'Table Rates Settings', 'woogosend' ),
-				'description' => __( 'Determine the shipping cost based on the shipping address distance and extra advanced rules. The rate row that will be chosen during checkout is the rate row with the maximum distance value closest with the calculated shipping address distance and the order info must matched with the extra advanced rules if defined. You can sort the rate row priority manually when it has the same maximum distance values by dragging vertically the "move" icon on the right. First come first served.', 'woogosend' ),
-			),
-			'table_rates'                 => array(
-				'type'  => 'table_rates',
-				'title' => __( 'Table Rates Settings', 'woogosend' ),
-			),
-			'field_group_advanced_rate'   => array(
-				'type'      => 'woogosend',
-				'orig_type' => 'title',
-				'class'     => 'woogosend-field-group woogosend-field-group-hidden',
-				'title'     => __( 'Advanced Rate Settings', 'woogosend' ),
-			),
-			'advanced_rate'               => array(
-				'type'  => 'advanced_rate',
-				'title' => __( 'Advanced Table Rate Settings', 'woogosend' ),
-			),
 			'field_group_location_picker' => array(
 				'type'      => 'woogosend',
 				'orig_type' => 'title',
@@ -554,13 +388,26 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			'js_template'                 => array(
 				'type' => 'js_template',
 			),
-			'field_group_third_party'     => array(
+		);
+
+		foreach ( $this->services as $service ) {
+			$form_fields[ 'field_group_services_' . $service->get_slug() ] = array(
 				'type'        => 'woogosend',
 				'orig_type'   => 'title',
 				'class'       => 'woogosend-field-group',
-				'title'       => __( 'Third-Party Settings', 'woogosend' ),
-				'description' => __( 'Settings added by third-party plugins.', 'woogosend' ),
-			),
+				'title'       => sprintf( __( 'Service Settings: %s', 'woogosend' ), $service->get_label() ),
+				'description' => $service->get_description(),
+			);
+
+			$form_fields = array_merge( $form_fields, $service->get_fields() );
+		}
+
+		$form_fields['field_group_third_party'] = array(
+			'type'        => 'woogosend',
+			'orig_type'   => 'title',
+			'class'       => 'woogosend-field-group',
+			'title'       => __( 'Third-Party Settings', 'woogosend' ),
+			'description' => __( 'Settings added by third-party plugins.', 'woogosend' ),
 		);
 
 		/**
@@ -577,242 +424,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		 *      }
 		 */
 		$this->instance_form_fields = apply_filters( 'woogosend_form_fields', $form_fields, $this->get_instance_id() );
-	}
-
-	/**
-	 * Init rate fields.
-	 *
-	 * @since    2.0
-	 */
-	public function init_rate_fields() {
-		$rate_fields = array(
-			'section_shipping_rules' => array(
-				'type'        => 'title',
-				'title'       => __( 'Shipping Rules', 'woogosend' ),
-				'is_advanced' => true,
-				'is_dummy'    => false,
-				'is_hidden'   => false,
-			),
-			'max_distance'           => array(
-				'type'              => 'text',
-				'title'             => __( 'Maximum Distances', 'woogosend' ),
-				'description'       => __( 'The maximum distances rule for the shipping rate. This input is required.', 'woogosend' ),
-				'desc_tip'          => true,
-				'default'           => '1',
-				'is_advanced'       => true,
-				'is_dummy'          => true,
-				'is_hidden'         => true,
-				'is_required'       => true,
-				'is_rule'           => true,
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '1',
-				),
-			),
-			'min_order_quantity'     => array(
-				'type'              => 'text',
-				'title'             => __( 'Minimum Order Quantity', 'woogosend' ),
-				'description'       => __( 'The shipping rule for minimum order quantity. Leave blank or fill with zero value to disable this rule.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_advanced'       => true,
-				'is_dummy'          => false,
-				'is_hidden'         => true,
-				'is_required'       => true,
-				'is_rule'           => true,
-				'default'           => '0',
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-			),
-			'max_order_quantity'     => array(
-				'type'              => 'text',
-				'title'             => __( 'Maximum Order Quantity', 'woogosend' ),
-				'description'       => __( 'The shipping rule for maximum order quantity. Leave blank or fill with zero value to disable this rule.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_advanced'       => true,
-				'is_dummy'          => false,
-				'is_hidden'         => true,
-				'is_required'       => true,
-				'is_rule'           => true,
-				'default'           => '0',
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-			),
-			'min_order_amount'       => array(
-				'type'              => 'text',
-				'title'             => __( 'Minimum Order Amount', 'woogosend' ),
-				'description'       => __( 'The shipping rule for minimum order amount. Leave blank or fill with zero value to disable this rule.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_advanced'       => true,
-				'is_dummy'          => false,
-				'is_hidden'         => true,
-				'is_required'       => true,
-				'is_rule'           => true,
-				'default'           => '0',
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-			),
-			'max_order_amount'       => array(
-				'type'              => 'text',
-				'title'             => __( 'Maximum Order Amount', 'woogosend' ),
-				'description'       => __( 'The shipping rule for maximum order amount. Leave blank or fill with zero value to disable this rule.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_advanced'       => true,
-				'is_dummy'          => false,
-				'is_hidden'         => true,
-				'is_required'       => true,
-				'is_rule'           => true,
-				'default'           => '0',
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-			),
-			'section_shipping_rates' => array(
-				'type'        => 'title',
-				'title'       => __( 'Shipping Rates', 'woogosend' ),
-				'is_advanced' => true,
-				'is_dummy'    => false,
-				'is_hidden'   => false,
-			),
-			'rate_class_0'           => array(
-				'type'              => 'text',
-				'title'             => __( 'Distance Unit Rate', 'woogosend' ),
-				'description'       => __( 'The shipping rate within the distances range. Zero value will be assumed as free shipping.', 'woogosend' ),
-				'desc_tip'          => true,
-				'is_advanced'       => true,
-				'is_dummy'          => true,
-				'is_hidden'         => true,
-				'is_required'       => true,
-				'is_rate'           => true,
-				'is_rule'           => true,
-				'default'           => '0',
-				'validate'          => 'number',
-				'custom_attributes' => array(
-					'min' => '0',
-				),
-			),
-			'section_total_cost'     => array(
-				'type'        => 'title',
-				'title'       => __( 'Total Cost', 'woogosend' ),
-				'is_advanced' => true,
-				'is_dummy'    => false,
-				'is_hidden'   => false,
-			),
-			'section_general'        => array(
-				'type'        => 'title',
-				'title'       => __( 'General', 'woogosend' ),
-				'is_advanced' => true,
-				'is_dummy'    => false,
-				'is_hidden'   => false,
-			),
-			'link_advanced'          => array(
-				'type'        => 'link_advanced',
-				'title'       => __( 'Advanced', 'woogosend' ),
-				'class'       => 'woogosend-link woogosend-link--advanced-rate',
-				'is_advanced' => false,
-				'is_dummy'    => true,
-				'is_hidden'   => false,
-			),
-			'link_sort'              => array(
-				'type'        => 'link_sort',
-				'title'       => __( 'Sort', 'woogosend' ),
-				'class'       => 'woogosend-link woogosend-link--sort',
-				'is_advanced' => false,
-				'is_dummy'    => true,
-				'is_hidden'   => false,
-			),
-		);
-
-		$shipping_classes = array();
-		foreach ( WC()->shipping->get_shipping_classes() as $shipping_classes_key => $shipping_classes_value ) {
-			$shipping_classes[ $shipping_classes_value->term_id ] = $shipping_classes_value;
-		}
-
-		if ( $shipping_classes ) {
-			$rate_class_0 = $rate_fields['rate_class_0'];
-			foreach ( $shipping_classes as $class_id => $class_obj ) {
-				$rate_class_data = array_merge(
-					$rate_class_0,
-					array(
-						// translators: %s is Product shipping class name.
-						'title'       => sprintf( __( '"%s" Shipping Class Rate', 'woogosend' ), $class_obj->name ),
-						// translators: %s is Product shipping class name.
-						'description' => sprintf( __( 'Rate for "%s" shipping class products. Leave blank to use defined default rate above.', 'woogosend' ), $class_obj->name ),
-						'default'     => '',
-						'is_advanced' => true,
-						'is_dummy'    => false,
-						'is_hidden'   => true,
-						'is_required' => false,
-					)
-				);
-
-				$rate_fields = woogosend_array_insert_after( 'rate_class_0', $rate_fields, 'rate_class_' . $class_id, $rate_class_data );
-			}
-		}
-
-		foreach ( $this->instance_form_fields as $key => $field ) {
-			if ( ! isset( $field['table_rate'] ) || ! $field['table_rate'] ) {
-				continue;
-			}
-
-			if ( is_bool( $field['table_rate'] ) ) {
-				$rate_fields[ $key ] = $field;
-			} elseif ( is_array( $field['table_rate'] ) ) {
-				if ( isset( $field['table_rate']['attrs'] ) && is_array( $field['table_rate']['attrs'] ) ) {
-					$field = array_merge( $field, $field['table_rate']['attrs'] );
-				}
-
-				$field_type = isset( $field['orig_type'] ) ? $field['orig_type'] : $field['type'];
-
-				if ( 'select' === $field_type ) {
-					if ( isset( $field['options'] ) && ! isset( $field['table_rate']['attrs']['options'] ) ) {
-						$field['options'] = array_merge(
-							array(
-								'inherit' => __( 'Inherit - Use global setting', 'woogosend' ),
-							),
-							$field['options']
-						);
-					}
-
-					if ( isset( $field['default'] ) && ! isset( $field['table_rate']['attrs']['default'] ) ) {
-						$field['default'] = 'inherit';
-					}
-				}
-
-				if ( 'select' !== $field_type && isset( $field['description'] ) && ! isset( $field['table_rate']['attrs']['description'] ) ) {
-					$field['description'] = sprintf( '%1$s %2$s', $field['description'], __( 'Leave blank to inherit from the global setting.', 'woogosend' ) );
-				}
-
-				if ( isset( $field['table_rate']['insert_after'] ) ) {
-					$rate_fields = woogosend_array_insert_after( $field['table_rate']['insert_after'], $rate_fields, $key, $field );
-				} elseif ( isset( $field['table_rate']['insert_before'] ) ) {
-					$rate_fields = woogosend_array_insert_before( $field['table_rate']['insert_before'], $rate_fields, $key, $field );
-				} else {
-					$rate_fields[ $key ] = $field;
-				}
-			}
-		}
-
-		/**
-		 * Developers can modify the $rate_fields var via filter hooks.
-		 *
-		 * @since 1.0.1
-		 *
-		 * This example shows how you can modify the rate fields data via custom function:
-		 *
-		 *      add_filter( 'woogosend_rate_fields', 'my_woogosend_rate_fields', 10, 2 );
-		 *
-		 *      function my_woogosend_rate_fields( $rate_fields, $instance_id ) {
-		 *          return array();
-		 *      }
-		 */
-		$this->instance_rate_fields = apply_filters( 'woogosend_rate_fields', $rate_fields, $this->get_instance_id() );
 	}
 
 	/**
@@ -901,17 +512,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	public function generate_js_template_html() {
 		ob_start();
 		?>
-		<script type="text/template" id="tmpl-woogosend-errors">
-			<div id="{{ data.id }}" class="woogosend-errors">
-				<ul class="notice notice-error">
-					<li class="woogosend-errors--heading"><?php esc_html_e( 'Errors', 'woogosend' ); ?>:</li>
-					<# _.each(data.errors, function(error, key) { #>
-					<li id="woogosend-errors--{{ key }}">{{ error }}</li>
-					<# }); #>
-				</ul>
-			</div>
-		</script>
-
 		<script type="text/template" id="tmpl-woogosend-buttons">
 			<div id="woogosend-buttons" class="woogosend-buttons">
 				<# if(data.btn_left) { #>
