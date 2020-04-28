@@ -376,11 +376,20 @@ gulp.task('bump', function () {
       },
     },
     {
-      file: ['./wcsdm.php'],
+      file: ['./woogosend.php'],
       config: {
         key: "Version",
         type: argv.hasOwnProperty('type') ? argv.type : 'patch',
       },
+    },
+    {
+      file: ['./includes/constants.php'],
+      config: {
+        key: "WOOGOSEND_VERSION",
+        regex: new RegExp('([<|\'|"]?(WOOGOSEND_VERSION)[>|\'|"]?[ ]*[:=,]?[ ]*[\'|"]?[a-z]?)(\\d+.\\d+.\\d+)(-[0-9A-Za-z.-]+)?(\\+[0-9A-Za-z\\.-]+)?([\'|"|<]?)', 'i'),
+        type: argv.hasOwnProperty('type') ? argv.type : 'patch',
+      },
+      dest: './includes/',
     },
     {
       file: ['./package.json'],
@@ -392,9 +401,16 @@ gulp.task('bump', function () {
   ];
 
   sources.forEach(function (source) {
+    const dest = source.dest || './';
+
+    console.log('dest', {
+      dest: dest,
+      source: source,
+    })
+
     gulp.src(source.file)
       .pipe(bump(source.config))
-      .pipe(gulp.dest('./'));
+      .pipe(gulp.dest(dest));
   });
 });
 

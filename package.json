@@ -1,17 +1,17 @@
 {
-  "name": "woogosend",
-  "title": "WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier",
-  "author": "Sofyan Sitorus",
-  "homepage": "https://github.com/sofyansitorus/",
-  "version": "1.3.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sofyansitorus/WooGoSend.git"
-  },
+	"name": "woogosend",
+	"title": "WooCommerce shipping rates calculator based on products shipping class and distances",
+	"author": "Sofyan Sitorus",
+	"homepage": "https://github.com/sofyansitorus/",
+	"version": "2.1.7",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sofyansitorus/WooGoSend.git"
+	},
 	"engines": {
 		"node": ">=8.0.0 <10"
 	},
-  "devDependencies": {
+	"devDependencies": {
 		"browser-sync": "^2.24.4",
 		"gulp": "^3.9.1",
 		"gulp-autoprefixer": "^5.0.0",
@@ -33,8 +33,8 @@
 		"jshint": "^2.11.0",
 		"jshint-stylish": "^2.2.1",
 		"yargs": "^11.0.0"
-  },
-  "scripts": {
+	},
+	"scripts": {
 		"start": "./node_modules/.bin/gulp",
 		"build": "./node_modules/.bin/gulp build",
 		"lintScripts": "./node_modules/.bin/gulp lintScripts",
@@ -42,5 +42,5 @@
 		"dist": "./node_modules/.bin/gulp dist",
 		"phpcs": "./node_modules/.bin/gulp phpcs",
 		"phpcbf": "./node_modules/.bin/gulp phpcbf"
-  }
+	}
 }
