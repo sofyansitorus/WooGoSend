@@ -402,11 +402,6 @@ gulp.task('bump', function () {
   sources.forEach(function (source) {
     const dest = source.dest || './';
 
-    console.log('dest', {
-      dest: dest,
-      source: source,
-    })
-
     gulp.src(source.file)
       .pipe(bump(source.config))
       .pipe(gulp.dest(dest));
