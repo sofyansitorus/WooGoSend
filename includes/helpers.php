@@ -234,6 +234,8 @@ if ( ! function_exists( 'woogosend_autoload' ) ) :
 
 		if ( strpos( $class, 'woogosend_services_' ) === 0 ) {
 			require_once WOOGOSEND_PATH . 'includes/services/class-' . str_replace( '_', '-', $class ) . '.php';
+		} elseif ( strpos( $class, 'woogosend_migration_' ) === 0 ) {
+			require_once WOOGOSEND_PATH . 'includes/migrations/class-' . str_replace( '_', '-', $class ) . '.php';
 		} else {
 			require_once WOOGOSEND_PATH . 'includes/classes/class-' . str_replace( '_', '-', $class ) . '.php';
 		}

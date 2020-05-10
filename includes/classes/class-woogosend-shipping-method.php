@@ -107,6 +107,7 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		);
 
 		$this->init();
+		$this->migrate_data();
 	}
 
 	/**
@@ -132,6 +133,76 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			$this->options[ $key ] = $this->get_option( $key, $default );
 
 			$this->{$key} = $this->options[ $key ];
+		}
+	}
+
+	/**
+	 * Data migration handler
+	 *
+	 * @since 1.3
+	 *
+	 * @return void
+	 */
+	private function migrate_data() {
+		if ( ! $this->get_instance_id() ) {
+			return;
+		}
+
+		$data_version = get_option( 'woogosend_data_version' );
+
+		if ( $data_version && version_compare( WOOGOSEND_VERSION, $data_version, '<=' ) ) {
+			return;
+		}
+
+		$migrations = array();
+
+		foreach ( glob( WOOGOSEND_PATH . 'includes/migrations/*.php' ) as $migration_file ) {
+			$migration_file_name  = basename( $migration_file, '.php' );
+			$migration_class_name = 'WooGoSend_Migration_' . str_replace( '-', '_', str_replace( 'class-woogosend-migration-', '', $migration_file_name ) );
+
+			if ( isset( $migrations[ $migration_class_name ] ) ) {
+				continue;
+			}
+
+			$migrations[ $migration_class_name ] = new $migration_class_name();
+		}
+
+		if ( $migrations ) {
+			usort( $migrations, array( $this, 'sort_version' ) );
+		}
+
+		foreach ( $migrations as $migration ) {
+			if ( $data_version && version_compare( $migration::get_version(), $data_version, '<=' ) ) {
+				continue;
+			}
+
+			$migration->set_instance( $this );
+
+			$migration_update_options = $migration->get_update_options();
+			$migration_delete_options = $migration->get_delete_options();
+
+			if ( ! $migration_update_options && ! $migration_delete_options ) {
+				continue;
+			}
+
+			foreach ( $migration->get_update_options() as $key => $value ) {
+				$this->instance_settings[ $key ] = $value;
+			}
+
+			foreach ( $migration->get_delete_options() as $key ) {
+				unset( $this->instance_settings[ $key ] );
+			}
+
+			$data_version = $migration->get_version();
+
+			// Update the settings data.
+			update_option( $this->get_instance_option_key(), apply_filters( 'woocommerce_shipping_' . $this->id . '_instance_settings_values', $this->instance_settings, $this ), 'yes' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+
+			// Update the latest version migrated option.
+			update_option( 'woogosend_data_version', $data_version, 'yes' );
+
+			// translators: %s is data migration version.
+			$this->show_debug( sprintf( __( 'Data migrated to version %s', 'woogosend' ), $data_version ) );
 		}
 	}
 
@@ -1368,6 +1439,17 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			return 0;
 		}
 		return ( $a['max_distance'] < $b['max_distance'] ) ? -1 : 1;
+	}
+
+	/**
+	 * Sort migration by version.
+	 *
+	 * @param WooGoSend_Migration $a Object 1 migration handler.
+	 * @param WooGoSend_Migration $b Object 1 migration handler.
+	 * @return int
+	 */
+	public function sort_version( $a, $b ) {
+		return version_compare( $a::get_version(), $b::get_version(), '<=' ) ? -1 : 1;
 	}
 
 	/**
