@@ -174,7 +174,7 @@
     }
 
     &-unit {
-      background-color: $iron !important;
+      background-color: lighten($iron, 10%) !important;
       display: inline-block !important;
       width: 40px !important;
       min-width: 40px !important;
