@@ -1,6 +1,6 @@
 {
 	"name": "woogosend",
-	"title": "WooCommerce shipping rates calculator based on products shipping class and distances",
+	"title": "WooCommerce per kilometer shipping rates calculator for GoSend delivery service from Gojek Indonesia.",
 	"author": "Sofyan Sitorus",
 	"homepage": "https://github.com/sofyansitorus/",
 	"version": "1.4.0",

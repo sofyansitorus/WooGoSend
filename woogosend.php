@@ -13,7 +13,7 @@
  * @wordpress-plugin
  * Plugin Name:       WooGoSend
  * Plugin URI:        https://WooGoSend.com
- * Description:       WooCommerce shipping rates calculator allows you to easily offer shipping rates based on the distance calculated using Google Maps Distance Matrix Service API.
+ * Description:       WooCommerce per kilometer shipping rates calculator for GoSend delivery service from Gojek Indonesia.
  * Version:           1.4.0
  * Author:            Sofyan Sitorus
  * Author URI:        https://github.com/sofyansitorus

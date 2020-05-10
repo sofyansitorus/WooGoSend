@@ -1,6 +1,6 @@
 {
 	"name": "sofyan/woogosend",
-	"description": "WooCommerce shipping rates calculator allows you to easily offer shipping rates based on the distance calculated using Google Maps Distance Matrix Service API.",
+	"description": "WooCommerce per kilometer shipping rates calculator for GoSend delivery service from Gojek Indonesia.",
 	"type": "wordpress-plugin",
 	"authors": [
 		{
