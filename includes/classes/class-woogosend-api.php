@@ -3,7 +3,6 @@
  * The file that defines the api request class
  *
  * @link       https://github.com/sofyansitorus
- * @since      1.3
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -11,13 +10,12 @@
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit;
 }
 
 /**
  * The API request class.
  *
- * @since      1.3
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
@@ -27,8 +25,6 @@ class WooGoSend_API {
 	/**
 	 * URL of Google Maps Distance Matrix API
 	 *
-	 * @since 1.3
-	 *
 	 * @var string
 	 */
 	private $api_url = 'https://maps.googleapis.com/maps/api/distancematrix/json';
@@ -36,13 +32,10 @@ class WooGoSend_API {
 	/**
 	 * Making HTTP request to Google Maps Distance Matrix API
 	 *
-	 * @since 1.3
-	 *
-	 * @throws Exception If error happen.
-	 *
 	 * @param array $args          Custom arguments for $settings and $package data.
 	 * @param bool  $is_validation Is the request for validation purpose or not.
 	 *
+	 * @throws Exception If error happen.
 	 * @return array
 	 */
 	public function calculate_distance( $args = array(), $is_validation = false ) {
@@ -62,7 +55,9 @@ class WooGoSend_API {
 
 			foreach ( $args as $key => $value ) {
 				if ( is_array( $value ) ) {
-					$args[ $key ] = implode( ',', $value );
+					$args[ $key ] = implode( ',', array_map( 'rawurlencode', $value ) );
+				} else {
+					$args[ $key ] = rawurlencode( $value );
 				}
 			}
 
@@ -90,13 +85,14 @@ class WooGoSend_API {
 
 			if ( $json_last_error_msg && 'No error' !== $json_last_error_msg ) {
 				// translators: %s is json decoding error message.
-				throw new Exception( sprintf( __( 'Error occured while decoding API response: %s', 'woogosend' ), $json_last_error_msg ) );
+				throw new Exception( sprintf( __( 'Error occurred while decoding API response: %s', 'woogosend' ), $json_last_error_msg ) );
 			}
 
 			// Check API response is OK.
 			$status = isset( $response_data['status'] ) ? $response_data['status'] : '';
 			if ( 'OK' !== $status ) {
-				$error_message = __( 'API Response Error', 'woogosend' ) . ': ' . $status;
+				$error_message = $status;
+
 				if ( isset( $response_data['error_message'] ) ) {
 					$error_message .= ' - ' . $response_data['error_message'];
 				}
@@ -138,14 +134,14 @@ class WooGoSend_API {
 
 				foreach ( $errors as $error_key ) {
 					if ( isset( $error_template[ $error_key ] ) ) {
-						throw new Exception( __( 'API Response Error', 'woogosend' ) . ': ' . $error_template[ $error_key ] );
+						throw new Exception( $error_key . ' - ' . $error_template[ $error_key ] );
 					}
 				}
 			}
 
-			throw new Exception( __( 'API Response Error', 'woogosend' ) . ': ' . __( 'No results found', 'woogosend' ) );
+			throw new Exception( __( 'No results found', 'woogosend' ) );
 		} catch ( Exception $e ) {
-			return new WP_Error( 'api_request', $e->getMessage() );
+			return new WP_Error( 'api_request', __( 'Google Distance Matrix API error', 'woogosend' ) . ': ' . $e->getMessage() );
 		}
 	}
 }

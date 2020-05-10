@@ -92,7 +92,7 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 * Improvements - Added option to choose origin type data.
 * Improvements - Added option to choose preferred route type.
 * Improvements - Improved the multiple drivers calculation.
-* Improvements - Improved the UI/UX in admin area. 
+* Improvements - Improved the UI/UX in admin area.
 
 = 1.2.6 =
 

@@ -1,44 +1,23 @@
 {
-    "name": "sofyan/woogosend",
-    "description": "WooCommerce per kilometer shipping rates calculator for GoSend from Gojek Indonesia.",
-    "type": "wordpress-plugin",
-    "authors": [
-        {
-            "name": "Sofyan Sitorus",
-            "email": "sofyansitorus@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable",
-    "require-dev": {
-        "woocommerce/woocommerce": "dev-master",
-        "phpcompatibility/php-compatibility": "*",
-        "phpcompatibility/phpcompatibility-wp": "*",
-        "wp-coding-standards/wpcs": "^2.1",
-        "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
-        "sirbrillig/phpcs-variable-analysis": "^2.7",
-        "phpunit/phpunit": "^5",
-        "wp-cli/wp-cli": "^2.3"
-    },
-    "autoload-dev": {
-        "classmap": [
-            "vendor/woocommerce/woocommerce/tests/framework"
-        ]
-    },
-    "extra": {
-        "installer-paths": {
-            "vendor/woocommerce/woocommerce": [
-                "woocommerce/woocommerce"
-            ],
-            "vendor/woocommerce/woocommerce-blocks": [
-                "woocommerce/woocommerce-blocks"
-            ],
-            "vendor/woocommerce/woocommerce-rest-api": [
-                "woocommerce/woocommerce-rest-api"
-            ]
-        }
-    },
-    "scripts": {
-        "phpcs": "vendor/bin/phpcs",
-        "phpcbf": "vendor/bin/phpcbf"
-    }
+	"name": "sofyan/woogosend",
+	"description": "WooCommerce shipping rates calculator allows you to easily offer shipping rates based on the distance calculated using Google Maps Distance Matrix Service API.",
+	"type": "wordpress-plugin",
+	"authors": [
+		{
+			"name": "Sofyan Sitorus",
+			"email": "sofyansitorus@gmail.com"
+		}
+	],
+	"require-dev": {
+		"squizlabs/php_codesniffer": "3.*",
+		"phpcompatibility/php-compatibility": "*",
+		"phpcompatibility/phpcompatibility-wp": "*",
+		"wp-coding-standards/wpcs": "^2.1",
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+		"sirbrillig/phpcs-variable-analysis": "^2.7"
+	},
+	"scripts": {
+		"phpcs": "vendor/bin/phpcs",
+		"phpcbf": "vendor/bin/phpcbf"
+	}
 }

@@ -1,343 +1,324 @@
 /* Begin Import */
 
 @import 'color';
+
 /* End Import */
 
-/* Begin Stylings */
-
-.woogosend {
-    &-hidden {
-        display: none;
-
-        &.button {
-            display: none;
-        }
-    }
-
-    &-no-padding {
-        padding: 0 !important;
-    }
-
-    &-spinner {
-        float: none;
-        margin-top: 0;
-        margin-left: 7px;
-    }
-
-    &-link {
-        text-decoration: none;
-        text-align: center;
-
-        &:active,
-        &:focus {
-            text-decoration: none;
-            box-shadow: none;
-        }
-
-        &.woogosend-edit-api-key,
-        &.woogosend-edit-location {
-            width: 60px;
-        }
-    }
-
-    &-edit-api-key.editing .dashicons-edit {
-        display: none;
-    }
-
-    &-edit-api-key:not(.editing) .dashicons-yes {
-        display: none;
-    }
-
-    &-edit-api-key.loading .dashicons {
-        display: none;
-    }
-
-    &-edit-api-key:not(.loading) .spinner {
-        display: none;
-    }
-
-    &-edit-api-key.loading .spinner {
-        visibility: visible;
-    }
-
-    &-fullwidth:not(a) {
-        display: block;
-        width: 100% !important;
-    }
-
-    &-buttons {
-        &-item {
-            &.button-large {
-                .dashicons {
-                    margin-top: 5px;
-
-                    &:before {
-                        font-size: 1em;
-                    }
-                }
-            }
-
-            &--left {
-                float: left;
-            }
-        }
-    }
-
-    &-field {
-        &:disabled {
-            background: $alabaster;
-        }
-
-        &-type--title {
-            padding-left: 14px !important;
-
-            &~p {
-                padding-left: 14px !important;
-            }
-        }
-
-        &-group-wrap {
-            padding-top: 1px;
-            margin-bottom: 1em;
-            box-shadow: 0px 0px 1px 0px rgba($black, 0.1);
-
-            >.form-table {
-                border-top: 1px solid $alabaster;
-                box-shadow: 0px -1px 0px 0px rgba($black, 0.1);
-            }
-
-            &--api_key_instruction,
-            &--location_picker,
-            &--advanced_rate {
-                >h3 {
-                    text-align: center;
-                }
-            }
-        }
-    }
-
-    &-table {
-        &--table_rates--dummy {
-            max-width: 100%;
-
-            tr {
-                .woogosend-col {
-                    box-sizing: border-box;
-                    background-color: $white;
-
-                    &--select-item {
-                        width: 50px;
-                        text-align: center;
-
-                        input {
-                            margin: 0;
-                            padding: 0;
-                        }
-                    }
-
-                    &--link_advanced {
-                        width: 96px;
-                        text-align: center;
-                    }
-
-                    &+.woogosend-col {
-                        border-left: 1px solid $seashell;
-                    }
-                }
-            }
-
-            thead {
-                tr {
-                    .woogosend-col {
-                        font-weight: 600;
-                    }
-                }
-            }
-
-            tbody {
-                tr {
-                    .woogosend-col {
-                        padding-top: 9px !important;
-                        padding-bottom: 9px !important;
-                    }
-
-                    &.highlighted {
-                        .woogosend-col {
-                            animation: highlighted 0.5s infinite;
-                        }
-                    }
-
-                    &:nth-child(odd) {
-                        .woogosend-col {
-                            background-color: rgba($anakiwa, 0.1);
-                        }
-                    }
-
-                    &:nth-child(even) {
-                        .woogosend-col {
-                            background-color: $white;
-                        }
-                    }
-
-                    &:last-child {
-
-                        td,
-                        th {
-                            border-bottom: 0px solid rgba($alabaster, 0) !important;
-                        }
-                    }
-
-                    &:hover {
-                        .woogosend-col {
-                            background-color: rgba($anakiwa, 0.2);
-                        }
-                    }
-
-                    .woogosend-field--context--dummy:not(a) {
-                        min-width: 100px !important;
-                    }
-                }
-            }
-        }
-
-        &--advanced_rate {
-            .woogosend-no-padding {
-                .woogosend-field-type--title {
-                    margin-top: 0;
-                    margin-bottom: 0;
-                    padding-top: 5px;
-                    padding-bottom: 5px;
-                    background: rgba($alabaster, 0.6);
-                    border-top: 1px solid $alabaster;
-                    border-bottom: 1px solid $alabaster;
-                }
-
-                .form-table {
-                    border-top: 1px solid $alabaster;
-                    margin-bottom: 0 !important;
-                }
-            }
-        }
-    }
-
-    &-map-instructions {
-        background-color: $double-pearl-lusta;
-        border: 1px solid darken($double-pearl-lusta, 20%);
-        text-align: center;
-        padding: 30px 30px;
-        max-width: 760px;
-        margin: 50px auto 50px;
-        border-radius: 5px;
-
-        img {
-            display: block;
-            margin: 20px auto 0;
-            max-width: 100%;
-            width: 100%;
-        }
-    }
-
-    &-map-wrap {
-        position: relative;
-        padding: 0;
-    }
-
-    &-map-canvas {
-        height: 450px;
-    }
-
-    &-map-error {
-        text-align: center;
-        padding-top: 100px;
-    }
-
-    &-map-search-panel {
-        margin: 10px;
-        position: absolute;
-        top: 10px;
-        left: 10px;
-
-        .woogosend-map-search-element {
-            margin: 0;
-            line-height: 1;
-            float: left;
-        }
-
-        #woogosend-map-search-input {
-            width: 540px !important;
-            max-width: calc(100% - 60px) !important;
-            height: 40px !important;
-            display: none;
-            transition: all 2s ease;
-        }
-
-        #woogosend-map-search-panel-toggle {
-            width: 40px !important;
-            height: 40px !important;
-            display: block;
-            cursor: pointer;
-            background-color: $white;
-        }
-
-        &.expanded {
-            #woogosend-map-search-input {
-                display: block;
-            }
-        }
-
-        &:after {
-            clear: both;
-        }
-    }
-
-    &-map-search-input {
-        display: block;
-        margin: 10px 0 0;
-        border-radius: 0;
-        height: 36px;
-    }
-
-    &-map-pin-info {
-        padding: 0 5px;
-        margin-bottom: 5px;
-        font-weight: 700;
-        position: relative;
-    }
-
-    &-map-pin-info:first-child {
-        margin-top: 10px;
-    }
-
-    &-map-pin-label {
-        display: inline-block;
-        width: 60px;
-        opacity: 0.6;
-        margin-right: 5px;
-    }
+.wc-backbone-modal-header h1 span {
+  &:before {
+    content: "» ";
+  }
 }
 
 .pac-container {
-    z-index: 9999999;
+  z-index: 9999999;
+}
+
+.gm-style .gm-style-iw-c {
+  border-radius: 0;
+}
+
+.woogosend {
+  &-api-key-input {
+    ~button {
+      width: 40px;
+      position: relative;
+      transform: scale(1);
+      transition: all .2s ease-in-out;
+
+      span {
+        &:before {
+          font-size: 20px;
+          top: 4px;
+          line-height: 1;
+          left: 8px;
+          content: "\f113";
+        }
+      }
+    }
+
+    &:not(.editing) {
+      ~button {
+        height: 0;
+        width: 0;
+        transform: scale(0);
+      }
+    }
+
+    &.loading {
+      ~button {
+        pointer-events: none;
+
+        span {
+          animation: rotation 1s infinite linear;
+        }
+      }
+    }
+
+    &.valid {
+      ~button {
+
+        span {
+          animation: none;
+
+          &:before {
+            content: "\f147";
+          }
+        }
+      }
+    }
+  }
+
+  &-hidden {
+    display: none;
+
+    &.button {
+      display: none;
+    }
+  }
+
+  &-no-padding {
+    padding: 0 !important;
+  }
+
+  &-link {
+    text-align: center;
+    text-decoration: none;
+    width: 70px;
+
+    &--sort {
+      cursor: not-allowed;
+      opacity: 0.3;
+      pointer-events: none;
+
+      .woogosend-sort-enabled & {
+        opacity: 1;
+        cursor: move;
+        pointer-events: inherit;
+      }
+    }
+
+    &:active,
+    &:focus {
+      box-shadow: none;
+      text-decoration: none;
+    }
+  }
+
+  &-fullwidth:not(a) {
+    display: block;
+    width: 100% !important;
+  }
+
+  &-buttons {
+    &-item {
+      &.button-large {
+        .dashicons {
+          margin-top: 5px;
+
+          &:before {
+            font-size: 1em;
+          }
+        }
+      }
+
+      &--left {
+        float: left;
+      }
+    }
+
+    &--has-icon {
+      position: relative;
+
+      .dashicons {
+        width: 20px;
+        height: 20px;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        margin-top: -10px;
+        margin-left: -10px;
+      }
+    }
+  }
+
+  &-field {
+    &:disabled {
+      background: $alabaster;
+    }
+
+    &-type--title {
+      padding-left: 14px !important;
+
+      .dashicons:before {
+        content: "\f113";
+      }
+
+      &~p {
+        padding-top: 8px !important;
+        margin: 14px !important;
+        border-top: 1px solid $iron;
+      }
+    }
+
+    &-group-wrap {
+      padding-top: 1px;
+      margin-bottom: 1em;
+
+      >.wc-settings-sub-title:not(.woogosend-hidden) {
+        &~.form-table {
+          border-top: 1px solid $iron !important;
+          border-bottom: 1px solid $iron !important;
+        }
+      }
+    }
+
+    &-unit {
+      background-color: lighten($iron, 10%) !important;
+      display: inline-block !important;
+      width: 40px !important;
+      min-width: 40px !important;
+      margin-left: -5px;
+      border-radius: 0 !important;
+      border-top-right-radius: 4px !important;
+      border-bottom-right-radius: 4px !important;
+      box-shadow: 0 0 0 transparent;
+      border: 1px solid #7e8993 !important;
+      color: #32373c !important;
+      padding: 0 8px;
+      line-height: 2;
+      min-height: 30px;
+    }
+
+    &:read-only {
+      background-color: $white !important;
+    }
+  }
+
+  &-map-wrap {
+    padding: 0;
+    position: relative;
+  }
+
+  &-map-canvas {
+    height: 450px;
+  }
+
+  &-map-search-panel {
+    left: 10px;
+    margin: 10px;
+    position: absolute;
+    top: 10px;
+    box-shadow: 0 2px 7px 1px rgba(0, 0, 0, 0.3);
+
+    .woogosend-map-search-element {
+      float: left;
+      line-height: 1;
+      margin: 0;
+    }
+
+    #woogosend-map-search-input {
+      display: none;
+      height: 40px !important;
+      max-width: calc(100% - 60px) !important;
+      transition: all 2s ease;
+      border-radius: 0;
+      border: none;
+      border-left: 1px solid $lochmara;
+
+      &:focus {
+        border: none !important;
+        outline: none !important;
+      }
+    }
+
+    #woogosend-map-search-panel-toggle {
+      background: $lochmara;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      display: block;
+      height: 40px !important;
+      width: 40px !important;
+      color: $alabaster;
+      border-radius: 0;
+
+      .dashicons {
+        &:before {
+          content: "\f179";
+        }
+      }
+    }
+
+    &.expanded {
+      border: 1px solid $lochmara;
+
+      #woogosend-map-search-input {
+        display: block;
+      }
+
+      #woogosend-map-search-panel-toggle {
+        background: $alabaster;
+        color: $lochmara;
+      }
+    }
+
+    &:after {
+      clear: both;
+    }
+  }
+
+  &-map-search-input {
+    border-radius: 0;
+    display: block;
+    height: 36px;
+    margin: 10px 0 0;
+  }
+
+  &-error-box {
+    margin: 0 !important;
+    padding-top: 1em;
+    padding-bottom: 1em;
+
+    &.has-margin {
+      margin: 15px !important;
+    }
+
+    p {
+      margin: .1em 0 !important;
+      padding: 2px !important;
+    }
+  }
 }
 
 @keyframes highlighted {
-    0% {
-        background-color: $white;
-    }
+  0% {
+    background-color: $white;
+  }
 
-    49% {
-        background-color: $white;
-    }
+  49% {
+    background-color: $white;
+  }
 
-    50% {
-        background-color: rgba($anakiwa, 0.3);
-    }
+  50% {
+    background-color: rgba($anakiwa, 0.3);
+  }
 
-    99% {
-        background-color: rgba($anakiwa, 0.3);
-    }
+  99% {
+    background-color: rgba($anakiwa, 0.3);
+  }
 
-    100% {
-        background-color: $white;
-    }
+  100% {
+    background-color: $white;
+  }
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
