@@ -32,16 +32,50 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
  */
 abstract class WooGoSend_Services {
-	protected $fields           = array();
+
+	/**
+	 * Setting fields data
+	 *
+	 * @var array
+	 */
+	protected $fields = array();
+
+	/**
+	 * Default service settings data
+	 *
+	 * @var array
+	 */
 	protected $default_settings = array();
 
+	/**
+	 * Get service slug ID
+	 *
+	 * @return string
+	 */
 	abstract public function get_slug();
+
+	/**
+	 * Get service label
+	 *
+	 * @return string
+	 */
 	abstract public function get_label();
 
+	/**
+	 * Get service setting description
+	 *
+	 * @return string
+	 */
 	public function get_description() {
+		// translators: %s is URL to Gojek's website.
 		return sprintf( __( '<a href="%s" target="_blank">Click here</a> for more info about GoSend.', 'woogosend' ), 'https://www.go-jek.com/go-send/' );
 	}
 
+	/**
+	 * Get setting fields data
+	 *
+	 * @var array
+	 */
 	public function get_fields() {
 		if ( ! $this->fields ) {
 			foreach ( $this->get_fields_raw() as $key => $field ) {
@@ -60,6 +94,11 @@ abstract class WooGoSend_Services {
 		return $this->fields;
 	}
 
+	/**
+	 * Get setting fields raw data
+	 *
+	 * @return array
+	 */
 	public function get_fields_raw() {
 		return array(
 			'enable'              => array(
@@ -70,14 +109,6 @@ abstract class WooGoSend_Services {
 				'description' => __( 'Enable delivery service.', 'woogosend' ),
 				'desc_tip'    => true,
 				'class'       => 'woogosend-toggle-service',
-			),
-			'multiple_drivers'    => array(
-				'title'       => __( 'Multiple Drivers', 'woogosend' ),
-				'label'       => __( 'Enable', 'woogosend' ),
-				'type'        => 'woogosend',
-				'orig_type'   => 'checkbox',
-				'description' => __( 'Split shipping into several drivers if the total package weight and dimensions exceeded the limit. Will be handy for bulk quantity orders.', 'woogosend' ),
-				'desc_tip'    => true,
 			),
 			'title'               => array(
 				'title'       => __( 'Label', 'woogosend' ),
@@ -90,7 +121,7 @@ abstract class WooGoSend_Services {
 			'min_cost'            => array(
 				'title'             => __( 'Minimum Cost', 'woogosend' ),
 				'type'              => 'woogosend',
-				'orig_type'         => 'number',
+				'orig_type'         => 'price',
 				'description'       => __( 'Minimum shipping cost that will be billed to customer. Set to zero to disable.', 'woogosend' ),
 				'desc_tip'          => true,
 				'is_required'       => true,
@@ -102,7 +133,7 @@ abstract class WooGoSend_Services {
 			'max_cost'            => array(
 				'title'             => __( 'Maximum Cost', 'woogosend' ),
 				'type'              => 'woogosend',
-				'orig_type'         => 'number',
+				'orig_type'         => 'price',
 				'description'       => __( 'Maximum shipping cost that will be billed to customer. Set to zero to disable.', 'woogosend' ),
 				'desc_tip'          => true,
 				'is_required'       => true,
@@ -114,7 +145,7 @@ abstract class WooGoSend_Services {
 			'per_km_cost'         => array(
 				'title'             => __( 'Per Kilometer Cost', 'woogosend' ),
 				'type'              => 'woogosend',
-				'orig_type'         => 'number',
+				'orig_type'         => 'price',
 				'description'       => __( 'Per kilometer rates that will be billed to customer. Set to zero to disable.', 'woogosend' ),
 				'desc_tip'          => true,
 				'is_required'       => true,
@@ -201,13 +232,33 @@ abstract class WooGoSend_Services {
 					'data-unit' => 'km',
 				),
 			),
+			'multiple_drivers'    => array(
+				'title'       => __( 'Multiple Drivers', 'woogosend' ),
+				'label'       => __( 'Enable', 'woogosend' ),
+				'type'        => 'woogosend',
+				'orig_type'   => 'checkbox',
+				'description' => __( 'Split shipping into several drivers if the total package weight and dimensions exceeded the limit. Will be handy for bulk quantity orders.', 'woogosend' ),
+				'desc_tip'    => true,
+			),
 		);
 	}
 
+	/**
+	 * Get setting field key
+	 *
+	 * @param string $key Field key.
+	 * @return string
+	 */
 	private function get_field_key( $key ) {
 		return $key . '_' . $this->get_slug();
 	}
 
+	/**
+	 * Get setting field valu
+	 *
+	 * @param string $key Field key.
+	 * @return string
+	 */
 	private function get_default_setting( $key ) {
 		if ( isset( $this->default_settings[ $key ] ) ) {
 			return $this->default_settings[ $key ];

@@ -144,6 +144,11 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		}
 	}
 
+	/**
+	 * Register courier services
+	 *
+	 * @return void
+	 */
 	private function register_services() {
 		foreach ( glob( WOOGOSEND_PATH . 'includes/services/class-woogosend-services-*.php' ) as $file ) {
 			$class_name = str_replace( array( 'class-', 'woogosend' ), array( '', 'WooGoSend' ), basename( $file, '.php' ) );
@@ -197,35 +202,47 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				),
 			),
 			'field_group_store_location'  => array(
-				'type'      => 'woogosend',
-				'orig_type' => 'title',
-				'class'     => 'woogosend-field-group',
-				'title'     => __( 'Store Location Settings', 'woogosend' ),
+				'type'        => 'woogosend',
+				'orig_type'   => 'title',
+				'class'       => 'woogosend-field-group',
+				'title'       => __( 'Store Location Settings', 'woogosend' ),
+				// translators: %s is the API services documentation URL.
+				'description' => sprintf( __( 'This plugin requires Google API Key and API services enabled for Distance Matrix API, Maps JavaScript API, Geocoding API, Places API. <a href="%s" target="_blank">Click here</a> to go to Google API Console to get API Key and to enable the service.', 'woogosend' ), 'https://cloud.google.com/maps-platform/#get-started' ),
 			),
 			'api_key'                     => array(
-				'title'       => __( 'Distance Calculator API Key', 'woogosend' ),
-				'type'        => 'woogosend',
-				'orig_type'   => 'api_key',
-				'description' => __( 'API Key used to calculate the shipping address distance. Required Google API Service: Distance Matrix API.', 'woogosend' ),
-				'desc_tip'    => true,
-				'default'     => '',
-				'placeholder' => __( 'Click the pencil icon on the right to edit', 'woogosend' ),
-				'is_required' => true,
+				'title'             => __( 'Distance Calculator API Key', 'woogosend' ),
+				'type'              => 'woogosend',
+				'orig_type'         => 'text',
+				'desc_tip'          => __( 'API Key used to calculate the shipping address distance. Required Google API Service: Distance Matrix API.', 'woogosend' ),
+				'description'       => __( 'Required Google API Services: Distance Matrix API', 'woogosend' ),
+				'default'           => '',
+				'is_required'       => true,
+				'class'             => 'woogosend-api-key-input',
+				'custom_attributes' => array(
+					'data-link' => 'api_key',
+					'data-key'  => 'api_key',
+					'readonly'  => 'readonly',
+				),
 			),
 			'api_key_picker'              => array(
-				'title'       => __( 'Location Picker API Key', 'woogosend' ),
-				'type'        => 'woogosend',
-				'orig_type'   => 'api_key',
-				'description' => __( 'API Key used to render the location picker map. Required Google API Services: Maps JavaScript API, Geocoding API, Places API.', 'woogosend' ),
-				'desc_tip'    => true,
-				'default'     => '',
-				'placeholder' => __( 'Click the pencil icon on the right to edit', 'woogosend' ),
-				'is_required' => true,
+				'title'             => __( 'Location Picker API Key', 'woogosend' ),
+				'type'              => 'woogosend',
+				'orig_type'         => 'text',
+				'desc_tip'          => __( 'API Key used to render the location picker map. Required Google API Services: Maps JavaScript API, Geocoding API, Places API.', 'woogosend' ),
+				'description'       => __( 'Required Google API Services: Maps JavaScript API, Geocoding API, Places API', 'woogosend' ),
+				'default'           => '',
+				'is_required'       => true,
+				'class'             => 'woogosend-api-key-input',
+				'custom_attributes' => array(
+					'data-link' => 'api_key',
+					'data-key'  => 'api_key_picker',
+					'readonly'  => 'readonly',
+				),
 			),
 			'origin_type'                 => array(
 				'title'             => __( 'Store Origin Data Type', 'woogosend' ),
 				'type'              => 'woogosend',
-				'orig_type'         => 'origin_type',
+				'orig_type'         => 'select',
 				'description'       => __( 'Preferred data that will be used as the origin info when calculating the distance.', 'woogosend' ),
 				'desc_tip'          => true,
 				'default'           => 'coordinate',
@@ -249,10 +266,11 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'description'       => __( 'Store location latitude coordinates', 'woogosend' ),
 				'desc_tip'          => true,
 				'default'           => '',
-				'placeholder'       => __( 'Click the map icon on the right Store Origin Data Type to edit', 'woogosend' ),
 				'is_required'       => true,
+				'class'             => 'woogosend-field--origin',
 				'custom_attributes' => array(
-					'readonly' => true,
+					'data-link' => 'location_picker',
+					'readonly'  => true,
 				),
 			),
 			'origin_lng'                  => array(
@@ -262,10 +280,11 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'description'       => __( 'Store location longitude coordinates', 'woogosend' ),
 				'desc_tip'          => true,
 				'default'           => '',
-				'placeholder'       => __( 'Click the map icon on the right Store Origin Data Type to edit', 'woogosend' ),
 				'is_required'       => true,
+				'class'             => 'woogosend-field--origin',
 				'custom_attributes' => array(
-					'readonly' => true,
+					'data-link' => 'location_picker',
+					'readonly'  => true,
 				),
 			),
 			'origin_address'              => array(
@@ -275,10 +294,11 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'description'       => __( 'Store location full address', 'woogosend' ),
 				'desc_tip'          => true,
 				'default'           => '',
-				'placeholder'       => __( 'Click the map icon on the right Store Origin Data Type to edit', 'woogosend' ),
 				'is_required'       => true,
+				'class'             => 'woogosend-field--origin',
 				'custom_attributes' => array(
-					'readonly' => true,
+					'data-link' => 'location_picker',
+					'readonly'  => true,
 				),
 			),
 			'field_group_route'           => array(
@@ -395,6 +415,7 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'type'        => 'woogosend',
 				'orig_type'   => 'title',
 				'class'       => 'woogosend-field-group',
+				// translators: %s is Courier service name.
 				'title'       => sprintf( __( 'Service Settings: %s', 'woogosend' ), $service->get_label() ),
 				'description' => $service->get_description(),
 			);
@@ -499,9 +520,12 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	 * @param array  $data Settings field data.
 	 */
 	public function generate_woogosend_html( $key, $data ) {
-		$data = $this->populate_field( $key, $data );
-
-		return $this->generate_settings_html( array( $key => $data ), false );
+		return $this->generate_settings_html(
+			array(
+				$key => $this->populate_field( $key, $data ),
+			),
+			false
+		);
 	}
 
 	/**
@@ -512,6 +536,10 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	public function generate_js_template_html() {
 		ob_start();
 		?>
+		<script type="text/template" id="tmpl-woogosend-button">
+			<button href="{{data.href}}" class="button button-secondary woogosend-button {{data.class}}">{{{ data.text }}}</button>
+		</script>
+
 		<script type="text/template" id="tmpl-woogosend-buttons">
 			<div id="woogosend-buttons" class="woogosend-buttons">
 				<# if(data.btn_left) { #>
@@ -522,104 +550,13 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				<# } #>
 			</div>
 		</script>
+
 		<script type="text/template" id="tmpl-woogosend-map-search-panel">
 			<div id="woogosend-map-search-panel" class="woogosend-map-search-panel woogosend-hidden expanded">
 				<button type="button" id="woogosend-map-search-panel-toggle" class="woogosend-map-search-panel-toggle woogosend-map-search-element"><span class="dashicons"></button>
 				<input id="woogosend-map-search-input" class="woogosend-fullwidth woogosend-map-search-input woogosend-map-search-element" type="search" placeholder="<?php echo esc_html__( 'Type your store location address...', 'woogosend' ); ?>" autocomplete="off">
 			</div>
 		</script>
-		<?php
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Generate api_key field.
-	 *
-	 * @since    1.0.0
-	 * @param string $key Input field key.
-	 * @param array  $data Settings field data.
-	 */
-	public function generate_api_key_html( $key, $data ) {
-		$field_key = $this->get_field_key( $key );
-		$defaults  = array(
-			'title'             => '',
-			'disabled'          => false,
-			'class'             => '',
-			'css'               => '',
-			'placeholder'       => '',
-			'type'              => 'text',
-			'desc_tip'          => false,
-			'description'       => '',
-			'custom_attributes' => array(),
-		);
-
-		$data = wp_parse_args( $data, $defaults );
-
-		ob_start();
-		?>
-		<tr valign="top">
-			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
-			</th>
-			<td class="forminp">
-				<fieldset>
-					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<input type="text" class="input-text regular-input <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" value="<?php echo esc_attr( $this->get_option( $key ) ); ?>" placeholder="<?php echo esc_attr( $data['placeholder'] ); ?>" readonly="readonly" />
-					<a href="#" class="button button-secondary woogosend-buttons--has-icon woogosend-edit-api-key woogosend-link" id="<?php echo esc_attr( $key ); ?>" title="<?php esc_attr_e( 'Edit API Key', 'woogosend' ); ?>"><span class="dashicons"></span></a>
-					<a href="https://cloud.google.com/maps-platform/#get-started" target="_blank" class="button button-secondary woogosend-buttons--has-icon woogosend-link" id="<?php echo esc_attr( $key ); ?>" title="<?php esc_attr_e( 'Get API Key', 'woogosend' ); ?>"><span class="dashicons dashicons-admin-network"></span></a>
-					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</fieldset>
-			</td>
-		</tr>
-		<?php
-
-		return ob_get_clean();
-	}
-
-	/**
-	 * Generate origin_type field.
-	 *
-	 * @since    1.0.0
-	 * @param string $key Input field key.
-	 * @param array  $data Settings field data.
-	 */
-	public function generate_origin_type_html( $key, $data ) {
-		$field_key = $this->get_field_key( $key );
-		$defaults  = array(
-			'title'             => '',
-			'disabled'          => false,
-			'class'             => '',
-			'css'               => '',
-			'placeholder'       => '',
-			'type'              => 'text',
-			'desc_tip'          => false,
-			'description'       => '',
-			'custom_attributes' => array(),
-			'options'           => array(),
-		);
-
-		$data = wp_parse_args( $data, $defaults );
-
-		ob_start();
-		?>
-		<tr valign="top">
-			<th scope="row" class="titledesc">
-				<label for="<?php echo esc_attr( $field_key ); ?>"><?php echo wp_kses_post( $data['title'] ); ?> <?php echo $this->get_tooltip_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
-			</th>
-			<td class="forminp">
-				<fieldset>
-					<legend class="screen-reader-text"><span><?php echo wp_kses_post( $data['title'] ); ?></span></legend>
-					<select class="select <?php echo esc_attr( $data['class'] ); ?>" name="<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>" style="<?php echo esc_attr( $data['css'] ); ?>" <?php disabled( $data['disabled'], true ); ?> <?php echo $this->get_custom_attribute_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-						<?php foreach ( (array) $data['options'] as $option_key => $option_value ) : ?>
-							<option value="<?php echo esc_attr( $option_key ); ?>" <?php selected( (string) $option_key, esc_attr( $this->get_option( $key ) ) ); ?>><?php echo esc_attr( $option_value ); ?></option>
-						<?php endforeach; ?>
-					</select>
-					<a href="#" class="button button-secondary woogosend-buttons--has-icon woogosend-link woogosend-edit-location-picker" title="<?php esc_attr_e( 'Pick Location', 'woogosend' ); ?>"><span class="dashicons dashicons-location"></span></a>
-					<?php echo $this->get_description_html( $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</fieldset>
-			</td>
-		</tr>
 		<?php
 
 		return ob_get_clean();
@@ -661,161 +598,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 							</div>
 						</td>
 					</tr>
-				</table>
-			</td>
-		</tr>
-		<?php
-		return ob_get_clean();
-	}
-
-	/**
-	 * Generate table_rates field.
-	 *
-	 * @since    1.0.0
-	 * @param string $key Input field key.
-	 * @param array  $data Settings field data.
-	 */
-	public function generate_table_rates_html( $key, $data ) {
-		$field_key = $this->get_field_key( $key );
-
-		$defaults = array(
-			'title'             => '',
-			'disabled'          => false,
-			'class'             => '',
-			'css'               => '',
-			'placeholder'       => '',
-			'type'              => 'text',
-			'desc_tip'          => false,
-			'description'       => '',
-			'custom_attributes' => array(),
-			'options'           => array(),
-		);
-
-		$data = wp_parse_args( $data, $defaults );
-		ob_start();
-		?>
-		<tr valign="top">
-			<td colspan="2" class="woogosend-no-padding">
-				<table id="woogosend-table--table_rates--dummy" class="form-table woogosend-table woogosend-table--table_rates--dummy">
-					<thead>
-						<tr>
-							<td class="woogosend-col woogosend-col--select-item">
-								<input class="select-item" type="checkbox">
-							</td>
-							<?php foreach ( $this->get_rates_fields( 'dummy' ) as $key => $field ) : ?>
-								<td class="woogosend-col woogosend-col--<?php echo esc_html( $key ); ?>">
-									<label><span class="label-text"><?php echo esc_html( $field['title'] ); ?></span><?php echo $this->get_tooltip_html( $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></label>
-								</td>
-							<?php endforeach; ?>
-						</tr>
-					</thead>
-					<tbody>
-						<?php
-						if ( $this->table_rates ) :
-							foreach ( $this->table_rates as $table_rate ) :
-								$this->generate_rate_row_body( $field_key, $table_rate );
-							endforeach;
-						endif;
-						?>
-					</tbody>
-				</table>
-				<script type="text/template" id="tmpl-woogosend-dummy-row">
-					<?php $this->generate_rate_row_body( $field_key ); ?>
-				</script>
-			</td>
-		</tr>
-		<?php
-		return ob_get_clean();
-	}
-
-	/**
-	 * Generate table rate_row_body
-	 *
-	 * @param string $field_key Table rate column key.
-	 * @param array  $rate Table rate data.
-	 * @return void
-	 */
-	private function generate_rate_row_body( $field_key, $rate = array() ) {
-		?>
-		<tr>
-			<td class="woogosend-col woogosend-col--select-item">
-				<input class="select-item" type="checkbox">
-			</td>
-			<?php
-			foreach ( $this->get_rates_fields( 'dummy' ) as $key => $data ) :
-				$data = $this->populate_field( $key, $data );
-				?>
-			<td class="woogosend-col woogosend-col--<?php echo esc_html( $key ); ?>">
-				<?php
-				$field_value = $this->get_rate_field_value( $key, $rate, $data['default'] );
-
-				switch ( $data['type'] ) {
-					case 'link_sort':
-						?>
-						<a href="#" class="<?php echo esc_attr( $data['class'] ); ?>" title="<?php echo esc_attr( $data['title'] ); ?>"><span class="dashicons dashicons-move"></span></a>
-						<?php
-						break;
-					case 'link_advanced':
-						?>
-						<a href="#" class="<?php echo esc_attr( $data['class'] ); ?>" title="<?php echo esc_attr( $data['title'] ); ?>"><span class="dashicons dashicons-admin-generic"></span></a>
-						<?php
-						foreach ( $this->get_rates_fields( 'hidden' ) as $hidden_key => $hidden_field ) :
-							$hidden_field = $this->populate_field( $hidden_key, $hidden_field );
-							$hidden_value = $this->get_rate_field_value( $hidden_key, $rate, $hidden_field['default'] );
-							?>
-						<input class="<?php echo esc_attr( $hidden_field['class'] ); ?>" type="hidden" name="<?php echo esc_attr( $field_key ); ?>__<?php echo esc_attr( $hidden_key ); ?>[]" value="<?php echo esc_attr( $hidden_value ); ?>" <?php echo $this->get_custom_attribute_html( $hidden_field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
-							<?php
-						endforeach;
-						break;
-
-					default:
-						$html = $this->generate_settings_html( array( 'fake--field--' . $key => $data ), false );
-
-						preg_match( '/<fieldset>(.*?)<\/fieldset>/s', $html, $matches );
-
-						if ( ! empty( $matches[0] ) ) {
-							$output = preg_replace( '#\s(name|id)="[^"]+"#', '', $matches[0] );
-
-							$find    = 'select' === $data['type'] ? 'value="' . $field_value . '"' : 'value=""';
-							$replace = 'select' === $data['type'] ? 'value="' . $field_value . '" ' . selected( true, true, false ) : 'value="' . $field_value . '"';
-
-							$output = str_replace( $find, $replace, $output );
-
-							echo $output; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						}
-						break;
-				}
-				?>
-			</td>
-			<?php endforeach; ?>
-		</tr>
-		<?php
-	}
-
-	/**
-	 * Generate advanced_rate field
-	 *
-	 * @since 1.2.4
-	 * @param string $key Settings field key.
-	 * @param array  $data Settings field data.
-	 */
-	public function generate_advanced_rate_html( $key, $data ) {
-		$defaults = array(
-			'title' => '',
-		);
-
-		$data = wp_parse_args( $data, $defaults );
-
-		ob_start();
-		?>
-		<tr valign="top">
-			<td colspan="2" class="woogosend-no-padding">
-				<table id="woogosend-table--advanced-rate" class="form-table woogosend-table woogosend-table--advanced-rate">
-					<?php
-					foreach ( $this->get_rates_fields( 'advanced' ) as $key => $data ) {
-						$this->generate_settings_html( array( 'fake--field--' . $key => $this->populate_field( $key, $data ) ) );
-					}
-					?>
 				</table>
 			</td>
 		</tr>

@@ -32,6 +32,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
  */
 class WooGoSend_Services_Same_Day extends WooGoSend_Services {
+
+	/**
+	 * Default service settings data
+	 *
+	 * @var array
+	 */
 	protected $default_settings = array(
 		'per_km_cost'         => 2500,
 		'per_km_min_distance' => 15,
@@ -44,10 +50,20 @@ class WooGoSend_Services_Same_Day extends WooGoSend_Services {
 		'max_distance'        => 40,
 	);
 
+	/**
+	 * Get service slug ID
+	 *
+	 * @return string
+	 */
 	public function get_slug() {
 		return 'same_day';
 	}
 
+	/**
+	 * Get service label
+	 *
+	 * @return string
+	 */
 	public function get_label() {
 		return 'GoSend Same Day';
 	}

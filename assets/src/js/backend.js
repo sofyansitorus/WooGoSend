@@ -119,7 +119,7 @@ var woogosendBackend = {
 	submitForm: function (e) {
 		e.preventDefault();
 
-		if (woogosendMapPicker.editingAPIKey || woogosendMapPicker.editingAPIKeyPicker) {
+		if (woogosendMapPicker.isEditingAPIKey()) {
 			window.alert(woogosendError('finish_editing_api'));
 		} else {
 			$('#btn-ok').trigger('click');

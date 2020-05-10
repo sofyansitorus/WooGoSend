@@ -10,12 +10,10 @@ var woogosendMapPicker = {
 	apiKeyErrorCheckInterval: null,
 	apiKeyError: '',
 	editingAPIKey: false,
-	editingAPIKeyPicker: false,
 	init: function (params) {
 		woogosendMapPicker.params = params;
 		woogosendMapPicker.apiKeyError = '';
 		woogosendMapPicker.editingAPIKey = false;
-		woogosendMapPicker.editingAPIKeyPicker = false;
 
 		ConsoleListener.on('error', function (errorMessage) {
 			if (errorMessage.toLowerCase().indexOf('google') !== -1) {
@@ -27,17 +25,47 @@ var woogosendMapPicker = {
 			}
 		});
 
-		// Edit Api Key
-		$(document).off('input', '.woogosend-field-type--api_key');
-		$(document).on('input', '.woogosend-field-type--api_key', woogosendDebounce(woogosendMapPicker.submitApiKeyOnInputChange, 700));
+		$('[data-link="api_key"]').each(function () {
+			$(this).after(wp.template('woogosend-button')({
+				href: '#',
+				class: 'woogosend-buttons--has-icon woogosend-api-key-button',
+				text: '<span class="dashicons"></span>',
+			}));
+		});
 
 		// Edit Api Key
-		$(document).off('click', '.woogosend-edit-api-key', woogosendMapPicker.editApiKey);
-		$(document).on('click', '.woogosend-edit-api-key', woogosendMapPicker.editApiKey);
+		$(document).off('focus', '[data-link="api_key"]');
+		$(document).on('focus', '[data-link="api_key"]', function () {
+			if ($(this).prop('readonly') && !$(this).hasClass('loading')) {
+				$(this).data('value', $(this).val()).prop('readonly', false);
+			}
+		});
+
+		$(document).off('blur', '[data-link="api_key"]');
+		$(document).on('blur', '[data-link="api_key"]', function () {
+			if (!$(this).prop('readonly') && !$(this).hasClass('editing')) {
+				$(this).data('value', undefined).prop('readonly', true);
+			}
+		});
+
+		$(document).off('input', '[data-link="api_key"]', woogosendMapPicker.handleApiKeyInput);
+		$(document).on('input', '[data-link="api_key"]', woogosendMapPicker.handleApiKeyInput);
+
+		// Edit Api Key
+		$(document).off('click', '.woogosend-api-key-button', woogosendMapPicker.editApiKey);
+		$(document).on('click', '.woogosend-api-key-button', woogosendMapPicker.editApiKey);
 
 		// Show Store Location Picker
-		$(document).off('click', '.woogosend-edit-location-picker', woogosendMapPicker.showLocationPicker);
-		$(document).on('click', '.woogosend-edit-location-picker', woogosendMapPicker.showLocationPicker);
+		$(document).off('click', '.woogosend-field--origin');
+		$(document).on('click', '.woogosend-field--origin', function () {
+			if ($(this).prop('readonly')) {
+				$('.woogosend-edit-location-picker').trigger('click');
+			}
+		});
+
+		// Show Store Location Picker
+		$(document).off('focus', '[data-link="location_picker"]', woogosendMapPicker.showLocationPicker);
+		$(document).on('focus', '[data-link="location_picker"]', woogosendMapPicker.showLocationPicker);
 
 		// Hide Store Location Picker
 		$(document).off('click', '#woogosend-btn--map-cancel', woogosendMapPicker.hideLocationPicker);
@@ -51,13 +79,13 @@ var woogosendMapPicker = {
 		$(document).off('click', '#woogosend-map-search-panel-toggle', woogosendMapPicker.toggleMapSearch);
 		$(document).on('click', '#woogosend-map-search-panel-toggle', woogosendMapPicker.toggleMapSearch);
 	},
-	validateAPIKeyBothSide: function (apiKey, $input, $link) {
-		woogosendMapPicker.validateAPIKeyServerSide(apiKey, $input, $link, woogosendMapPicker.validateAPIKeyBrowserSide);
+	validateAPIKeyBothSide: function ($input) {
+		woogosendMapPicker.validateAPIKeyServerSide($input, woogosendMapPicker.validateAPIKeyBrowserSide);
 	},
-	validateAPIKeyBrowserSide: function (apiKey, $input, $link) {
+	validateAPIKeyBrowserSide: function ($input) {
 		woogosendMapPicker.apiKeyError = '';
 
-		woogosendMapPicker.initMap(apiKey, function () {
+		woogosendMapPicker.initMap($input.val(), function () {
 			var geocoderArgs = {
 				latLng: new google.maps.LatLng(parseFloat(woogosendMapPicker.params.defaultLat), parseFloat(woogosendMapPicker.params.defaultLng)),
 			};
@@ -68,46 +96,48 @@ var woogosendMapPicker = {
 				if (status.toLowerCase() === 'ok') {
 					console.log('validateAPIKeyBrowserSide', results);
 
-					woogosendMapPicker.apiKeyError = '';
-					woogosendMapPicker.editingAPIKeyPicker = false;
-					$input.prop('readonly', true);
-					$link.removeClass('editing').addClass('valid').data('value', '');
+					$input.addClass('valid');
+
+					setTimeout(function () {
+						$input.removeClass('editing loading valid');
+					}, 2000);
 				}
 			});
 
 			clearInterval(woogosendMapPicker.apiKeyErrorCheckInterval);
 
 			woogosendMapPicker.apiKeyErrorCheckInterval = setInterval(function () {
-				if (!$link.hasClass('editing') || woogosendMapPicker.apiKeyError) {
+				if ($input.hasClass('valid') || woogosendMapPicker.apiKeyError) {
 					clearInterval(woogosendMapPicker.apiKeyErrorCheckInterval);
+				}
 
-					$link.removeClass('loading').attr('disabled', false);
-
-					if (woogosendMapPicker.apiKeyError) {
-						woogosendMapPicker.showError($input, woogosendMapPicker.apiKeyError);
-					}
+				if (woogosendMapPicker.apiKeyError) {
+					woogosendMapPicker.showError($input, woogosendMapPicker.apiKeyError);
+					$input.prop('readonly', false).removeClass('loading');
 				}
 			}, 300);
 		});
 	},
-	validateAPIKeyServerSide: function (apiKey, $input, $link, onSuccess) {
+	validateAPIKeyServerSide: function ($input, onSuccess) {
 		$.ajax({
 			method: 'POST',
 			url: woogosendMapPicker.params.ajax_url,
 			data: {
 				action: 'woogosend_validate_api_key_server',
 				nonce: woogosendMapPicker.params.validate_api_key_nonce,
-				key: apiKey
+				key: $input.val(),
 			}
 		}).done(function (response) {
 			console.log('validateAPIKeyServerSide', response);
-			woogosendMapPicker.editingAPIKey = false;
 
 			if (typeof onSuccess === 'function') {
-				onSuccess(apiKey, $input, $link);
+				onSuccess($input);
 			} else {
-				$input.prop('readonly', true);
-				$link.removeClass('editing').addClass('valid').data('value', '');
+				$input.addClass('valid');
+
+				setTimeout(function () {
+					$input.removeClass('editing loading valid');
+				}, 2000);
 			}
 		}).fail(function (error) {
 			if (error.responseJSON && error.responseJSON.data) {
@@ -117,8 +147,8 @@ var woogosendMapPicker = {
 			} else {
 				woogosendMapPicker.showError($input, 'Google Distance Matrix API error: Uknown');
 			}
-		}).always(function () {
-			$link.removeClass('loading').attr('disabled', false);
+
+			$input.prop('readonly', false).removeClass('loading');
 		});
 	},
 	showError: function ($input, errorMessage) {
@@ -136,63 +166,46 @@ var woogosendMapPicker = {
 		var exp = /(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig;
 		return text.replace(exp, "<a href='$1' target='_blank'>$1</a>");
 	},
-	submitApiKeyOnInputChange: function (e) {
-		$(e.currentTarget).next('.woogosend-edit-api-key').trigger('click');
+	handleApiKeyInput: function (e) {
+		var $input = $(e.currentTarget);
+
+		if ($input.val() === $input.data('value')) {
+			$input.removeClass('editing').next('.woogosend-edit-api-key').removeClass('editing');
+		} else {
+			$input.addClass('editing').next('.woogosend-edit-api-key').addClass('editing');
+		}
+
+		woogosendMapPicker.removeError($input);
 	},
 	editApiKey: function (e) {
 		e.preventDefault();
 
-		var $link = $(this);
+		var $input = $(this).blur().prev('input');
 
-		if ($link.hasClass('loading')) {
+		if (!$input.hasClass('editing') || $input.hasClass('loading')) {
 			return;
 		}
 
-		var $input = $link.closest('td').find('input[type=text]');
-		var apiKey = $input.val();
+		$input.prop('readonly', true).addClass('loading');
+
+		if ($input.attr('data-key') === 'api_key') {
+			woogosendMapPicker.validateAPIKeyServerSide($input);
+		} else {
+			woogosendMapPicker.validateAPIKeyBrowserSide($input);
+		}
 
 		woogosendMapPicker.removeError($input);
-
-		if ($link.hasClass('editing')) {
-			if (apiKey && apiKey !== $input.data('value')) {
-				$link.addClass('loading').attr('disabled', true);
-
-				if ($link.attr('id') === 'api_key') {
-					woogosendMapPicker.validateAPIKeyServerSide(apiKey, $input, $link);
-				} else {
-					woogosendMapPicker.validateAPIKeyBrowserSide(apiKey, $input, $link);
-				}
-			} else {
-				$input.data('value', '').prop('readonly', true);
-				$link.removeClass('editing');
-
-				if ($link.attr('id') === 'api_key') {
-					woogosendMapPicker.editingAPIKey = false;
-				} else {
-					woogosendMapPicker.editingAPIKeyPicker = false;
-				}
-			}
-
-			if (!apiKey) {
-				$link.addClass('empty');
-			}
-		} else {
-			$input.data('value', apiKey).prop('readonly', false).focus();
-			$link.removeClass('empty').addClass('editing');
-
-			if ($link.attr('id') === 'api_key') {
-				woogosendMapPicker.editingAPIKey = $input;
-			} else {
-				woogosendMapPicker.editingAPIKeyPicker = $input;
-			}
-		}
 	},
-	showLocationPicker: function (e) {
-		e.preventDefault();
+	showLocationPicker: function (event) {
+		event.preventDefault();
+
+		$(this).blur();
+
+		woogosendMapPicker.apiKeyError = '';
 
 		var api_key_picker = $('#woocommerce_woogosend_api_key_picker').val();
 
-		if (woogosendMapPicker.editingAPIKeyPicker) {
+		if (woogosendMapPicker.isEditingAPIKey()) {
 			return window.alert(woogosendError('finish_editing_api'));
 		} else if (!api_key_picker.length) {
 			return window.alert(woogosendError('api_key_picker_empty'));
@@ -415,5 +428,8 @@ var woogosendMapPicker = {
 		);
 
 		map.setCenter(location);
-	}
+	},
+	isEditingAPIKey: function () {
+		return $('[data-link="api_key"].editing').length > 0;
+	},
 };
