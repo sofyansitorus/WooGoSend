@@ -8,7 +8,6 @@
  * that starts the plugin.
  *
  * @link              https://github.com/sofyansitorus
- * @since             1.0.0
  * @package           WooGoSend
  *
  * @wordpress-plugin

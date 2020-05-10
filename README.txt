@@ -1,45 +1,35 @@
 === WooGoSend ===
 Contributors: sofyansitorus
-Tags: woocommerce,woocommerce-shipping,local-shipping,private-shipping
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=DGSVXLV7R8BTY
+Tags: woocommerce,woocommerce-shipping,gojek,gojek-shipping,gosend,gosend-shipping
 Requires at least: 4.8
-Tested up to: 5.4
+Tested up to: 5.2.2
 Requires PHP: 5.6
-Stable tag: 2.1.7
+Stable tag: 1.3.0
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
-WooGoSend (formerly WooCommerce Shipping Distance Matrix) is a WooCommerce shipping rates calculator that allows you to easily offer shipping rates based on the distance calculated using Google Maps Distance Matrix Service API.
+WooCommerce per kilometer shipping rates calculator for GoSend Go-Jek Indonesia courier.
 
 == Description ==
-WooGoSend (formerly WooCommerce Shipping Distance Matrix) is a WooCommerce shipping rates calculator that allows you to easily offer shipping rates based on the distance calculated using Google Maps Distance Matrix Service API.
+WooCommerce per kilometer shipping rates calculator for GoSend delivery service from Gojek Indonesia.
 
-This plugin perfect for the store owner who wants to charge customers for the delivery of items based on how far away they are from the store. A perfect example would be an online store that sells flowers, food, beverages. It’s not limited to just those, but anything that uses local delivery or self-delivery business.
+Please note that this plugin is not using official Gojek Indonesia API. This plugin just estimate the distance matrix using using Google Maps Distance Matrix API and then calculating the cost using the rates defined in the settings.
 
-= Key Features =
+This plugin require Google Maps Distance Matrix API Services enabled in your Google Console. [Click here](https://developers.google.com/maps/documentation/distance-matrix/get-api-key) to get API Key and to enable the services.
 
-* Set unlimited table rates rows.
-* Set flat or flexible distance cost type: Fixed, Per KM/MI.
-* Set rule for each rate rows: Maximum Distances.
-* Set rule for each rate rows: Minimum Order Quantity.
-* Set rule for each rate rows: Maximum Order Quantity.
-* Set rule for each rate rows: Minimum Order Amount.
-* Set rule for each rate rows: Maximum Order Amount.
-* Set flat or progressive total shipping cost for each rate rows: Max, Average, Min, Per Class, Per Product, Per Piece.
-* Set surcharge for each rate rows.
-* Set custom shipping labels for each rate row.
-* Set different shipping rate for each product shipping class.
-* Set shipping origin location using Maps Picker.
-* Set distances unit: Mile, Kilometer.
+= Features =
+
+* Automatically split shipping for multiple items into several drivers if the package size exceeded package weight and dimensions limitation.
+* Available 2 shipping services: Instant Delivery, Same Day Delivery.
+* Set shipping cost per kilometer.
+* Set minimum cost that will be billed to customer.
+* Set maximum shipping distances that allowed to use the courier.
+* Set maximum package weight and dimensions that allowed to use the courier.
+* Set shipping origin info by store location coordinates.
 * Set travel mode: Driving, Walking, Bicycling.
 * Set route restrictions: Avoid Tolls, Avoid Highways, Avoid Ferries, Avoid Indoor.
-* Set preferred route: Shortest Distance, Longest Distance, Shortest Duration, Longest Duration.
-* Round the distance up to the nearest absolute number.
-* Show distance info to the customer during checkout.
-
-= Dependencies =
-
-This plugin requires Google Maps Distance Matrix API Key and service is enabled. [Click here](https://developers.google.com/maps/documentation/distance-matrix/get-api-key) to go to Google API Console to get API Key and to enable the service.
+* Set visibility distance info to customer.
+* Set fallback request if there is no results for API request using full address.
 
 == Installation ==
 = Minimum Requirements =
@@ -51,7 +41,7 @@ This plugin requires Google Maps Distance Matrix API Key and service is enabled.
 
 Automatic installation is the easiest option as WordPress handles the file transfers itself and you don’t even need to leave your web browser. To do an automatic install of WooGoSend, log in to your WordPress admin panel, navigate to the Plugins menu and click Add New.
 
-In the search field type “WooGoSend” and click Search Plugins. You can install it by simply clicking Install Now. After clicking that link you will be asked if you’re sure you want to install the plugin. Click yes and WordPress will automatically complete the installation. After the installation has finished, click the ‘activate plugin’ link.
+In the search field type “WooGoSend” and click Search Plugins. You can install it by simply clicking Install Now. After clicking that link you will be asked if you’re sure you want to install the plugin. Click yes and WordPress will automatically complete the installation. After installation has finished, click the ‘activate plugin’ link.
 
 = MANUAL INSTALLATION =
 
@@ -59,286 +49,113 @@ In the search field type “WooGoSend” and click Search Plugins. You can insta
 1. Go to the WordPress admin panel menu Plugins > Add New
 1. Choose upload
 1. Upload the plugin zip file, the plugin will now be installed
-1. After the installation has finished, click the ‘activate plugin’ link
+1. After installation has finished, click the ‘activate plugin’ link
 
 == Frequently Asked Questions ==
-
 = How to set the plugin settings? =
-You can set up the plugin setting from the WooCommerce Shipping Zones settings panel. Please [click here](https://fast.wistia.net/embed/iframe/95yiocro6p) for the video tutorial on how to set up the WooCommerce Shipping Zones.
+You can setup the plugin setting from the Shipping Zones settings. Please check the following video tutorial how to setup the WooCommerce Shipping Zones:
 
-= I got an error in the "Store Location" setting field", what should I do? =
-The error printed in there is coming from the Google API. Click any link printed within the error message to find out the causes and solutions.
+[youtube https://www.youtube.com/watch?v=eThWmrnBP38]
 
-= I see the message "There are no shipping methods available" in the cart/checkout page, what should I do? =
-Please try to switch the WooCommerce Shipping Debug Mode setting to "On". Then open your cart/checkout page. You will see the error printed if there was.
+[Video](https://www.youtube.com/watch?v=eThWmrnBP38) by [InMotion Hosting](https://www.inmotionhosting.com)
 
-[Click here](https://fast.wistia.net/embed/iframe/9c9008dxnr) for how to switch WooCommerce Shipping Debug Mode.
-
-= Where can I get support or report a bug? =
-You can create a support ticket at plugin support forum:
+= Where can I get support? =
+You can either support ticket at plugin support forum :
 
 * [Plugin Support Forum](https://wordpress.org/support/plugin/woogosend)
 
-= Can I contribute to developing this plugin? =
+= Where can I report bugs? =
+You can report bugs at the plugin GitHub repository:
+
+* [Plugin Support Forum](https://wordpress.org/support/plugin/woogosend)
+* [Plugin GitHub Repository](https://github.com/sofyansitorus/WooGoSend)
+
+= Can I contribute to develop this plugin? =
 I always welcome and encourage contributions to this plugin. Please visit the plugin GitHub repository:
 
 * [Plugin GitHub Repository](https://github.com/sofyansitorus/WooGoSend)
 
 == Screenshots ==
-1. Settings Panel: General
-2. Settings Panel: Table Rates
-3. Settings Panel: Advanced Rate Settings
-4. Cart Page
-5. Cart Page - Free Shipping
+1. Settings panel: General Options
+2. Settings panel: Instant Delivery Service Options
+3. Settings panel: Same Day Delivery Service Options
+4. Shipping Calculator preview
 
 == Changelog ==
 
-> **WARNING:**
->
-> Upgrading to version 2.1.0 has some breaking changes. Some **settings data will be lost** and **re-setup the plugin** after the upgrade is required.
->
-> Upgrading from version 1.x to version 2.x is a major update and has breaking changes. Some **settings data will be lost** and **re-setup the plugin** after the upgrade is required.
->
-> **Please upgrade wisely and carefully.**
-
-= 2.1.7 =
-* Enhancement - Added shipping discount options.
-* Enhancement - Added shipping discount type options.
-* Enhancement - Added shipping surcharge type options.
-* Fix - Fixed sort link still visible and interacting while deleting rate rows.
-* Fix - Fixed incorrect table rate row fields description for the select field type.
-
-= 2.1.6 =
-* Fix - Fixed table rates row not filtered properly when having same max distance value.
-
-= 2.1.5 =
-* Fix - Fixed compatibility issue with Checkout Fields Editor plugin.
-* Enhancement - Enabled manual sorting for table rates data.
-* Enhancement - Enabled client site table rates data validation.
-
-= 2.1.4 =
-* Fix - Fixed action buttons not displayed propely after deleting rate items.
-
-= 2.1.3 =
-* Fix - Fixed conflict with other shipping plugins in the cart calculate shipping form.
-
-= 2.1.2 =
-* Fix - Fixed incorrect settings fields placeholder
-* Fix - Added missing minified JS & CSS files
-
-= 2.1.1 =
-* Fix - Fixed bulk delete table rates checkbox still checked after delete did
-* Fix - Fixed settings fields added by third-party not visible
-* Fix - Added missing title attribute fro edit API Key button
-
-= 2.1.0 =
-* Enhancement - Added new shipping rule: Minimum Order Quantity
-* Enhancement - Added new shipping rule: Maximum Order Quantity
-* Enhancement - Added new shipping rule: Minimum Order Amount
-* Enhancement - Added new shipping rule: Maximum Order Amount
-* Fix - Fixed issue fail to calculate distance when there is pound character in the address data
-* Fix - Fixed JS Error in cart page when certain fields is disabled
-
-= 2.0.8 =
-* Enhancement - Fixed Unable to Calculate distnance in some cases
-* Enhancement - Improved UI/UX backend area
-
-= 2.0.7 =
-* Enhancement - Added minimum cost option in favor removed distance cost type option.
-* Enhancement - Improved backend area
-
-= 2.0.6 =
-* Fix - Fixed Wrong Shipping Address Format for US Based Address.
-
-= 2.0.5 =
-* Fix - Fixed address 1 & 2 fields not displayed when no shipping zone defined.
-
-= 2.0.4 =
-* Fix - Fixed the frontend script not loaded.
-* Fix - Fixed the annoying scroll to the current editing rate row in the admin panel.
-* Enhancement - Added Options to Select Origin Type.
-* Enhancement - Added filters to enable/disable address 1 and address 2 fields in the shipping calculator form.
-
-= 2.0.3 =
-* Fix - Fixed Wrong Addres 1 & 2 Field Value in the Shipping Calculator Form.
-
-= 2.0.2 =
-* Fix - Fixed JS Error in the console that causing shipping calculator form crash when there is no state selected on page load.
-
-= 2.0.1 =
-* Fix - Fixed JS Error in the console that causing shipping calculator form crash.
-* Fix - Fixed typo for "Total Cost Type" settings field description
-* Fix - Disabled enqueue frontend scripts when the instance is disabled
-
-= 2.0 =
-* Improvements - Renamed the plugin name from WooCommerce Shipping Distance Matrix to WooGoSend.
-* Improvements - Added server-side API Key setting field in the settings form.
-* Improvements - Added server-side API Key setting field in the settings form.
-* Improvements - Added browser-side API Key setting field in the settings form.
-* Improvements - Added address 1 field into the shipping calculator form.
-* Improvements - Added address 2 fields into the shipping calculator form.
-* Improvements - Improved the admin setting form UI/UX. Especially the address picker.
-* Fix - Postcode validation not for several countries such as Latvia.
-* Fix - Postcode validation only works in uppercase.
-* Fix - Failed populating shipping destination info for the address field.
-* Fix - Failed to calculate for a short distance such as 100m.
-* Fix - Data cache issue for multiple instances within the same shipping zone.
-
-= 1.4.7 =
-* Feature - Added new field to set the shipping title dynamically for each distance ranges.
-* Fix - Added destination address validation.
-* Improvements - Improved table rates setting sorted automatically by distance.
-
-= 1.4.6 =
-* Fix - Rate row not visible when switching free shipping option.
-* Fix - Flickering Map address picker when changing API Key.
-
-= 1.4.5 =
-* Fix - In rare cases, settings panel broke for the site using UTF-8 characters language.
-
-= 1.4.4 =
-* Improvements - Added new option: Prefered Route
-* Improvements - Improved accuration in cart shipping calculator form.
-
-= 1.4.3 =
-* Fix - Update minified styles and scripts.
-* Improvements - Enable real time API key validation.
-
-= 1.4.3 =
-* Fix - Update minified styles and scripts.
-* Improvements - Enable real time API key validation.
-
-= 1.4.2 =
-* Improvements - Settings Panel
-* Improvements - Data cache handler
-* Improvements - Free shipping Options
-
-= 1.4.1 =
-* Fix - Error in Google Map address picker.
-
-= 1.4 =
-
-* Improvements - Enable Free Shipping Option.
-
-= 1.3.8 =
-
-* Improvements - Added free shipping option.
-* Improvements - Added option dynamic cost calculation type for each distance range.
-* Fix - Plugin is undetected in WordPress multisite installation when the WooCommerce plugin is network activated.
-
-= 1.3.8 =
-
-* Improvements - Add new option for the base fee.
-* Improvements - Add new option for round-up distance.
-
-= 1.3.7 =
-
-* Improvements - Enhance store location map picker.
-* Improvements - Enhance table rates setting field.
-* Improvements - Update cache_key on shipping rates settings updated.
-
-= 1.3.6 =
-
-* Improvements - Add new calculation type option: Per product - Charge shipping grouped by product ID.
-* Improvements - Add new calculation type option: Per shipping class - Charge shipping grouped by product shipping class.
-* Fix - Fix table rates input value issue.
-
-= 1.3.5 =
-
-* Improvements - Add new option: Enable Fallback Request.
-
-= 1.3.4 =
-
-* Improvements - Add new option: Enable Fallback Request.
-
-= 1.3.3 =
-
-* Fix - Change route restriction to single select.
-* Improvements - Added fallback to input store location manually on google map error.
-
-= 1.3.2 =
-
-* Fix - Fix issue with localization decimal delimiter.
-* Improvements - Added language parameter for Maps API request.
-
-= 1.3.1 =
-
-* Fix - Fix API request URL.
-* Improvements - Switched from WP-Cache Object to Transient.
-
 = 1.3.0 =
 
-* Improvements - Add Google Maps Picker.
-
-= 1.2.9 =
-
-* Fix - Fix issue when comma as decimal separator.
-
-= 1.2.8 =
-
-* Improvements - More info in debugging mode.
-* Fix - Table rates input fields styling.
-
-= 1.2.7 =
-
-* Fix - Remove Maps Place Picker.
+* Improvements - Enabled address 1 and address 2 fields in the shipping calculator form.
+* Improvements - Added option to set distance slab for per km cost.
+* Improvements - Added option to round up the distance.
+* Improvements - Added option to use alternate API Key for server side API request.
+* Improvements - Added option to choose origin type data.
+* Improvements - Added option to choose preferred route type.
+* Improvements - Improved the multiple drivers calculation.
+* Improvements - Improved the UI/UX in admin area.
 
 = 1.2.6 =
 
-* Fix - Maps picker.
+* Improvements - Enhance Maps Picker.
 
 = 1.2.5 =
 
-* Improvements - Add option to charge shipping per distance unit.
+* Improvements - Add new option: Enable Fallback Request.
+* Fix - Added fallback to input store location manually on google map error.
 
 = 1.2.4 =
 
-* Improvements - Add "Map Location Picker" for store location setting.
-* Improvements - Setting panel UI/UX improved more user friendly.
+* Improvements - Add Maps Place Picker.
+* Fix - Fix issue when using comma as decimal dlimeter.
 
 = 1.2.3 =
 
-* Improvements - Add new filter hooks: woocommerce_woogosend_shipping_destination_info.
-* Improvements - Add new filter hooks: woocommerce_woogosend_shipping_origin_info.
-* Improvements - Tweak settings panel UI and default value.
-* Improvements - Add validation for settings field: gmaps_api_key, origin_lat, origin_lng, table_rates.
+* Fix - Remove Maps Place Picker.
 
 = 1.2.2 =
 
-* Fix - woocommerce_shipping_woogosend_is_available filter.
+* Fix - Maps picker.
 
 = 1.2.1 =
 
-* Improvements - Add filter to enable the city field in the shipping calculator form.
-* Fix - Filter destination address, address_2, city, postcode fields for shipping calculator request.
-* Fix - Change wrong API request param from mode to avoid.
+* Fix - Fix styling for search address input.
 
 = 1.2.0 =
 
-* Feature - Set visibility distance info to the customer.
+* Improvemnets - Add "Map Location Picker" for store location setting.
 
 = 1.1.1 =
 
-* Improvement - Enable WP Object Cache for API HTTP request to improve the speed and reduce request count to API server.
-* Fix - Remove unused js code.
+* Improvemnets - Add "Settings" link on the plugins.php page.
 
 = 1.1.0 =
 
-* Feature - Set cost calculation type per order or per item.
-* Localization - Update POT file.
+* Improvements - Add new settings field to enable or disabled multiple drivers function.
+
+= 1.0.2 =
+
+* Fix - A non-numeric value encountered warning.
+
+= 1.0.1 =
+
+* Improvements - Add new filter hooks: woocommerce_woogosend_shipping_destination_info.
+* Improvements - Add new filter hooks: woocommerce_woogosend_shipping_origin_info.
 
 = 1.0.0 =
 
-* Feature - Set shipping cost by-product shipping class.
-* Feature - Set unlimited distances ranges.
-* Feature - Set origin info by coordinates.
-* Feature - Set distances unit: Mile, Kilometer.
+* Feature - Automatically split shipping for multiple items into several drivers if the package size exceeded package weight and dimensions limitation.
+* Feature - Available 2 shipping services: Instant Delivery, Same Day Delivery.
+* Feature - Set shipping cost per kilometer.
+* Feature - Set minimum cost that will be billed to customer.
+* Feature - Set maximum cost that will be billed to customer.
+* Feature - Set maximum shipping distances that allowed to use the courier.
+* Feature - Set maximum package weight and dimensions that allowed to use the courier.
+* Feature - Set shipping origin info by coordinates.
 * Feature - Set travel mode: Driving, Walking, Bicycling.
 * Feature - Set route restrictions: Avoid Tolls, Avoid Highways, Avoid Ferries, Avoid Indoor.
+* Feature - Set visibility distance info to customer.
 
 == Upgrade Notice ==
-= 2.1.0 =
-WARNING: Upgrading to version 2.1.0 has some breaking changes. Some settings data will be lost and re-setup the plugin after the upgrade is required. Please upgrade wisely and carefully.
 
-= 2.0.0 =
-WARNING: Upgrading from version 1.x to version 2.x is a major update and has breaking changes. Some settings data will be lost and re-setup the plugin after the upgrade is required. Please upgrade wisely and carefully.
+= 1.2.6 =
+This version include improvements. Upgrade immediately.

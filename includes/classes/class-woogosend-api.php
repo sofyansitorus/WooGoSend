@@ -3,7 +3,6 @@
  * The file that defines the api request class
  *
  * @link       https://github.com/sofyansitorus
- * @since      2.0.8
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -17,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The API request class.
  *
- * @since      2.0.8
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
@@ -27,7 +25,6 @@ class WooGoSend_API {
 	/**
 	 * URL of Google Maps Distance Matrix API
 	 *
-	 * @since    2.0.8
 	 * @var string
 	 */
 	private $api_url = 'https://maps.googleapis.com/maps/api/distancematrix/json';

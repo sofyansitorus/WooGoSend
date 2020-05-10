@@ -6,7 +6,6 @@
  * public-facing side of the site and the admin area.
  *
  * @link       https://github.com/sofyansitorus
- * @since      1.0.0
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -26,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      1.0.0
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>

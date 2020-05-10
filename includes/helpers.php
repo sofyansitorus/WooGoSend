@@ -3,7 +3,6 @@
  * Helpers file
  *
  * @link       https://github.com/sofyansitorus
- * @since      1.5.0
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -97,8 +96,6 @@ function woogosend_i18n( $key = '', $default = '' ) {
 /**
  * Get shipping method instances
  *
- * @since 2.0
- *
  * @param bool $enabled_only Filter to includes only enabled instances.
  * @return array
  */
@@ -150,8 +147,6 @@ function woogosend_instances( $enabled_only = true ) {
 /**
  * Inserts a new key/value before the key in the array.
  *
- * @since 2.0.7
- *
  * @param string $before_key The key to insert before.
  * @param array  $array An array to insert in to.
  * @param string $new_key The new key to insert.
@@ -179,8 +174,6 @@ function woogosend_array_insert_before( $before_key, $array, $new_key, $new_valu
 
 /**
  * Inserts a new key/value after the key in the array.
- *
- * @since 2.0.7
  *
  * @param string $after_key The key to insert after.
  * @param array  $array An array to insert in to.
@@ -210,8 +203,6 @@ function woogosend_array_insert_after( $after_key, $array, $new_key, $new_value 
 /**
  * Check is in development environment.
  *
- * @since 1.0.0
- *
  * @return bool
  */
 function woogosend_is_dev_env() {
@@ -229,8 +220,6 @@ function woogosend_is_dev_env() {
 if ( ! function_exists( 'woogosend_autoload' ) ) :
 	/**
 	 * Class autoload
-	 *
-	 * @since 1.0.0
 	 *
 	 * @param string $class Class name.
 	 *
@@ -255,8 +244,6 @@ if ( ! function_exists( 'woogosend_is_calc_shipping' ) ) :
 	/**
 	 * Check if current request is shipping calculator form.
 	 *
-	 * @since 1.0.0
-	 *
 	 * @return bool
 	 */
 	function woogosend_is_calc_shipping() {
@@ -274,8 +261,6 @@ endif;
 if ( ! function_exists( 'woogosend_calc_shipping_field_value' ) ) :
 	/**
 	 * Get calculated shipping for fields value.
-	 *
-	 * @since 2.1.3
 	 *
 	 * @param string $input_name Input name.
 	 *
@@ -296,8 +281,6 @@ endif;
 if ( ! function_exists( 'woogosend_shipping_fields' ) ) :
 	/**
 	 * Get shipping fields.
-	 *
-	 * @since 2.1.5
 	 *
 	 * @return array
 	 */

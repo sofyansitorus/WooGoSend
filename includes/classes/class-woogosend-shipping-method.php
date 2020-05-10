@@ -6,7 +6,6 @@
  * public-facing side of the site and the admin area.
  *
  * @link       https://github.com/sofyansitorus
- * @since      1.0.0
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -26,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      1.0.0
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
@@ -36,7 +34,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * All options data
 	 *
-	 * @since    1.4.2
 	 * @var array
 	 */
 	private $options = array();
@@ -44,7 +41,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * All debugs data
 	 *
-	 * @since    1.4.2
 	 * @var array
 	 */
 	private $debugs = array();
@@ -52,15 +48,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Rate fields data
 	 *
-	 * @since    2.0
-	 * @var array
-	 */
-	private $instance_rate_fields = array();
-
-	/**
-	 * Rate fields data
-	 *
-	 * @since    2.0
 	 * @var array
 	 */
 	private $services = array();
@@ -68,7 +55,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Default data
 	 *
-	 * @since    2.0
 	 * @var array
 	 */
 	private $field_default = array(
@@ -86,9 +72,15 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	);
 
 	/**
+	 * Distance unit
+	 *
+	 * @var string
+	 */
+	private $distance_unit = 'metric';
+
+	/**
 	 * Constructor for your shipping class
 	 *
-	 * @since    1.0.0
 	 * @param int $instance_id ID of shipping method instance.
 	 */
 	public function __construct( $instance_id = 0 ) {
@@ -120,7 +112,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Init settings
 	 *
-	 * @since    1.0.0
 	 * @return void
 	 */
 	public function init() {
@@ -178,8 +169,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 
 	/**
 	 * Init form fields.
-	 *
-	 * @since    1.0.0
 	 */
 	public function init_form_fields() {
 		$form_fields = array(
@@ -351,33 +340,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 					'longest_duration'  => __( 'Longest Duration', 'woogosend' ),
 				),
 			),
-			'distance_unit'               => array(
-				'title'             => __( 'Distance Units', 'woogosend' ),
-				'type'              => 'woogosend',
-				'orig_type'         => 'select',
-				'description'       => __( 'Google Maps Distance Matrix API distance units parameter.', 'woogosend' ),
-				'desc_tip'          => true,
-				'default'           => 'metric',
-				'options'           => array(
-					'metric'   => __( 'Kilometer', 'woogosend' ),
-					'imperial' => __( 'Mile', 'woogosend' ),
-				),
-				'api_request'       => 'units',
-				'custom_attributes' => array(
-					'data-fields' => wp_json_encode(
-						array(
-							'targets' => array(
-								'#woogosend-table--table_rates--dummy .woogosend-col--rate_class_0 .label-text',
-								'#woogosend-table--advanced_rate .woogosend-field--context--advanced--section_shipping_rates',
-							),
-							'label'   => array(
-								'metric'   => __( 'Rate per Kilometer', 'woogosend' ),
-								'imperial' => __( 'Rate per Mile', 'woogosend' ),
-							),
-						)
-					),
-				),
-			),
 			'round_up_distance'           => array(
 				'title'       => __( 'Round Up Distance', 'woogosend' ),
 				'label'       => __( 'Yes', 'woogosend' ),
@@ -434,8 +396,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		/**
 		 * Developers can modify the $form_fields var via filter hooks.
 		 *
-		 * @since 1.0.1
-		 *
 		 * This example shows how you can modify the form fields data via custom function:
 		 *
 		 *      add_filter( 'woogosend_form_fields', 'my_woogosend_form_fields', 10, 2 );
@@ -448,52 +408,8 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	}
 
 	/**
-	 * Get rate fields
-	 *
-	 * @since    1.4.2
-	 *
-	 * @param string $context Data context filter.
-	 * @return array
-	 */
-	public function get_rates_fields( $context = '' ) {
-		$rates_fields = array();
-
-		foreach ( $this->instance_rate_fields as $key => $field ) {
-			if ( ! empty( $context ) && ( ! isset( $field[ 'is_' . $context ] ) || ! $field[ 'is_' . $context ] ) ) {
-				continue;
-			}
-
-			if ( ! empty( $context ) ) {
-				$field['context'] = $context;
-			}
-
-			$rate_field_default = array(
-				'title'             => '',
-				'disabled'          => false,
-				'class'             => '',
-				'css'               => '',
-				'placeholder'       => '',
-				'type'              => 'text',
-				'desc_tip'          => false,
-				'description'       => '',
-				'custom_attributes' => array(),
-				'options'           => array(),
-				'default'           => '',
-				'is_rate'           => true,
-			);
-
-			$rate_field = wp_parse_args( $field, $rate_field_default );
-
-			$rates_fields[ $key ] = $rate_field;
-		}
-
-		return $rates_fields;
-	}
-
-	/**
 	 * Get Rate Field Value
 	 *
-	 * @since 2.0.7
 	 * @param string $key Rate field key.
 	 * @param array  $rate Rate row data.
 	 * @param string $default Default rate field value.
@@ -515,7 +431,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Generate woogosend field.
 	 *
-	 * @since    1.0.0
 	 * @param string $key Input field key.
 	 * @param array  $data Settings field data.
 	 */
@@ -530,8 +445,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 
 	/**
 	 * Generate js_template field.
-	 *
-	 * @since 1.2.4
 	 */
 	public function generate_js_template_html() {
 		ob_start();
@@ -565,7 +478,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Generate store_location_picker field.
 	 *
-	 * @since    1.0.0
 	 * @param string $key Input field key.
 	 * @param array  $data Settings field data.
 	 */
@@ -612,16 +524,11 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	 *
 	 * @param  string $key Field key.
 	 * @param  string $value Posted Value.
-	 * @param  bool   $is_rate_field Is this validating rate field.
 	 * @throws Exception If the field value is invalid.
 	 * @return string
 	 */
-	public function validate_woogosend_field( $key, $value, $is_rate_field = false ) {
-		if ( $is_rate_field ) {
-			$field = isset( $this->instance_rate_fields[ $key ] ) ? $this->instance_rate_fields[ $key ] : false;
-		} else {
-			$field = isset( $this->instance_form_fields[ $key ] ) ? $this->instance_form_fields[ $key ] : false;
-		}
+	public function validate_woogosend_field( $key, $value ) {
+		$field = isset( $this->instance_form_fields[ $key ] ) ? $this->instance_form_fields[ $key ] : false;
 
 		if ( $field ) {
 			$field = $this->populate_field( $key, $field );
@@ -672,127 +579,7 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	}
 
 	/**
-	 * Validate and format table_rates settings field.
-	 *
-	 * @since    1.0.0
-	 * @param string $key Input field key.
-	 * @param string $value Input field current value.
-	 * @throws Exception If the field value is invalid.
-	 * @return array
-	 */
-	public function validate_table_rates_field( $key, $value ) {
-		$rates = array();
-
-		$post_data = $this->get_post_data();
-
-		$rate_fields = $this->get_rates_fields( 'hidden' );
-
-		$errors = array();
-
-		foreach ( $rate_fields as $rate_field_key => $rate_field ) {
-			$field_key = $this->get_field_key( $key . '__' . $rate_field_key );
-
-			$values = isset( $post_data[ $field_key ] ) ? (array) $post_data[ $field_key ] : array();
-
-			foreach ( $values as $index => $value ) {
-				try {
-					$rates[ $index ][ $rate_field_key ] = $this->validate_woogosend_field( $rate_field_key, $value, true );
-				} catch ( Exception $e ) {
-					// translators: %1$d = row number, %2$s = error message.
-					$errors[] = wp_sprintf( __( 'Table rates row %1$d: %2$s', 'woogosend' ), ( $index + 1 ), $e->getMessage() );
-				}
-			}
-		}
-
-		if ( $errors ) {
-			throw new Exception( implode( '</p><p>', $errors ) );
-		}
-
-		$rule_fields = array();
-
-		foreach ( $rate_fields as $rate_field_key => $rate_field ) {
-			if ( ! isset( $rate_field['is_rule'] ) || ! $rate_field['is_rule'] ) {
-				continue;
-			}
-
-			$rule_fields[] = $rate_field_key;
-		}
-
-		$filtered = array();
-
-		$errors = array();
-
-		foreach ( $rates as $index => $rate ) {
-			$rules = array();
-
-			foreach ( $rule_fields as $rule_field ) {
-				$rules[ $rule_field ] = isset( $rate[ $rule_field ] ) && strlen( $rate[ $rule_field ] ) ? $rate[ $rule_field ] : false;
-			}
-
-			$rate_key = implode( '___', array_values( $rules ) );
-
-			try {
-				if ( isset( $filtered[ $rate_key ] ) ) {
-					$error_msg = array();
-
-					foreach ( $rules as $rule_key => $rule_value ) {
-						if ( false === $rule_value || 'max_distance' === $rule_key ) {
-							continue;
-						}
-
-						$error_msg[] = wp_sprintf( '%s: %s', $rate_fields[ $rule_key ]['title'], $rule_value );
-					}
-
-					throw new Exception( implode( ', ', $error_msg ) );
-				}
-
-				$filtered[ $rate_key ] = array(
-					'index' => $index,
-					'rate'  => $rate,
-				);
-			} catch ( Exception $e ) {
-				$errors[] = wp_sprintf(
-					woogosend_i18n( 'errors.table_rate_row' ),
-					( $index + 1 ),
-					wp_sprintf( woogosend_i18n( 'errors.duplicate_rate_row' ), $filtered[ $rate_key ]['index'], $e->getMessage() )
-				);
-			}
-		}
-
-		if ( $errors ) {
-			throw new Exception( implode( '</p><p>', $errors ) );
-		}
-
-		if ( empty( $filtered ) ) {
-			throw new Exception( __( 'Shipping rates table is empty', 'woogosend' ) );
-		}
-
-		$filtered_values = array();
-
-		foreach ( $filtered as $row ) {
-			$filtered_values[] = $row['rate'];
-		}
-
-		/**
-		 * Developers can modify the $filtered_values var via filter hooks.
-		 *
-		 * @since 1.0.1
-		 *
-		 * This example shows how you can modify the filtered table rates data via custom function:
-		 *
-		 *      add_filter( 'woogosend_validate_table_rates', 'my_woogosend_validate_table_rates', 10, 2 );
-		 *
-		 *      function my_woogosend_validate_table_rates( $filtered_values, $instance_id ) {
-		 *          return array();
-		 *      }
-		 */
-		return apply_filters( 'woogosend_validate_table_rates', $filtered_values, $this->get_instance_id() );
-	}
-
-	/**
 	 * Get API Key for the API request
-	 *
-	 * @since 2.0.8
 	 *
 	 * @return string
 	 */
@@ -811,8 +598,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	private function api_request( $args = array(), $cache = true ) {
 		/**
 		 * Developers can modify the api request via filter hooks.
-		 *
-		 * @since 2.0
 		 *
 		 * This example shows how you can modify the $pre var via custom function:
 		 *
@@ -897,6 +682,14 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				$api_request_data[ $field['api_request'] ] = isset( $settings[ $key ] ) ? $settings[ $key ] : '';
 			}
 
+			$api_request_data_debug = $api_request_data;
+
+			if ( isset( $api_request_data_debug['key'] ) ) {
+				$api_request_data_debug['key'] = str_repeat( '*', 20 );
+			}
+
+			$this->show_debug( array( 'API_REQUEST_DATA' => $api_request_data_debug ) );
+
 			$api = new WooGoSend_API();
 
 			$results = $api->calculate_distance( $api_request_data );
@@ -948,12 +741,16 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				set_transient( $cache_key, $result, HOUR_IN_SECONDS ); // Store the data to transient with expiration in 1 hour for later use.
 			}
 
-			$this->show_debug( __( 'API Response', 'woogosend' ) . ': ' . wp_json_encode( $result ) );
+			$result_debug = $result;
+
+			if ( isset( $result_debug['api_request_data'] ) ) {
+				unset( $result_debug['api_request_data'] );
+			}
+
+			$this->show_debug( array( 'API_RESPONSE_DATA' => $result_debug ) );
 
 			/**
 			 * Developers can modify the api request $result via filter hooks.
-			 *
-			 * @since 2.0
 			 *
 			 * This example shows how you can modify the $pre var via custom function:
 			 *
@@ -972,16 +769,12 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			 */
 			return apply_filters( 'woogosend_api_request', $result, $this );
 		} catch ( Exception $e ) {
-			$this->show_debug( $e->getMessage(), 'error' );
-
 			return new WP_Error( 'api_request', $e->getMessage() );
 		}
 	}
 
 	/**
 	 * Populate field data
-	 *
-	 * @since    2.0
 	 *
 	 * @param array $key Current field key.
 	 * @param array $data Current field data.
@@ -1049,7 +842,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Processes and saves global shipping method options in the admin area.
 	 *
-	 * @since 2.0
 	 * @return bool was anything saved?
 	 */
 	public function process_admin_options() {
@@ -1084,7 +876,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Sanitize settings value before store to DB.
 	 *
-	 * @since    1.0.0
 	 * @param array $settings Current settings data.
 	 * @return array
 	 */
@@ -1099,17 +890,28 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Calculate shipping function.
 	 *
-	 * @since    1.0.0
 	 * @param array $package Package data array.
 	 * @throws Exception Throw error if validation not passed.
 	 * @return void
 	 */
 	public function calculate_shipping( $package = array() ) {
 		try {
+			$origin_info = $this->get_origin_info( $package );
+
+			if ( is_wp_error( $origin_info ) ) {
+				throw new Exception( $origin_info->get_error_message() );
+			}
+
+			$destination_info = $this->get_destination_info( $package );
+
+			if ( is_wp_error( $destination_info ) ) {
+				throw new Exception( $destination_info->get_error_message() );
+			}
+
 			$api_response = $this->api_request(
 				array(
-					'origin'      => $this->get_origin_info( $package ),
-					'destination' => $this->get_destination_info( $package ),
+					'origin'      => $origin_info,
+					'destination' => $destination_info,
 					'package'     => $package,
 				)
 			);
@@ -1124,453 +926,207 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				throw new Exception( __( 'API Response data is empty', 'woogosend' ) );
 			}
 
-			$calculated = $this->calculate_shipping_cost( $api_response, $package );
+			$envelope = $this->get_envelope( $package );
 
-			// Bail early if there is no rate found.
-			if ( is_wp_error( $calculated ) ) {
-				throw new Exception( $calculated->get_error_message() );
+			foreach ( $this->services as $service ) {
+				$service->set_settings( $this->instance_settings );
+
+				$this->show_debug(
+					array(
+						'SERVICE_SETTINGS_DATA' => array(
+							'id'   => $service->get_slug(),
+							'data' => $service->get_settings( true ),
+						),
+					)
+				);
+
+				if ( 'yes' !== $service->get_setting( 'enable' ) ) {
+					$this->show_debug(
+						array(
+							'SERVICE_NOT_ENABLED' => $service->get_slug(),
+						)
+					);
+
+					continue;
+				}
+
+				/**
+				* Early filter for the service cost calculation
+				*
+				* @param array $shipping_cost {
+				*      Default service cost info
+				*
+				*      @type int $total         Total shipping cost.
+				*      @type int $drivers_count Number of drivers needed.
+				* }
+				* @param string $service_id        Current service ID.
+				* @param int    $distance          Current distance.
+				* @param array  $envelope          Current envelope info.
+				* @param array  $instance_settings Current settings info.
+				*
+				* @return array
+				*/
+				$shipping_cost = apply_filters( 'woogosend_calculate_shipping_cost_pre', false, $service->get_slug(), $api_response['distance'], $envelope, $this->instance_settings );
+
+				if ( false === $shipping_cost ) {
+					$shipping_cost = $service->calculate_cost( $api_response['distance'], $envelope );
+				}
+
+				if ( is_wp_error( $shipping_cost ) ) {
+					$this->show_debug( $shipping_cost->get_error_message() );
+
+					continue;
+				}
+
+				$label = $service->get_setting( 'title', true );
+
+				if ( ! $label ) {
+					$label = $service->get_slug();
+				}
+
+				$drivers_count = isset( $shipping_cost['drivers_count'] ) ? (int) $shipping_cost['drivers_count'] : 1;
+
+				if ( ! $drivers_count ) {
+					$drivers_count = 1;
+				}
+
+				$label_extra = array();
+
+				if ( $drivers_count > 1 ) {
+					// translators: %s is the number of the drivers.
+					$label_extra[] = sprintf( _n( '%s driver', '%s drivers', $drivers_count, 'woogosend' ), $drivers_count );
+				}
+
+				if ( 'yes' === $this->show_distance ) {
+					$label_extra[] = $api_response['distance_text'];
+				}
+
+				if ( $label_extra ) {
+					$label = sprintf( '%1$s (%2$s)', $label, implode( ', ', $label_extra ) );
+				}
+
+				$total = isset( $shipping_cost['total'] ) ? $shipping_cost['total'] : 0;
+
+				$rate = array(
+					'id'        => $this->get_rate_id( $service->get_slug() ),
+					'label'     => $label,
+					'cost'      => $total,
+					'meta_data' => array(
+						'api_response'  => $api_response,
+						'drivers_count' => $drivers_count,
+					),
+				);
+
+				$this->add_rate( $rate );
 			}
-
-			// Bail early if the calculated data format is invalid.
-			if ( ! is_array( $calculated ) || ! isset( $calculated['cost'] ) ) {
-				throw new Exception( __( 'Calculated shipping data format is invalid', 'woogosend' ) );
-			}
-
-			$calculated = wp_parse_args(
-				$calculated,
-				array(
-					'id'        => $this->get_rate_id(),
-					'label'     => $this->title,
-					'package'   => $package,
-					'meta_data' => array( 'api_response' => $api_response ),
-				)
-			);
-
-			// Show the distance info.
-			if ( 'yes' === $this->show_distance && ! empty( $api_response['distance_text'] ) ) {
-				$calculated['label'] = sprintf( '%s (%s)', $calculated['label'], $api_response['distance_text'] );
-			}
-
-			// Register shipping rate to cart.
-			$this->add_rate( $calculated );
 		} catch ( Exception $e ) {
 			$this->show_debug( $e->getMessage(), 'error' );
 		}
 	}
 
 	/**
-	 * Get shipping cost by distance
+	 * Get the envelope info: weight, dimension, quantity.
 	 *
-	 * @since    1.0.0
-	 * @param array $api_response API response data.
-	 * @param array $package Current cart data.
-	 * @return mixed cost data array or WP_Error on failure.
-	 */
-	private function calculate_shipping_cost( $api_response, $package ) {
-		/**
-		 * Developers can modify the $rate via filter hooks.
-		 *
-		 * @since 2.0
-		 *
-		 * This example shows how you can modify the $pre var via custom function:
-		 *
-		 *      add_filter( 'woogosend_calculate_shipping_cost_pre', 'my_woogosend_calculate_shipping_cost_pre', 10, 4 );
-		 *
-		 *      function my_woogosend_calculate_shipping_cost_pre( $false, $api_response, $package, $obj ) {
-		 *          // Return the cost data array
-		 *          return array(
-		 *              'cost'      => 0,
-		 *              'label'     => 'Free Shipping',
-		 *              'meta_data' => array(),
-		 *          );
-		 *      }
-		 */
-		$pre = apply_filters( 'woogosend_calculate_shipping_cost_pre', false, $api_response, $package, $this );
-
-		if ( false !== $pre ) {
-			return $pre;
-		}
-
-		/**
-		 * Developers can modify the $table_rates data via filter hooks.
-		 *
-		 * @since 2.1.0
-		 *
-		 * This example shows how you can modify the $table_rates var via custom function:
-		 *
-		 *      add_filter( 'woogosend_table_rates', 'my_woogosend_table_rates', 10, 4 );
-		 *
-		 *      function my_woogosend_table_rates( $table_rates, $api_response, $package, $object ) {
-		 *          // Return the table rates data array
-		 *          return array(
-		 *              array(
-		 *                  'max_distance' => '1',
-		 *                  'min_order_quantity' => '0',
-		 *                  'max_order_quantity' => '0',
-		 *                  'min_order_amount' => '0',
-		 *                  'max_order_amount' => '0',
-		 *                  'rate_class_0' => '10',
-		 *                  'min_cost' => '',
-		 *                  'surcharge' => '',
-		 *                  'total_cost_type' => 'inherit',
-		 *                  'title' => '',
-		 *              ),
-		 *              array(
-		 *                  'max_distance' => '1000',
-		 *                  'min_order_quantity' => '0',
-		 *                  'max_order_quantity' => '0',
-		 *                  'min_order_amount' => '0',
-		 *                  'max_order_amount' => '0',
-		 *                  'rate_class_0' => '5',
-		 *                  'min_cost' => '',
-		 *                  'surcharge' => '',
-		 *                  'total_cost_type' => 'inherit',
-		 *                  'title' => '',
-		 *              )
-		 *          );
-		 *      }
-		 */
-		$table_rates = apply_filters( 'woogosend_table_rates', $this->table_rates, $api_response, $package, $this );
-
-		if ( $table_rates ) {
-			$table_rates_match = array();
-
-			foreach ( $table_rates as $index => $rate ) {
-				/**
-				 * Developers can modify the $rate data via filter hooks.
-				 *
-				 * @since 2.1.0
-				 *
-				 * This example shows how you can modify the $rate var via custom function:
-				 *
-				 *      add_filter( 'woogosend_table_rates_row', 'my_woogosend_table_rates_row', 10, 5 );
-				 *
-				 *      function my_woogosend_table_rates_row( $rate, $index, $api_response, $package, $object ) {
-				 *          // Return the rate row data array
-				 *          return array(
-				 *              'max_distance' => '8',
-				 *              'min_order_quantity' => '0',
-				 *              'max_order_quantity' => '0',
-				 *              'min_order_amount' => '0',
-				 *              'max_order_amount' => '0',
-				 *              'rate_class_0' => '1000',
-				 *              'min_cost' => '',
-				 *              'surcharge' => '',
-				 *              'total_cost_type' => 'inherit',
-				 *              'title' => '',
-				 *          );
-				 *      }
-				 */
-				$rate = apply_filters( 'woogosend_table_rates_row', $rate, $index, $api_response, $package, $this );
-
-				$rate = $this->norlmalize_table_rate_row( $rate );
-
-				if ( ! $rate ) {
-					continue;
-				}
-
-				if ( $this->table_rate_row_rules_match( $rate, 0, $api_response, $package ) ) {
-					if ( ! isset( $table_rates_match[ $rate['max_distance'] ] ) ) {
-						$table_rates_match[ $rate['max_distance'] ] = array();
-					}
-
-					$table_rates_match[ $rate['max_distance'] ][] = $rate;
-				}
-			}
-
-			if ( $table_rates_match ) {
-				ksort( $table_rates_match, SORT_NUMERIC );
-
-				// Pick the lowest max distance rate row rules.
-				$table_rates_match = reset( $table_rates_match );
-
-				// Pick first rate row data.
-				$rate = reset( $table_rates_match );
-
-				$this->show_debug( __( 'Table Rate Row match', 'woogosend' ) . ': ' . wp_json_encode( $rate ) );
-
-				// Hold costs data for flat total_cost_type.
-				$flat = array();
-
-				// Hold costs data for progressive total_cost_type.
-				$progressive = array();
-
-				foreach ( $package['contents'] as $hash => $item ) {
-					if ( ! $item['data']->needs_shipping() ) {
-						continue;
-					}
-
-					$class_id   = $item['data']->get_shipping_class_id();
-					$product_id = $item['data']->get_id();
-
-					$item_cost = $this->get_rate_field_value( 'rate_class_0', $rate, 0 );
-
-					if ( $class_id ) {
-						$class_cost = $this->get_rate_field_value( 'rate_class_' . $class_id, $rate );
-						if ( strlen( $class_cost ) ) {
-							$item_cost = $class_cost;
-						}
-					}
-
-					// Multiply shipping cost with distance unit.
-					$item_cost *= $api_response['distance'];
-
-					// Add cost data for flat total_cost_type.
-					$flat[] = $item_cost;
-
-					// Add cost data for progressive total_cost_type.
-					$progressive[] = array(
-						'item_cost'  => $item_cost,
-						'class_id'   => $class_id,
-						'product_id' => $product_id,
-						'quantity'   => $item['quantity'],
-					);
-				}
-
-				$cost = 0;
-
-				$total_cost_type = $this->get_rate_field_value( 'total_cost_type', $rate, 'inherit' );
-				if ( 'inherit' === $total_cost_type ) {
-					$total_cost_type = $this->total_cost_type;
-				}
-
-				if ( strpos( $total_cost_type, 'flat__' ) === 0 ) {
-					switch ( str_replace( 'flat__', '', $total_cost_type ) ) {
-						case 'lowest':
-							$cost = min( $flat );
-							break;
-
-						case 'average':
-							$cost = array_sum( $flat ) / count( $flat );
-							break;
-
-						default:
-							$cost = max( $flat );
-							break;
-					}
-				} elseif ( strpos( $total_cost_type, 'progressive__' ) === 0 ) {
-					switch ( str_replace( 'progressive__', '', $total_cost_type ) ) {
-						case 'per_shipping_class':
-							$costs = array();
-							foreach ( $progressive as $value ) {
-								$costs[ $value['class_id'] ] = $value['item_cost'];
-							}
-							$cost = array_sum( $costs );
-							break;
-
-						case 'per_product':
-							$costs = array();
-							foreach ( $progressive as $value ) {
-								$costs[ $value['product_id'] ] = $value['item_cost'];
-							}
-							$cost = array_sum( $costs );
-							break;
-
-						default:
-							$costs = array();
-							foreach ( $progressive as $value ) {
-								$costs[ $value['product_id'] ] = $value['item_cost'] * $value['quantity'];
-							}
-							$cost = array_sum( $costs );
-							break;
-					}
-				}
-
-				$min_cost = $this->get_rate_field_value( 'min_cost', $rate, '' );
-
-				if ( ! strlen( $min_cost ) ) {
-					$min_cost = $this->min_cost;
-				}
-
-				if ( $min_cost && $min_cost > $cost ) {
-					$cost = $min_cost;
-				}
-
-				$surcharge = $this->get_rate_field_value( 'surcharge', $rate, '' );
-
-				if ( ! strlen( $surcharge ) ) {
-					$surcharge = $this->surcharge;
-				}
-
-				if ( $surcharge ) {
-					$surcharge_type = $this->get_rate_field_value( 'surcharge_type', $rate );
-
-					if ( ! $surcharge_type || 'inherit' === $surcharge_type ) {
-						$surcharge_type = $this->surcharge_type;
-					}
-
-					if ( ! $surcharge_type ) {
-						$surcharge_type = 'fixed';
-					}
-
-					if ( 'fixed' === $surcharge_type ) {
-						$cost += $surcharge;
-					} else {
-						$cost += ( ( $cost * $surcharge ) / 100 );
-					}
-				}
-
-				$discount = $this->get_rate_field_value( 'discount', $rate, '' );
-
-				if ( ! strlen( $discount ) ) {
-					$discount = $this->discount;
-				}
-
-				if ( $discount ) {
-					$discount_type = $this->get_rate_field_value( 'discount_type', $rate );
-
-					if ( ! $discount_type || 'inherit' === $discount_type ) {
-						$discount_type = $this->discount_type;
-					}
-
-					if ( ! $discount_type ) {
-						$discount_type = 'fixed';
-					}
-
-					if ( 'fixed' === $discount_type ) {
-						$cost -= $discount;
-					} else {
-						$cost -= ( ( $cost * $discount ) / 100 );
-					}
-				}
-
-				$result = array(
-					'cost'      => $cost,
-					'label'     => empty( $rate['title'] ) ? $this->title : $rate['title'],
-					'meta_data' => array(
-						'api_response' => $api_response,
-					),
-				);
-
-				/**
-				 * Developers can modify the $rate via filter hooks.
-				 *
-				 * @since 2.0
-				 *
-				 * This example shows how you can modify the $result var via custom function:
-				 *
-				 *      add_filter( 'woogosend_calculate_shipping_cost', 'my_woogosend_calculate_shipping_cost', 10, 4 );
-				 *
-				 *      function my_woogosend_calculate_shipping_cost( $result, $api_response, $package, $obj ) {
-				 *          // Return the cost data array
-				 *          return array(
-				 *              'cost'      => 0,
-				 *              'label'     => 'Free Shipping',
-				 *              'meta_data' => array(),
-				 *          );
-				 *      }
-				 */
-				return apply_filters( 'woogosend_calculate_shipping_cost', $result, $api_response, $package, $this );
-			}
-		}
-
-		return new WP_Error( 'no_table_rates_rules_match', __( 'No shipping table rates rules match.', 'woogosend' ) );
-	}
-
-	/**
-	 * Normalize table rate row data.
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param array $rate Rate row data.
+	 * @param array $package The cart data.
 	 *
 	 * @return array
 	 */
-	private function norlmalize_table_rate_row( $rate ) {
-		if ( ! is_array( $rate ) ) {
-			return false;
-		}
-
-		return wp_parse_args(
-			$rate,
-			array(
-				'max_distance'       => '0',
-				'min_order_quantity' => '0',
-				'max_order_quantity' => '0',
-				'min_order_amount'   => '0',
-				'max_order_amount'   => '0',
-				'rate_class_0'       => '',
-				'min_cost'           => '',
-				'surcharge'          => '',
-				'total_cost_type'    => 'inherit',
-				'title'              => '',
-			)
+	public function get_envelope( $package ) {
+		$data = array(
+			'width'    => 0,
+			'length'   => 0,
+			'height'   => 0,
+			'weight'   => 0,
+			'quantity' => 0,
 		);
-	}
 
-	/**
-	 * Check if table rate row rules is match
-	 *
-	 * @since 2.1.0
-	 *
-	 * @param array $rate Rate row data.
-	 * @param int   $distance_offset Distance offset data.
-	 * @param array $api_response API response data.
-	 * @param array $package Cart data.
-	 *
-	 * @deprecated $distance_offset since 2.1.6
-	 *
-	 * @return bool
-	 */
-	private function table_rate_row_rules_match( $rate, $distance_offset, $api_response, $package ) {
-		$is_match = $api_response['distance'] <= $rate['max_distance'];
+		$length   = array();
+		$width    = array();
+		$height   = array();
+		$weight   = array();
+		$quantity = array();
 
-		$min_order_amount = $this->get_rate_field_value( 'min_order_amount', $rate );
+		foreach ( $package['contents'] as $item ) {
+			// Validate cart item quantity value.
+			$item_quantity = absint( $item['quantity'] );
 
-		if ( $is_match && $min_order_amount ) {
-			$is_match = $min_order_amount <= $package['cart_subtotal'];
+			if ( ! $item_quantity ) {
+				continue;
+			}
+
+			$quantity[] = $item_quantity;
+
+			// Validate cart item weight value.
+			$item_weight = is_numeric( $item['data']->get_weight() ) ? $item['data']->get_weight() : 0;
+
+			if ( $item_weight ) {
+				array_push( $weight, $item_weight * $item_quantity );
+			}
+
+			// Validate cart item width value.
+			$item_width = is_numeric( $item['data']->get_width() ) ? $item['data']->get_width() : 0;
+
+			if ( $item_width ) {
+				array_push( $width, $item_width * 1 );
+			}
+
+			// Validate cart item length value.
+			$item_length = is_numeric( $item['data']->get_length() ) ? $item['data']->get_length() : 0;
+
+			if ( $item_length ) {
+				array_push( $length, $item_length * 1 );
+			}
+
+			// Validate cart item height value.
+			$item_height = is_numeric( $item['data']->get_height() ) ? $item['data']->get_height() : 0;
+
+			if ( $item_height ) {
+				array_push( $height, $item_height * $item_quantity );
+			}
 		}
 
-		$max_order_amount = $this->get_rate_field_value( 'max_order_amount', $rate );
-
-		if ( $is_match && $max_order_amount ) {
-			$is_match = $max_order_amount >= $package['cart_subtotal'];
+		if ( $weight ) {
+			$data['weight'] = wc_get_weight( array_sum( $weight ), 'kg' );
 		}
 
-		if ( $is_match && ( isset( $rate['min_order_quantity'] ) || isset( $rate['max_order_quantity'] ) ) ) {
-			$cart_quantity = 0;
+		if ( $width ) {
+			$data['width'] = wc_get_dimension( max( $width ), 'cm' );
+		}
 
-			foreach ( $package['contents'] as $item ) {
-				if ( ! $item['data']->needs_shipping() ) {
-					continue;
-				}
+		if ( $length ) {
+			$data['length'] = wc_get_dimension( max( $length ), 'cm' );
+		}
 
-				$cart_quantity += $item['quantity'];
-			}
+		if ( $height ) {
+			$data['height'] = wc_get_dimension( array_sum( $height ), 'cm' );
+		}
 
-			$min_order_quantity = $this->get_rate_field_value( 'min_order_quantity', $rate );
-
-			if ( $min_order_quantity ) {
-				$is_match = $min_order_quantity <= $cart_quantity;
-			}
-
-			$max_order_quantity = $this->get_rate_field_value( 'max_order_quantity', $rate );
-
-			if ( $max_order_quantity ) {
-				$is_match = $max_order_quantity >= $cart_quantity;
-			}
+		if ( $quantity ) {
+			$data['quantity'] = array_sum( $quantity );
 		}
 
 		/**
-		 * Developers can modify the rate row rules via filter hooks.
+		 * Filter the service envelope info
 		 *
-		 * @since 2.1.0
+		 * @param array $envelope {
+		 *      Default envelope info
 		 *
-		 * This example shows how you can modify the rate row rules var via custom function:
+		 *      @type string $weight   Envelope mass weight.
+		 *      @type string $width    Envelope dimension width.
+		 *      @type string $length   Envelope dimension length.
+		 *      @type string $height   Envelope dimension height.
+		 *      @type string $quantity Envelope items quantity.
+		 * }
+		 * @param array $package     Current cart data.
 		 *
-		 *      add_filter( 'woogosend_table_rate_row_rules_match', 'my_woogosend_table_rate_row_rules_match', 10, 6 );
-		 *
-		 *      function my_woogosend_table_rate_row_rules_match( $is_match, $rate, $distance_offset, $api_response, $package, $object ) {
-		 *          return true;
-		 *      }
+		 * @return array
 		 */
-		return apply_filters( 'woogosend_table_rate_row_rules_match', $is_match, $rate, $distance_offset, $api_response, $package, $this );
+		return apply_filters( 'woogosend_envelope_info', $data, $package );
 	}
 
 	/**
 	 * Get shipping origin info
 	 *
-	 * @since    1.0.0
 	 * @param array $package The cart content data.
 	 * @return array
 	 */
@@ -1595,8 +1151,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		/**
 		 * Developers can modify the origin info via filter hooks.
 		 *
-		 * @since 1.0.1
-		 *
 		 * This example shows how you can modify the $origin_info var via custom function:
 		 *
 		 *      add_filter( 'woogosend_origin_info', 'my_woogosend_origin_info', 10, 3 );
@@ -1613,7 +1167,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Get shipping destination info
 	 *
-	 * @since    1.0.0
 	 * @throws Exception Throw error if validation not passed.
 	 * @param array $package The cart content data.
 	 * @return string
@@ -1621,8 +1174,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	private function get_destination_info( $package ) {
 		/**
 		 * Developers can modify the $destination_info var via filter hooks.
-		 *
-		 * @since 2.0
 		 *
 		 * This example shows how you can modify the shipping destination info via custom function:
 		 *
@@ -1736,8 +1287,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		/**
 		 * Developers can modify the $destination_info var via filter hooks.
 		 *
-		 * @since 1.0.1
-		 *
 		 * This example shows how you can modify the shipping destination info via custom function:
 		 *
 		 *      add_filter( 'woogosend_destination_info', 'my_woogosend_destination_info', 10, 3 );
@@ -1752,7 +1301,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Convert Meters to Distance Unit
 	 *
-	 * @since    1.3.2
 	 * @param int $meters Number of meters to convert.
 	 * @return int
 	 */
@@ -1763,7 +1311,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Convert Meters to Miles
 	 *
-	 * @since    1.3.2
 	 * @param int $meters Number of meters to convert.
 	 * @return int
 	 */
@@ -1774,7 +1321,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Convert Meters to Kilometers
 	 *
-	 * @since    1.3.2
 	 * @param int $meters Number of meters to convert.
 	 * @return int
 	 */
@@ -1785,7 +1331,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Sort ascending API response array by duration.
 	 *
-	 * @since    1.4.4
 	 * @param array $a Array 1 that will be sorted.
 	 * @param array $b Array 2 that will be compared.
 	 * @return int
@@ -1800,7 +1345,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Sort descending API response array by duration.
 	 *
-	 * @since    1.4.4
 	 * @param array $a Array 1 that will be sorted.
 	 * @param array $b Array 2 that will be compared.
 	 * @return int
@@ -1815,7 +1359,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Sort ascending API response array by distance.
 	 *
-	 * @since    1.4.4
 	 * @param array $a Array 1 that will be sorted.
 	 * @param array $b Array 2 that will be compared.
 	 * @return int
@@ -1830,7 +1373,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Sort descending API response array by distance.
 	 *
-	 * @since    1.4.4
 	 * @param array $a Array 1 that will be sorted.
 	 * @param array $b Array 2 that will be compared.
 	 * @return int
@@ -1845,7 +1387,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Check if run in debug mode
 	 *
-	 * @since    1.5.0
 	 * @return bool
 	 */
 	public function is_debug_mode() {
@@ -1855,7 +1396,6 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 	/**
 	 * Show debug info
 	 *
-	 * @since    1.0.0
 	 * @param string $message The text to display in the notice.
 	 * @param string $type The type of notice.
 	 * @return void

@@ -6,7 +6,6 @@
  * public-facing side of the site and the admin area.
  *
  * @link       https://github.com/sofyansitorus
- * @since      1.0.0
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -26,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      1.0.0
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
@@ -46,6 +44,13 @@ abstract class WooGoSend_Services {
 	 * @var array
 	 */
 	protected $default_settings = array();
+
+	/**
+	 * Default service settings data
+	 *
+	 * @var array
+	 */
+	protected $settings = array();
 
 	/**
 	 * Get service slug ID
@@ -244,26 +249,162 @@ abstract class WooGoSend_Services {
 	}
 
 	/**
+	 * Calculate the shipping cost
+	 *
+	 * @param integer $distance   Shipping distance.
+	 * @param array   $envelope   Package dimensions, weight & quantity info.
+	 * @param array   $settings   Plugin settings data.
+	 *
+	 * @return array|WP_Error WP_Error object on failure.
+	 */
+	public function calculate_cost( $distance, $envelope, $settings = array() ) {
+		if ( $settings ) {
+			$this->set_settings( $settings );
+		}
+
+		// Validate distance.
+		$max_distance = $this->get_setting( 'max_distance', true );
+
+		if ( $max_distance && $distance > $max_distance ) {
+			// translators: %1$s is service ID.
+			return new WP_Error( 'max_distance_exceeded', sprintf( __( 'Shipping distance exceeded the maximum setting: %1$s', 'woogosend' ), $this->get_slug() ) );
+		}
+
+		$max_weight    = $this->get_setting( 'max_weight', true );
+		$max_width     = $this->get_setting( 'max_width', true );
+		$max_length    = $this->get_setting( 'max_length', true );
+		$max_height    = $this->get_setting( 'max_height', true );
+		$max_dimension = $max_width * $max_length * $max_height;
+
+		$envelope_quantity  = isset( $envelope['quantity'] ) ? (int) $envelope['quantity'] : 0;
+		$envelope_weight    = isset( $envelope['weight'] ) ? (int) $envelope['weight'] : 0;
+		$envelope_width     = isset( $envelope['width'] ) ? (int) $envelope['width'] : 0;
+		$envelope_length    = isset( $envelope['length'] ) ? (int) $envelope['length'] : 0;
+		$envelope_height    = isset( $envelope['height'] ) ? (int) $envelope['height'] : 0;
+		$envelope_dimension = $envelope_width * $envelope_length * $envelope_height;
+
+		// Calculate number of drivers needed.
+		$drivers_count_weight    = ceil( ( $envelope_weight / $max_weight ) );
+		$drivers_count_dimension = ceil( ( $envelope_dimension / $max_dimension ) );
+		$drivers_count           = max( $drivers_count_weight, $drivers_count_dimension );
+
+		// Validate package dimensions, weight & quantity.
+		$multiple_drivers = 'yes' === $this->get_setting( 'multiple_drivers', true );
+
+		if ( $envelope_quantity < 2 || $drivers_count > $envelope_quantity ) {
+			$multiple_drivers = false;
+		}
+
+		if ( ! $multiple_drivers ) {
+			// Validate package weight.
+			if ( $envelope_weight > $max_weight ) {
+				// translators: %1$s is service ID.
+				return new WP_Error( 'max_weight_exceeded', sprintf( __( 'Package weight exceeded the maximum setting: %1$s', 'woogosend' ), $this->get_slug() ) );
+			}
+
+			// Validate package dimension.
+			if ( $envelope_dimension > $max_dimension ) {
+				// translators: %1$s is service ID.
+				return new WP_Error( 'max_dimension_exceeded', sprintf( __( 'Package dimension exceeded the maximum setting: %1$s', 'woogosend' ), $this->get_slug() ) );
+			}
+		}
+
+		// Calculate the cost.
+		$min_cost            = absint( $this->get_setting( 'min_cost', true ) );
+		$max_cost            = absint( $this->get_setting( 'max_cost', true ) );
+		$per_km_cost         = absint( $this->get_setting( 'per_km_cost', true ) );
+		$per_km_min_distance = absint( $this->get_setting( 'per_km_min_distance', true ) );
+
+		$total = 0;
+
+		if ( $per_km_cost && $distance > $per_km_min_distance ) {
+			$total += ( ( $distance - $per_km_min_distance ) * $per_km_cost );
+		}
+
+		if ( $min_cost && $total < $min_cost ) {
+			$total = $min_cost;
+		} elseif ( $max_cost && $total > $max_cost ) {
+			$total = $max_cost;
+		}
+
+		if ( $drivers_count > 1 ) {
+			$total = $total * $drivers_count;
+		}
+
+		return array(
+			'total'         => $total,
+			'drivers_count' => $drivers_count,
+		);
+	}
+
+	/**
 	 * Get setting field key
 	 *
 	 * @param string $key Field key.
 	 * @return string
 	 */
-	private function get_field_key( $key ) {
+	public function get_field_key( $key ) {
 		return $key . '_' . $this->get_slug();
 	}
 
 	/**
-	 * Get setting field valu
+	 * Get default setting field value
 	 *
 	 * @param string $key Field key.
-	 * @return string
+	 * @return mixed
 	 */
-	private function get_default_setting( $key ) {
+	public function get_default_setting( $key ) {
 		if ( isset( $this->default_settings[ $key ] ) ) {
 			return $this->default_settings[ $key ];
 		}
 
-		return '';
+		return null;
+	}
+
+	/**
+	 * Get settings field value
+	 *
+	 * @param string $key Field key.
+	 * @param bool   $load_default Is load default setting.
+	 * @return mixed
+	 */
+	public function get_setting( $key, $load_default = false ) {
+		$field_key = $this->get_field_key( $key );
+
+		if ( isset( $this->settings[ $field_key ] ) ) {
+			return $this->settings[ $field_key ];
+		}
+
+		if ( $load_default ) {
+			return $this->get_default_setting( $key );
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get all settings field value
+	 *
+	 * @param bool $load_default Is load default setting.
+	 * @return array
+	 */
+	public function get_settings( $load_default = false ) {
+		$settings = array();
+
+		foreach ( array_keys( $this->get_fields_raw() ) as $key ) {
+			$settings[ $key ] = $this->get_setting( $key, $load_default );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Get settings field value
+	 *
+	 * @param array $settings Settings data.
+	 * @return void
+	 */
+	public function set_settings( $settings ) {
+		$this->settings = $settings;
 	}
 }

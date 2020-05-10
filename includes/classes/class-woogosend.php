@@ -6,7 +6,6 @@
  * public-facing side of the site and the admin area.
  *
  * @link       https://github.com/sofyansitorus
- * @since      1.0.0
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -26,7 +25,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Also maintains the unique identifier of this plugin as well as the current
  * version of the plugin.
  *
- * @since      1.0.0
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
  * @author     Sofyan Sitorus <sofyansitorus@gmail.com>
@@ -56,8 +54,6 @@ class WooGoSend {
 
 	/**
 	 * Class Constructor
-	 *
-	 * @since 1.0.0
 	 */
 	private function __construct() {
 		// Hook to load plugin textdomain.
@@ -85,8 +81,6 @@ class WooGoSend {
 
 	/**
 	 * Load plugin textdomain.
-	 *
-	 * @since 1.0.0
 	 */
 	public function load_textdomain() {
 		load_plugin_textdomain( 'woogosend', false, basename( WOOGOSEND_PATH ) . '/languages' );
@@ -96,8 +90,6 @@ class WooGoSend {
 	 * Add plugin action links.
 	 *
 	 * Add a link to the settings page on the plugins.php page.
-	 *
-	 * @since 1.1.3
 	 *
 	 * @param  array $links List of existing plugin action links.
 	 * @return array         List of modified plugin action links.
@@ -149,7 +141,6 @@ class WooGoSend {
 	/**
 	 * Enqueue backend scripts.
 	 *
-	 * @since 1.0.0
 	 * @param string $hook Passed screen ID in admin area.
 	 */
 	public function enqueue_backend_assets( $hook = null ) {
@@ -213,8 +204,6 @@ class WooGoSend {
 
 	/**
 	 * Enqueue frontend scripts.
-	 *
-	 * @since 1.0.0
 	 */
 	public function enqueue_frontend_assets() {
 		// Bail early if there is no instances enabled.
@@ -243,7 +232,6 @@ class WooGoSend {
 	/**
 	 * Register shipping method to WooCommerce.
 	 *
-	 * @since 1.0.0
 	 * @param array $methods registered shipping methods.
 	 */
 	public function register_shipping_method( $methods ) {
@@ -258,7 +246,6 @@ class WooGoSend {
 	 * Print hidden element for the custom address 1 field and address 2 field value
 	 * in shipping calculator form.
 	 *
-	 * @since 2.0
 	 * @return void
 	 */
 	public function after_shipping_calculator() {
@@ -334,8 +321,6 @@ class WooGoSend {
 	/**
 	 * AJAX handler for Server Side API Key validation.
 	 *
-	 * @since 2.0.8
-	 *
 	 * @return void
 	 */
 	public function validate_api_key_server() {
@@ -367,7 +352,6 @@ class WooGoSend {
 	/**
 	 * Inject cart cart packages to calculate shipping for address fields.
 	 *
-	 * @since 1.0.0
 	 * @param array $packages Current cart contents packages.
 	 * @return array
 	 */

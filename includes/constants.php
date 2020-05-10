@@ -3,7 +3,6 @@
  * Constants file
  *
  * @link       https://github.com/sofyansitorus
- * @since      2.1.7
  *
  * @package    WooGoSend
  * @subpackage WooGoSend/includes
@@ -15,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // Define plugin constants.
-define( 'WOOGOSEND_VERSION', '2.1.7' );
+define( 'WOOGOSEND_VERSION', '1.3.0' );
 define( 'WOOGOSEND_METHOD_ID', 'woogosend' );
 define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
 define( 'WOOGOSEND_DEFAULT_LAT', '-6.17477373803497' );
