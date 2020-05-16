@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Define plugin constants.
 define( 'WOOGOSEND_VERSION', '1.4.0' );
+define( 'WOOGOSEND_DATA_VERSION', '1.4.0' );
 define( 'WOOGOSEND_METHOD_ID', 'woogosend' );
 define( 'WOOGOSEND_METHOD_TITLE', 'WooGoSend' );
 define( 'WOOGOSEND_DEFAULT_LAT', '-6.17477373803497' );
