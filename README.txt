@@ -5,7 +5,7 @@ Donate link: https://www.buymeacoffee.com/sofyansitorus?utm_source=woogosend_plu
 Requires at least: 4.8
 Tested up to: 5.4.1
 Requires PHP: 5.6
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 License: GPL-2.0+
 License URI: http://www.gnu.org/licenses/gpl-2.0.txt
 
@@ -102,6 +102,10 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Changelog ==
 
+= 1.4.1 =
+
+* Fix - Fixed data migration handler does not work properly.
+
 = 1.4.0 =
 
 * Fix - Fixed conflict with other shipping plugins in the cart calculate shipping form.
@@ -183,5 +187,5 @@ I always welcome and encourage contributions to this plugin. Please visit the pl
 
 == Upgrade Notice ==
 
-= 1.4.0 =
+= 1.4.1 =
 This version includes fixes and improvements. Upgrade immediately is always highly recommended.
