@@ -41,32 +41,15 @@ class WooGoSend_Migration_1_3_0 extends WooGoSend_Migration {
 	}
 
 	/**
-	 * Get migration options data to update
+	 * Get options pair data
 	 *
 	 * @return array
 	 */
-	public function get_update_options() {
-		$gmaps_api_key   = isset( $this->wc_shipping->instance_settings['gmaps_api_key'] ) ? $this->wc_shipping->instance_settings['gmaps_api_key'] : '';
-		$gmaps_api_mode  = isset( $this->wc_shipping->instance_settings['gmaps_api_mode'] ) ? $this->wc_shipping->instance_settings['gmaps_api_mode'] : 'driving';
-		$gmaps_api_avoid = isset( $this->wc_shipping->instance_settings['gmaps_api_avoid'] ) ? $this->wc_shipping->instance_settings['gmaps_api_avoid'] : '';
-
+	protected function get_options_pair() {
 		return array(
-			'api_key'            => $gmaps_api_key,
-			'travel_mode'        => $gmaps_api_mode,
-			'route_restrictions' => $gmaps_api_avoid,
-		);
-	}
-
-	/**
-	 * Get migration options data to delete
-	 *
-	 * @return array
-	 */
-	public function get_delete_options() {
-		return array(
-			'gmaps_api_key',
-			'gmaps_api_mode',
-			'gmaps_api_avoid',
+			'api_key'            => 'gmaps_api_key',
+			'travel_mode'        => 'gmaps_api_mode',
+			'route_restrictions' => 'gmaps_api_avoid',
 		);
 	}
 }

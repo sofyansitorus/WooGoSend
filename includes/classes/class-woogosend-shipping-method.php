@@ -125,7 +125,15 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 		// Load the settings API.
 		$this->init_form_fields(); // This is part of the settings API. Override the method to add your own settings.
 		$this->init_settings(); // This is part of the settings API. Loads settings you previously init.
+		$this->init_current_options(); // Init current options data.
+	}
 
+	/**
+	 * Init current options data.
+	 *
+	 * @return void
+	 */
+	private function init_current_options() {
 		// Define user set variables.
 		foreach ( $this->instance_form_fields as $key => $field ) {
 			$default = isset( $field['default'] ) ? $field['default'] : null;
@@ -148,9 +156,15 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			return;
 		}
 
-		$data_version = get_option( 'woogosend_data_version' );
+		if ( empty( $this->instance_settings ) ) {
+			$this->init_instance_settings();
+		}
 
-		if ( $data_version && version_compare( WOOGOSEND_VERSION, $data_version, '<=' ) ) {
+		$data_version_option_key = 'woogosend_data_version_' . $this->get_instance_id();
+
+		$data_version = get_option( $data_version_option_key );
+
+		if ( $data_version && version_compare( WOOGOSEND_DATA_VERSION, $data_version, '<=' ) ) {
 			return;
 		}
 
@@ -181,25 +195,31 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 			$migration_update_options = $migration->get_update_options();
 			$migration_delete_options = $migration->get_delete_options();
 
-			if ( ! $migration_update_options && ! $migration_delete_options ) {
-				continue;
+			if ( $migration_update_options ) {
+				foreach ( $migration_update_options as $key => $value ) {
+					$this->instance_settings[ $key ] = $value;
+				}
 			}
 
-			foreach ( $migration->get_update_options() as $key => $value ) {
-				$this->instance_settings[ $key ] = $value;
+			if ( $migration_delete_options ) {
+				foreach ( $migration_delete_options as $key ) {
+					unset( $this->instance_settings[ $key ] );
+				}
 			}
 
-			foreach ( $migration->get_delete_options() as $key ) {
-				unset( $this->instance_settings[ $key ] );
+			// Update the settings data.
+			if ( $migration_update_options || $migration_update_options ) {
+				$instance_settings = apply_filters( 'woocommerce_shipping_' . $this->id . '_instance_settings_values', $this->instance_settings, $this ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+
+				if ( update_option( $this->get_instance_option_key(), $instance_settings, 'yes' ) ) {
+					$this->init_current_options();
+				}
 			}
 
 			$data_version = $migration->get_version();
 
-			// Update the settings data.
-			update_option( $this->get_instance_option_key(), apply_filters( 'woocommerce_shipping_' . $this->id . '_instance_settings_values', $this->instance_settings, $this ), 'yes' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-
 			// Update the latest version migrated option.
-			update_option( 'woogosend_data_version', $data_version, 'yes' );
+			update_option( $data_version_option_key, $data_version, 'yes' );
 
 			// translators: %s is data migration version.
 			$this->show_debug( sprintf( __( 'Data migrated to version %s', 'woogosend' ), $data_version ) );
@@ -274,7 +294,7 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'type'              => 'woogosend',
 				'orig_type'         => 'text',
 				'desc_tip'          => __( 'API Key used to calculate the shipping address distance. Required Google API Service: Distance Matrix API.', 'woogosend' ),
-				'description'       => __( 'Required Google API Services: Distance Matrix API', 'woogosend' ),
+				'description'       => __( 'Required API Services: <strong>Distance Matrix API</strong>. Please disable the API Key restriction unless you know what you are doing, then set it to <strong>IP addresses</strong>.', 'woogosend' ),
 				'default'           => '',
 				'is_required'       => true,
 				'class'             => 'woogosend-api-key-input',
@@ -289,7 +309,7 @@ class WooGoSend_Shipping_Method extends WC_Shipping_Method {
 				'type'              => 'woogosend',
 				'orig_type'         => 'text',
 				'desc_tip'          => __( 'API Key used to render the location picker map. Required Google API Services: Maps JavaScript API, Geocoding API, Places API.', 'woogosend' ),
-				'description'       => __( 'Required Google API Services: Maps JavaScript API, Geocoding API, Places API', 'woogosend' ),
+				'description'       => __( 'Required API Services: <strong>Maps JavaScript API, Geocoding API, Places API</strong>. Please disable the API Key restriction unless you know what you are doing, then set it to <strong>HTTP referrers.</strong>', 'woogosend' ),
 				'default'           => '',
 				'is_required'       => true,
 				'class'             => 'woogosend-api-key-input',

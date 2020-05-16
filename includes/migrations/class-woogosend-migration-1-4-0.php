@@ -41,25 +41,43 @@ class WooGoSend_Migration_1_4_0 extends WooGoSend_Migration {
 	}
 
 	/**
-	 * Get migration options data to update
+	 * Get options pair data
 	 *
 	 * @return array
 	 */
-	public function get_update_options() {
-		$api_key        = isset( $this->wc_shipping->instance_settings['api_key'] ) ? $this->wc_shipping->instance_settings['api_key'] : '';
-		$api_key_split  = isset( $this->wc_shipping->instance_settings['api_key_split'] ) ? $this->wc_shipping->instance_settings['api_key_split'] : 'no';
-		$api_key_server = isset( $this->wc_shipping->instance_settings['api_key_server'] ) ? $this->wc_shipping->instance_settings['api_key_server'] : '';
+	protected function get_options_pair() {
+		return array(
+			'api_key_picker' => 'api_key',
+			'api_key'        => 'api_key_server',
+		);
+	}
 
-		if ( 'yes' === $api_key_split ) {
-			return array(
-				'api_key'        => $api_key_server,
-				'api_key_picker' => $api_key,
-			);
+	/**
+	 * Get new option value: api_key
+	 *
+	 * @return mixed
+	 */
+	protected function get_new_option__api_key() {
+		$api_key_split = isset( $this->wc_shipping->instance_settings['api_key_split'] ) ? $this->wc_shipping->instance_settings['api_key_split'] : 'no';
+
+		if ( 'yes' === $api_key_split && isset( $this->wc_shipping->instance_settings['api_key_server'] ) ) {
+			return $this->wc_shipping->instance_settings['api_key_server'];
 		}
 
-		return array(
-			'api_key_picker' => $api_key,
-		);
+		return new WP_Error();
+	}
+
+	/**
+	 * Get new option value: api_key_picker
+	 *
+	 * @return mixed
+	 */
+	protected function get_new_option__api_key_picker() {
+		if ( isset( $this->wc_shipping->instance_settings['api_key'] ) ) {
+			return $this->wc_shipping->instance_settings['api_key'];
+		}
+
+		return new WP_Error();
 	}
 
 	/**
